@@ -2,8 +2,12 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Tenant\CategoryController;
 use App\Http\Controllers\Tenant\CreateTenantController;
+use App\Http\Controllers\Tenant\PosController;
+use App\Http\Controllers\Tenant\ProductController;
 use App\Http\Controllers\Tenant\TenantArchiveController;
+use App\Http\Controllers\Tenant\TransactionController;
 use App\Support\TenantContext;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
@@ -78,4 +82,17 @@ Route::domain('{subdomain}.'.$central)
                 ),
             ]);
         })->name('tenant.home');
+
+        Route::get('/pos', [PosController::class, 'index'])->name('tenant.pos');
+        Route::post('/pos/checkout', [PosController::class, 'checkout'])->name('tenant.pos.checkout');
+
+        Route::resource('categories', CategoryController::class)
+            ->except(['show'])
+            ->names('tenant.categories');
+
+        Route::resource('products', ProductController::class)
+            ->except(['show'])
+            ->names('tenant.products');
+
+        Route::get('/transactions', [TransactionController::class, 'index'])->name('tenant.transactions');
     });

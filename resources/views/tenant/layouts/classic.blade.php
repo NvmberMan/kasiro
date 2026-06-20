@@ -19,9 +19,9 @@
                 <img src="{{ asset('storage/'.$tenant->logo_path) }}" alt="{{ $tenant->name }}" class="h-8 w-8 rounded object-cover">
             @endif
             <span class="font-serif font-bold text-xl brand-text">{{ $tenant->name }}</span>
-            <span class="ml-1 text-xs text-gray-400 font-normal">— Classic</span>
         </div>
     </header>
+    @include('tenant.partials.nav', ['tenant' => $tenant])
 
     <main class="mx-auto max-w-7xl px-4 py-8">
         {{ $slot }}
