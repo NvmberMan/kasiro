@@ -94,6 +94,11 @@ class Tenant extends Model
         return $this->belongsTo(Template::class, 'template_id');
     }
 
+    public function transactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
     public function layout(): string
     {
         return $this->theme_config['layout'] ?? config('branding.defaults.layout');

@@ -23,6 +23,11 @@
         </a>
         @endif
         @if ($navRole?->canViewReports())
+        <a href="{{ route('tenant.reports', ['subdomain' => $sub]) }}"
+           class="px-4 py-2 text-sm font-medium text-white/90 hover:text-white hover:bg-white/10 transition whitespace-nowrap
+                  {{ request()->routeIs('tenant.reports') ? 'text-white border-b-2 border-white' : '' }}">
+            Laporan
+        </a>
         <a href="{{ route('tenant.transactions', ['subdomain' => $sub]) }}"
            class="px-4 py-2 text-sm font-medium text-white/90 hover:text-white hover:bg-white/10 transition whitespace-nowrap
                   {{ request()->routeIs('tenant.transactions') ? 'text-white border-b-2 border-white' : '' }}">
