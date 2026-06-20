@@ -353,8 +353,8 @@ transactions 1───* transaction_items
 
 | # | Milestone | Outcome (user-visible) | Status | Plan |
 |---|---|---|---|---|
-| 1 | **Fondasi multi-tenant & routing** | Subdomain me-resolve ke tenant yang benar dari DB; data ter-isolasi otomatis (`tenant_id` global scope) | in-progress | `.claude/plans/kasiro.plan.md` |
-| 2 | **Auth terpusat & RBAC** | User register/login sekali; sesi jalan lintas subdomain; role per-tenant ditegakkan | pending | — |
+| 1 | **Fondasi multi-tenant & routing** | Subdomain me-resolve ke tenant yang benar dari DB; data ter-isolasi otomatis (`tenant_id` global scope) | complete | `.claude/plans/kasiro.plan.md` |
+| 2 | **Auth terpusat & RBAC** | User register/login sekali; sesi jalan lintas subdomain; role per-tenant ditegakkan | in-progress | `.claude/plans/kasiro-m2-auth-rbac.plan.md` |
 | 3 | **Create-tenant flow (Custom + Template + Quick-create)** | User bisa membuat tenant aktif lewat 3 jalur; subdomain & branding tersimpan | pending | — |
 | 4 | **Dashboard platform** | Beranda, Kasir Saya, Arsip (+restore) berfungsi | pending | — |
 | 5 | **Aplikasi POS tenant** | Kasir bisa transaksi; produk & kategori dikelola; stok berkurang | pending | — |

@@ -121,4 +121,4 @@ curl -s -H "Host: admin.kasiro.com" http://127.0.0.1:8000/      # reserved → 4
 ```
 
 ---
-*Status: DRAFT plan — menunggu konfirmasi sebelum menulis kode.*
+*Status: COMPLETE — semua task & acceptance criteria terpenuhi (21 test hijau, isolasi 0 kebocoran, routing terverifikasi live + via MySQL MCP). DB: `kasiro_remake`.*
