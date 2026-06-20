@@ -31,9 +31,9 @@ class LogoUploadTest extends TestCase
             ->post('http://kasiro.com/tenants/create/custom', [
                 'name'          => 'Logo Shop',
                 'subdomain'     => 'logoshop',
-                'layout'        => 'modern',
-                'theme'         => 'light',
-                'color_palette' => 'default',
+                'layout'        => 'topbar',
+                'theme'         => 'modern',
+                'color_palette' => 'violet',
                 'logo'          => $logo,
             ]);
 
@@ -49,9 +49,9 @@ class LogoUploadTest extends TestCase
             ->post('http://kasiro.com/tenants/create/custom', [
                 'name'          => 'No Logo',
                 'subdomain'     => 'nologo',
-                'layout'        => 'modern',
-                'theme'         => 'light',
-                'color_palette' => 'default',
+                'layout'        => 'topbar',
+                'theme'         => 'modern',
+                'color_palette' => 'violet',
             ]);
 
         $tenant = Tenant::where('subdomain', 'nologo')->firstOrFail();
@@ -66,9 +66,9 @@ class LogoUploadTest extends TestCase
             ->post('http://kasiro.com/tenants/create/custom', [
                 'name'          => 'Bad Logo',
                 'subdomain'     => 'badlogo',
-                'layout'        => 'modern',
-                'theme'         => 'light',
-                'color_palette' => 'default',
+                'layout'        => 'topbar',
+                'theme'         => 'modern',
+                'color_palette' => 'violet',
                 'logo'          => $pdf,
             ])
             ->assertSessionHasErrors('logo');

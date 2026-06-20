@@ -22,9 +22,9 @@ class CreateTenantTemplateTest extends TestCase
         $this->user     = User::factory()->create();
         $this->template = Template::factory()->published()->create([
             'default_config' => [
-                'layout'        => 'classic',
-                'theme'         => 'warm',
-                'color_palette' => 'rose',
+                'layout'        => 'sidebar',
+                'theme'         => 'classic',
+                'color_palette' => 'slate',
             ],
         ]);
     }
@@ -53,9 +53,9 @@ class CreateTenantTemplateTest extends TestCase
 
         $tenant = Tenant::where('subdomain', 'tokomawar')->firstOrFail();
 
-        $this->assertSame('classic', $tenant->theme_config['layout']);
-        $this->assertSame('warm', $tenant->theme_config['theme']);
-        $this->assertSame('rose', $tenant->theme_config['color_palette']);
+        $this->assertSame('sidebar', $tenant->theme_config['layout']);
+        $this->assertSame('classic', $tenant->theme_config['theme']);
+        $this->assertSame('slate', $tenant->theme_config['color_palette']);
         $this->assertSame($this->template->id, $tenant->template_id);
     }
 
@@ -69,17 +69,17 @@ class CreateTenantTemplateTest extends TestCase
         // Mutate the template after tenant creation.
         $this->template->update([
             'default_config' => [
-                'layout'        => 'retro',
-                'theme'         => 'dark',
-                'color_palette' => 'indigo',
+                'layout'        => 'topbar',
+                'theme'         => 'retro',
+                'color_palette' => 'amber',
             ],
         ]);
 
         $tenant->refresh();
 
         // Tenant's theme_config must remain unchanged (snapshot, not live ref).
-        $this->assertSame('classic', $tenant->theme_config['layout']);
-        $this->assertSame('rose', $tenant->theme_config['color_palette']);
+        $this->assertSame('sidebar', $tenant->theme_config['layout']);
+        $this->assertSame('slate', $tenant->theme_config['color_palette']);
     }
 
     public function test_template_flow_creates_owner_membership(): void

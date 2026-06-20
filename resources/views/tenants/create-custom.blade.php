@@ -18,14 +18,14 @@
                     <div class="mt-6">
                         <x-input-label :value="__('Layout')" />
                         <div class="mt-2 grid grid-cols-3 gap-3">
-                            @foreach ($layouts as $l)
+                            @foreach ($layouts as $key => $layout)
                                 <label class="cursor-pointer">
-                                    <input type="radio" name="layout" value="{{ $l }}"
+                                    <input type="radio" name="layout" value="{{ $key }}"
                                         class="sr-only peer"
-                                        {{ old('layout', $defaults['layout']) === $l ? 'checked' : '' }}>
+                                        {{ old('layout', $defaults['layout']) === $key ? 'checked' : '' }}>
                                     <span class="block rounded-lg border-2 border-gray-200 p-3 text-center text-sm font-medium
                                                  peer-checked:border-indigo-500 peer-checked:bg-indigo-50 hover:border-gray-400 transition">
-                                        {{ ucfirst($l) }}
+                                        {{ $layout['label'] }}
                                     </span>
                                 </label>
                             @endforeach
@@ -37,14 +37,14 @@
                     <div class="mt-4">
                         <x-input-label :value="__('Tema')" />
                         <div class="mt-2 grid grid-cols-3 gap-3">
-                            @foreach ($themes as $t)
+                            @foreach ($themes as $key => $theme)
                                 <label class="cursor-pointer">
-                                    <input type="radio" name="theme" value="{{ $t }}"
+                                    <input type="radio" name="theme" value="{{ $key }}"
                                         class="sr-only peer"
-                                        {{ old('theme', $defaults['theme']) === $t ? 'checked' : '' }}>
+                                        {{ old('theme', $defaults['theme']) === $key ? 'checked' : '' }}>
                                     <span class="block rounded-lg border-2 border-gray-200 p-3 text-center text-sm font-medium
                                                  peer-checked:border-indigo-500 peer-checked:bg-indigo-50 hover:border-gray-400 transition">
-                                        {{ ucfirst($t) }}
+                                        {{ $theme['label'] }}
                                     </span>
                                 </label>
                             @endforeach

@@ -10,4 +10,5 @@
             {{ $property }}: {{ $value }};
         @endforeach
     }
+    body { font-family: var(--brand-font, system-ui, sans-serif); }
 </style>
