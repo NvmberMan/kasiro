@@ -82,7 +82,7 @@
             <p class="text-xs text-gray-400 mb-3">Posisi navigasi dan susunan halaman.</p>
             <div class="grid grid-cols-2 gap-3">
                 @foreach ($layouts as $key => $layout)
-                    <label class="cursor-pointer">
+                    <label class="cursor-pointer relative block">
                         <input type="radio" name="layout" value="{{ $key }}" class="sr-only peer"
                             @checked($currentLayout === $key)>
                         <div class="border-2 rounded-lg p-3 transition
@@ -113,25 +113,20 @@
         <div class="bg-white rounded-xl shadow-sm border p-6">
             <h2 class="font-semibold text-gray-700 mb-1">Tema</h2>
             <p class="text-xs text-gray-400 mb-3">Gaya tipografi dan karakter visual toko.</p>
+            {{-- Hidden input carries the submitted theme; cards are Alpine-driven --}}
+            <input type="hidden" name="theme" :value="activeTheme">
             <div class="grid grid-cols-3 gap-3">
                 @foreach ($themes as $key => $theme)
-                    <label class="cursor-pointer">
-                        <input type="radio" name="theme" value="{{ $key }}" class="sr-only peer"
-                            @checked($currentTheme === $key)
-                            @change="changeTheme('{{ $key }}')">
-                        <div class="border-2 rounded-lg p-3 transition cursor-pointer
-                                    peer-checked:border-indigo-500 peer-checked:bg-indigo-50
-                                    border-gray-200 hover:border-gray-300"
-                             :class="activeTheme === '{{ $key }}' ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200'"
-                             @click="changeTheme('{{ $key }}')">
-                            <p class="text-lg font-semibold text-gray-800 mb-1 leading-none"
-                               style="font-family: {{ $theme['vars']['--brand-font'] }}">
-                                Aa
-                            </p>
-                            <p class="text-xs font-medium text-gray-600">{{ $theme['label'] }}</p>
-                            <p class="text-[10px] text-gray-400 mt-0.5">{{ count($theme['palettes']) }} palet</p>
-                        </div>
-                    </label>
+                    <div class="cursor-pointer border-2 rounded-lg p-3 transition"
+                         :class="activeTheme === '{{ $key }}' ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200 hover:border-gray-300'"
+                         @click="changeTheme('{{ $key }}')">
+                        <p class="text-lg font-semibold text-gray-800 mb-1 leading-none"
+                           style="font-family: {{ $theme['vars']['--brand-font'] }}">
+                            Aa
+                        </p>
+                        <p class="text-xs font-medium text-gray-600">{{ $theme['label'] }}</p>
+                        <p class="text-[10px] text-gray-400 mt-0.5">{{ count($theme['palettes']) }} palet</p>
+                    </div>
                 @endforeach
             </div>
         </div>
