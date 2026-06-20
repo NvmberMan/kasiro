@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AcceptInvitationController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Tenant\SettingsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Tenant\CategoryController;
 use App\Http\Controllers\Tenant\CreateTenantController;
@@ -109,4 +110,7 @@ Route::domain('{subdomain}.'.$central)
         Route::delete('/employees/{user}', [EmployeeController::class, 'destroy'])->name('tenant.employees.destroy');
         Route::post('/invitations', [InvitationController::class, 'store'])->name('tenant.invitations.store');
         Route::delete('/invitations/{invitation}', [InvitationController::class, 'destroy'])->name('tenant.invitations.destroy');
+
+        Route::get('/settings', [SettingsController::class, 'edit'])->name('tenant.settings.edit');
+        Route::put('/settings', [SettingsController::class, 'update'])->name('tenant.settings.update');
     });
