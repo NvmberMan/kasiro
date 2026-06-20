@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Tenant;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -19,9 +20,12 @@ class TenantResolutionTest extends TestCase
 
     public function test_active_subdomain_resolves_to_its_tenant(): void
     {
-        Tenant::factory()->subdomain('warungbudi')->create(['name' => 'Warung Budi']);
+        $tenant = Tenant::factory()->subdomain('warungbudi')->create(['name' => 'Warung Budi']);
+        $user = User::factory()->create();
+        $tenant->users()->attach($user, ['role' => 'owner', 'status' => 'active']);
 
-        $this->get('http://warungbudi.kasiro.com/')
+        $this->actingAs($user)
+            ->get('http://warungbudi.kasiro.com/')
             ->assertOk()
             ->assertJson([
                 'tenant' => 'Warung Budi',

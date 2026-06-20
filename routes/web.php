@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Support\TenantContext;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 
 $central = config('tenancy.central_domain');
@@ -42,7 +43,7 @@ Route::domain($central)->group(function () {
 | membership guards (auth, tenant.member) are layered in M2 Tasks 5–6.
 */
 Route::domain('{subdomain}.'.$central)
-    ->middleware(['tenant', 'tenant.context'])
+    ->middleware(['tenant', 'tenant.member', 'tenant.context'])
     ->group(function () {
         Route::get('/', function () {
             $tenant = app(TenantContext::class)->get();
@@ -50,6 +51,13 @@ Route::domain('{subdomain}.'.$central)
             return response()->json([
                 'tenant' => $tenant->name,
                 'subdomain' => $tenant->subdomain,
+                'role' => request()->user()?->roleFor($tenant)?->value,
+                'permissions' => [
+                    'access-pos' => Gate::allows('access-pos'),
+                    'manage-products' => Gate::allows('manage-products'),
+                    'view-reports' => Gate::allows('view-reports'),
+                    'manage-staff' => Gate::allows('manage-staff'),
+                ],
             ]);
         })->name('tenant.home');
     });
