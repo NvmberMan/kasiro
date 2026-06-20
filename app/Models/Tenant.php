@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -58,6 +59,21 @@ class Tenant extends Model
     public function isArchived(): bool
     {
         return $this->status === self::STATUS_ARCHIVED;
+    }
+
+    public function scopeActive(Builder $query): void
+    {
+        $query->where('status', self::STATUS_ACTIVE);
+    }
+
+    public function scopeArchived(Builder $query): void
+    {
+        $query->where('status', self::STATUS_ARCHIVED);
+    }
+
+    public function subdomainUrl(): string
+    {
+        return 'http://'.$this->subdomain.'.'.config('tenancy.central_domain').'/';
     }
 
     public function users(): BelongsToMany
