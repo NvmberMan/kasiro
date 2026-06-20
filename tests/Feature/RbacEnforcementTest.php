@@ -112,35 +112,23 @@ class RbacEnforcementTest extends TestCase
         $this->assertFalse($this->manager->can('manageBilling', $this->tenant));
     }
 
-    public function test_smoke_route_returns_role_and_permissions_for_owner(): void
+    public function test_smoke_route_renders_tenant_layout_for_owner(): void
     {
         $this->actingAs($this->owner)
             ->get('http://warungbudi.kasiro.com/')
             ->assertOk()
-            ->assertJson([
-                'role' => 'owner',
-                'permissions' => [
-                    'access-pos' => true,
-                    'manage-products' => true,
-                    'view-reports' => true,
-                    'manage-staff' => true,
-                ],
-            ]);
+            ->assertSee($this->tenant->name)
+            ->assertSee('Role: owner')
+            ->assertSee('--brand-primary', false);
     }
 
-    public function test_smoke_route_returns_restricted_permissions_for_cashier(): void
+    public function test_smoke_route_renders_tenant_layout_for_cashier(): void
     {
         $this->actingAs($this->cashier)
             ->get('http://warungbudi.kasiro.com/')
             ->assertOk()
-            ->assertJson([
-                'role' => 'cashier',
-                'permissions' => [
-                    'access-pos' => true,
-                    'manage-products' => false,
-                    'view-reports' => false,
-                    'manage-staff' => false,
-                ],
-            ]);
+            ->assertSee($this->tenant->name)
+            ->assertSee('Role: cashier')
+            ->assertSee('--brand-primary', false);
     }
 }

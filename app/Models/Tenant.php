@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Tenant extends Model
 {
@@ -70,5 +71,20 @@ class Tenant extends Model
     public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class, 'owner_id');
+    }
+
+    public function template(): BelongsTo
+    {
+        return $this->belongsTo(Template::class, 'template_id');
+    }
+
+    public function layout(): string
+    {
+        return $this->theme_config['layout'] ?? config('branding.defaults.layout');
+    }
+
+    public function colorPalette(): string
+    {
+        return $this->theme_config['color_palette'] ?? config('branding.defaults.color_palette');
     }
 }
