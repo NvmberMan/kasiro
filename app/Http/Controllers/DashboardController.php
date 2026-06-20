@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Enums\MembershipStatus;
 use App\Models\Tenant;
+use App\Models\Transaction;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -29,7 +31,15 @@ class DashboardController extends Controller
             ->take(3)
             ->get();
 
-        return view('dashboard', compact('activeCount', 'archivedCount', 'recent'));
+        // Platform-wide activation funnel (visible to all authenticated users)
+        $platformStats = [
+            'total_users'        => User::count(),
+            'total_tenants'      => Tenant::count(),
+            'active_tenants'     => Tenant::where('status', Tenant::STATUS_ACTIVE)->count(),
+            'activated_tenants'  => Tenant::whereHas('transactions')->count(),
+        ];
+
+        return view('dashboard', compact('activeCount', 'archivedCount', 'recent', 'platformStats'));
     }
 
     public function myStores(Request $request): View
