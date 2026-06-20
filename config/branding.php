@@ -10,8 +10,9 @@ return [
     */
 
     'layouts' => [
-        'topbar'  => ['label' => 'Navigasi Atas'],
-        'sidebar' => ['label' => 'Navigasi Samping'],
+        'topbar'    => ['label' => 'Navigasi Atas'],
+        'sidebar'   => ['label' => 'Navigasi Samping'],
+        'bottombar' => ['label' => 'Navigasi Bawah'],
     ],
 
     /*

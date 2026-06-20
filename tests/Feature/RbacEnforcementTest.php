@@ -131,4 +131,20 @@ class RbacEnforcementTest extends TestCase
             ->assertSee('Role: cashier')
             ->assertSee('--brand-primary', false);
     }
+
+    public function test_bottombar_layout_renders(): void
+    {
+        $tenant = Tenant::factory()->subdomain('bottomshop')->create([
+            'theme_config' => ['layout' => 'bottombar', 'theme' => 'modern', 'color_palette' => 'violet'],
+        ]);
+        $tenant->users()->attach($this->owner, ['role' => 'owner', 'status' => 'active']);
+        app(TenantContext::class)->set($tenant);
+
+        $this->actingAs($this->owner)
+            ->get('http://bottomshop.kasiro.com/')
+            ->assertOk()
+            ->assertSee($tenant->name)
+            ->assertSee('Role: owner')
+            ->assertSee('--brand-primary', false);
+    }
 }
