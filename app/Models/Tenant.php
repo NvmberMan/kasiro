@@ -1,0 +1,59 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Tenant extends Model
+{
+    /** @use HasFactory<\Database\Factories\TenantFactory> */
+    use HasFactory;
+
+    public const STATUS_ACTIVE = 'active';
+
+    public const STATUS_ARCHIVED = 'archived';
+
+    /**
+     * @var list<string>
+     */
+    protected $fillable = [
+        'owner_id',
+        'name',
+        'subdomain',
+        'logo_path',
+        'status',
+        'template_id',
+        'theme_config',
+        'archived_at',
+    ];
+
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'theme_config' => 'array',
+            'archived_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * Look up a tenant by its subdomain label.
+     */
+    public static function findBySubdomain(string $subdomain): ?self
+    {
+        return static::query()->where('subdomain', $subdomain)->first();
+    }
+
+    public function isActive(): bool
+    {
+        return $this->status === self::STATUS_ACTIVE;
+    }
+
+    public function isArchived(): bool
+    {
+        return $this->status === self::STATUS_ARCHIVED;
+    }
+}
