@@ -40,7 +40,7 @@
                     <div class="mt-6">
                         <x-input-label :value="__('Layout')" />
                         <p class="text-xs text-gray-400 mb-2">Posisi navigasi dan susunan halaman.</p>
-                        <div class="grid grid-cols-2 gap-3">
+                        <div class="grid grid-cols-3 gap-3">
                             @foreach ($layouts as $key => $layout)
                                 <label class="cursor-pointer relative block">
                                     <input type="radio" name="layout" value="{{ $key }}" class="sr-only peer"
