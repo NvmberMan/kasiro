@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Tenant\CreateTenantController;
 use App\Support\TenantContext;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,16 @@ Route::domain($central)->group(function () {
     });
 
     require __DIR__.'/auth.php';
+
+    Route::middleware(['auth', 'verified'])->group(function () {
+        Route::get('/tenants/create', [CreateTenantController::class, 'chooseFlow'])->name('tenants.choose');
+        Route::get('/tenants/create/custom', [CreateTenantController::class, 'createCustom'])->name('tenants.create.custom');
+        Route::post('/tenants/create/custom', [CreateTenantController::class, 'storeCustom'])->name('tenants.store.custom');
+        Route::get('/tenants/create/template', [CreateTenantController::class, 'createFromTemplate'])->name('tenants.create.template');
+        Route::post('/tenants/create/template', [CreateTenantController::class, 'storeFromTemplate'])->name('tenants.store.template');
+        Route::get('/tenants/showcase', [CreateTenantController::class, 'showcase'])->name('tenants.showcase');
+        Route::post('/tenants/showcase', [CreateTenantController::class, 'storeFromShowcase'])->name('tenants.store.showcase');
+    });
 });
 
 /*
@@ -47,17 +58,18 @@ Route::domain('{subdomain}.'.$central)
     ->group(function () {
         Route::get('/', function () {
             $tenant = app(TenantContext::class)->get();
+            $layout = $tenant->layout();
 
-            return response()->json([
-                'tenant' => $tenant->name,
-                'subdomain' => $tenant->subdomain,
-                'role' => request()->user()?->roleFor($tenant)?->value,
-                'permissions' => [
-                    'access-pos' => Gate::allows('access-pos'),
-                    'manage-products' => Gate::allows('manage-products'),
-                    'view-reports' => Gate::allows('view-reports'),
-                    'manage-staff' => Gate::allows('manage-staff'),
-                ],
+            return view("tenant.layouts.{$layout}", [
+                'tenant' => $tenant,
+                'slot'   => new \Illuminate\Support\HtmlString(
+                    '<div style="font-family:inherit;padding:1rem;">'
+                    .'<p>Selamat datang di <strong>'.e($tenant->name).'</strong>!</p>'
+                    .'<p style="margin-top:.5rem;font-size:.875rem;color:inherit;opacity:.7;">'
+                    .'Role: '.e(request()->user()?->roleFor($tenant)?->value ?? '-')
+                    .'</p>'
+                    .'</div>'
+                ),
             ]);
         })->name('tenant.home');
     });

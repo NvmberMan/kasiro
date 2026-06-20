@@ -27,10 +27,7 @@ class TenantResolutionTest extends TestCase
         $this->actingAs($user)
             ->get('http://warungbudi.kasiro.com/')
             ->assertOk()
-            ->assertJson([
-                'tenant' => 'Warung Budi',
-                'subdomain' => 'warungbudi',
-            ]);
+            ->assertSee('Warung Budi');
     }
 
     public function test_unknown_subdomain_returns_404(): void
