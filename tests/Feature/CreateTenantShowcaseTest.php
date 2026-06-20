@@ -22,8 +22,8 @@ class CreateTenantShowcaseTest extends TestCase
         $this->user      = User::factory()->create();
         $this->published = Template::factory()->published()->create([
             'default_config' => [
-                'layout'        => 'retro',
-                'theme'         => 'dark',
+                'layout'        => 'sidebar',
+                'theme'         => 'retro',
                 'color_palette' => 'amber',
             ],
         ]);
@@ -52,8 +52,8 @@ class CreateTenantShowcaseTest extends TestCase
         $tenant = Tenant::where('subdomain', 'kopinusantara')->firstOrFail();
 
         $this->assertSame($this->published->id, $tenant->template_id);
-        $this->assertSame('retro', $tenant->theme_config['layout']);
-        $this->assertSame('dark', $tenant->theme_config['theme']);
+        $this->assertSame('sidebar', $tenant->theme_config['layout']);
+        $this->assertSame('retro', $tenant->theme_config['theme']);
         $this->assertSame('amber', $tenant->theme_config['color_palette']);
     }
 

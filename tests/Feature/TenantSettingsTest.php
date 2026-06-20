@@ -23,9 +23,9 @@ class TenantSettingsTest extends TestCase
 
         $this->owner  = User::factory()->create();
         $this->tenant = Tenant::factory()->create([
-            'owner_id'    => $this->owner->id,
-            'name'        => 'Toko Lama',
-            'theme_config' => ['layout' => 'modern', 'theme' => 'light', 'color_palette' => 'default'],
+            'owner_id'     => $this->owner->id,
+            'name'         => 'Toko Lama',
+            'theme_config' => ['layout' => 'topbar', 'theme' => 'modern', 'color_palette' => 'violet'],
         ]);
         $this->tenant->users()->attach($this->owner, ['role' => 'owner', 'status' => 'active']);
 
@@ -43,9 +43,9 @@ class TenantSettingsTest extends TestCase
         return array_merge([
             'name'          => 'Toko Baru',
             'subdomain'     => $this->tenant->subdomain,
-            'layout'        => 'modern',
-            'theme'         => 'light',
-            'color_palette' => 'default',
+            'layout'        => 'topbar',
+            'theme'         => 'modern',
+            'color_palette' => 'violet',
         ], $overrides);
     }
 
@@ -76,19 +76,41 @@ class TenantSettingsTest extends TestCase
     public function test_owner_can_change_color_palette(): void
     {
         $this->actingAs($this->owner)
-            ->put($this->url('/settings'), $this->validPayload(['color_palette' => 'emerald']))
+            ->put($this->url('/settings'), $this->validPayload(['color_palette' => 'sky']))
             ->assertRedirect();
 
-        $this->assertEquals('emerald', $this->tenant->fresh()->theme_config['color_palette']);
+        $this->assertEquals('sky', $this->tenant->fresh()->theme_config['color_palette']);
     }
 
     public function test_owner_can_change_layout(): void
     {
         $this->actingAs($this->owner)
-            ->put($this->url('/settings'), $this->validPayload(['layout' => 'retro']))
+            ->put($this->url('/settings'), $this->validPayload(['layout' => 'sidebar']))
             ->assertRedirect();
 
-        $this->assertEquals('retro', $this->tenant->fresh()->theme_config['layout']);
+        $this->assertEquals('sidebar', $this->tenant->fresh()->theme_config['layout']);
+    }
+
+    public function test_owner_can_change_theme(): void
+    {
+        $this->actingAs($this->owner)
+            ->put($this->url('/settings'), $this->validPayload(['theme' => 'classic', 'color_palette' => 'slate']))
+            ->assertRedirect();
+
+        $config = $this->tenant->fresh()->theme_config;
+        $this->assertEquals('classic', $config['theme']);
+        $this->assertEquals('slate', $config['color_palette']);
+    }
+
+    public function test_palette_invalid_for_theme_falls_back_to_themes_first_palette(): void
+    {
+        // 'sky' is a modern palette, not valid for 'classic'
+        $this->actingAs($this->owner)
+            ->put($this->url('/settings'), $this->validPayload(['theme' => 'classic', 'color_palette' => 'sky']))
+            ->assertRedirect();
+
+        // ThemeConfig corrects 'sky' → first classic palette ('slate')
+        $this->assertEquals('slate', $this->tenant->fresh()->theme_config['color_palette']);
     }
 
     public function test_owner_can_upload_logo(): void
@@ -147,6 +169,13 @@ class TenantSettingsTest extends TestCase
         $this->actingAs($this->owner)
             ->put($this->url('/settings'), $this->validPayload(['layout' => 'hacked']))
             ->assertSessionHasErrors('layout');
+    }
+
+    public function test_invalid_theme_is_rejected(): void
+    {
+        $this->actingAs($this->owner)
+            ->put($this->url('/settings'), $this->validPayload(['theme' => 'dark']))
+            ->assertSessionHasErrors('theme');
     }
 
     public function test_duplicate_subdomain_is_rejected(): void

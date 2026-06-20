@@ -15,8 +15,8 @@ class TemplateFactory extends Factory
 
     public function definition(): array
     {
-        $layouts  = config('branding.layouts');
-        $themes   = config('branding.themes');
+        $layouts  = array_keys(config('branding.layouts'));
+        $themes   = array_keys(config('branding.themes'));
         $palettes = array_keys(config('branding.palettes'));
 
         $name = fake()->unique()->words(2, true);

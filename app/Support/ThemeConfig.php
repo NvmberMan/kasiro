@@ -7,24 +7,30 @@ use App\Models\Template;
 class ThemeConfig
 {
     /**
-     * Build a theme_config array from raw custom-flow user input.
-     * Unknown/missing values fall back to config defaults.
+     * Build a theme_config array from raw user input.
+     * - layout: validated against layout keys
+     * - theme: validated against theme keys
+     * - color_palette: validated against the selected theme's allowed palette list;
+     *   falls back to the theme's first palette if the submitted value is absent or invalid.
      */
     public static function fromCustomInput(array $input): array
     {
         $defaults = config('branding.defaults');
+        $layouts  = config('branding.layouts');
+        $themes   = config('branding.themes');
 
-        $layout  = in_array($input['layout'] ?? null, config('branding.layouts'), true)
+        $layout = array_key_exists($input['layout'] ?? null, $layouts)
             ? $input['layout']
             : $defaults['layout'];
 
-        $theme   = in_array($input['theme'] ?? null, config('branding.themes'), true)
+        $theme = array_key_exists($input['theme'] ?? null, $themes)
             ? $input['theme']
             : $defaults['theme'];
 
-        $palette = array_key_exists($input['color_palette'] ?? null, config('branding.palettes'))
+        $allowed = $themes[$theme]['palettes'] ?? [];
+        $palette = in_array($input['color_palette'] ?? null, $allowed, true)
             ? $input['color_palette']
-            : $defaults['color_palette'];
+            : ($allowed[0] ?? $defaults['color_palette']);
 
         return [
             'layout'        => $layout,
@@ -34,9 +40,7 @@ class ThemeConfig
     }
 
     /**
-     * Snapshot a template's default_config into a theme_config array.
-     * Unknown keys in the snapshot fall back to branding defaults so
-     * stale template data never produces an invalid config.
+     * Snapshot a template's default_config into a validated theme_config array.
      */
     public static function fromTemplate(Template $template): array
     {
@@ -44,15 +48,20 @@ class ThemeConfig
     }
 
     /**
-     * Resolve a theme_config array to CSS custom-property declarations.
-     * Returns an associative array of property-name => value strings.
-     * Falls back to the 'default' palette if the stored palette is missing.
+     * Resolve theme_config to CSS custom-property declarations.
+     * Merges theme typography vars (font, radius) with palette color vars.
      */
     public static function cssVariables(array $themeConfig): array
     {
-        $palette = $themeConfig['color_palette'] ?? 'default';
-        $palettes = config('branding.palettes');
+        $themeKey   = $themeConfig['theme'] ?? config('branding.defaults.theme');
+        $paletteKey = $themeConfig['color_palette'] ?? null;
+        $themes     = config('branding.themes');
+        $palettes   = config('branding.palettes');
 
-        return $palettes[$palette] ?? $palettes['default'];
+        $themeVars   = $themes[$themeKey]['vars'] ?? [];
+        $fallback    = $themes[$themeKey]['palettes'][0] ?? config('branding.defaults.color_palette');
+        $paletteVars = $palettes[$paletteKey] ?? $palettes[$fallback] ?? $palettes[array_key_first($palettes)];
+
+        return array_merge($themeVars, $paletteVars);
     }
 }
