@@ -16,5 +16,6 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call(TemplateSeeder::class);
+        $this->call(DemoAccountSeeder::class);
     }
 }
