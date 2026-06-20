@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AcceptInvitationController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LandingController;
 use App\Http\Controllers\Tenant\ReportController;
 use App\Http\Controllers\Tenant\SettingsController;
 use App\Http\Controllers\ProfileController;
@@ -28,10 +29,7 @@ $central = config('tenancy.central_domain');
 | login/register never leak onto tenant subdomains.
 */
 Route::domain($central)->group(function () {
-    Route::get('/', function () {
-        // Real landing page is Milestone 4; keep the M1 placeholder for now.
-        return 'Kasiro platform';
-    })->name('platform.home');
+    Route::get('/', [LandingController::class, 'index'])->name('platform.home');
 
     Route::get('/dashboard', [DashboardController::class, 'home'])
         ->middleware(['auth', 'verified'])->name('dashboard');
