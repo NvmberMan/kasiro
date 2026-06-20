@@ -9,13 +9,12 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Tenant\CategoryController;
 use App\Http\Controllers\Tenant\CreateTenantController;
 use App\Http\Controllers\Tenant\EmployeeController;
+use App\Http\Controllers\Tenant\HomeController as TenantHomeController;
 use App\Http\Controllers\Tenant\InvitationController;
 use App\Http\Controllers\Tenant\PosController;
 use App\Http\Controllers\Tenant\ProductController;
 use App\Http\Controllers\Tenant\TenantArchiveController;
 use App\Http\Controllers\Tenant\TransactionController;
-use App\Support\TenantContext;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 
 $central = config('tenancy.central_domain');
@@ -74,22 +73,7 @@ Route::domain($central)->group(function () {
 Route::domain('{subdomain}.'.$central)
     ->middleware(['tenant', 'tenant.member', 'tenant.context'])
     ->group(function () {
-        Route::get('/', function () {
-            $tenant = app(TenantContext::class)->get();
-            $layout = $tenant->layout();
-
-            return view("tenant.layouts.{$layout}", [
-                'tenant' => $tenant,
-                'slot'   => new \Illuminate\Support\HtmlString(
-                    '<div style="font-family:inherit;padding:1rem;">'
-                    .'<p>Selamat datang di <strong>'.e($tenant->name).'</strong>!</p>'
-                    .'<p style="margin-top:.5rem;font-size:.875rem;color:inherit;opacity:.7;">'
-                    .'Role: '.e(request()->user()?->roleFor($tenant)?->value ?? '-')
-                    .'</p>'
-                    .'</div>'
-                ),
-            ]);
-        })->name('tenant.home');
+        Route::get('/', [TenantHomeController::class, 'index'])->name('tenant.home');
 
         Route::get('/pos', [PosController::class, 'index'])->name('tenant.pos');
         Route::post('/pos/checkout', [PosController::class, 'checkout'])->name('tenant.pos.checkout');
