@@ -9,6 +9,7 @@ use App\Support\TenantContext;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProductController extends Controller
@@ -43,11 +44,17 @@ class ProductController extends Controller
             'category_id' => ['nullable', 'exists:categories,id'],
             'name'        => ['required', 'string', 'max:200'],
             'sku'         => ['nullable', 'string', 'max:50'],
+            'image'       => ['nullable', 'image', 'max:2048'],
             'price'       => ['required', 'numeric', 'min:0'],
             'stock'       => ['required', 'integer', 'min:0'],
         ]);
 
         $data['is_active'] = $request->boolean('is_active', true);
+
+        if ($request->hasFile('image')) {
+            $data['image_path'] = $request->file('image')->store('products', 'public');
+        }
+        unset($data['image']);
 
         Product::create($data);
 
@@ -78,11 +85,20 @@ class ProductController extends Controller
             'category_id' => ['nullable', 'exists:categories,id'],
             'name'        => ['required', 'string', 'max:200'],
             'sku'         => ['nullable', 'string', 'max:50'],
+            'image'       => ['nullable', 'image', 'max:2048'],
             'price'       => ['required', 'numeric', 'min:0'],
             'stock'       => ['required', 'integer', 'min:0'],
         ]);
 
         $data['is_active'] = $request->boolean('is_active', true);
+
+        if ($request->hasFile('image')) {
+            if ($product->image_path) {
+                Storage::disk('public')->delete($product->image_path);
+            }
+            $data['image_path'] = $request->file('image')->store('products', 'public');
+        }
+        unset($data['image']);
 
         $product->update($data);
 
@@ -98,6 +114,9 @@ class ProductController extends Controller
 
         $tenant = app(TenantContext::class)->get();
 
+        if ($product->image_path) {
+            Storage::disk('public')->delete($product->image_path);
+        }
         $product->delete();
 
         return redirect()

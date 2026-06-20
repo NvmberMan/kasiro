@@ -25,6 +25,7 @@
             <table class="w-full text-sm">
                 <thead class="bg-gray-50 text-gray-500 text-xs uppercase">
                     <tr>
+                        <th class="px-5 py-3"></th>
                         <th class="px-5 py-3 text-left">Nama</th>
                         <th class="px-5 py-3 text-left">Kategori</th>
                         <th class="px-5 py-3 text-right">Harga</th>
@@ -36,6 +37,14 @@
                 <tbody class="divide-y divide-gray-100">
                     @foreach ($products as $product)
                     <tr class="{{ $product->is_active ? '' : 'opacity-50' }}">
+                        <td class="px-3 py-2 w-12">
+                            @if ($product->image_path)
+                                <img src="{{ asset('storage/'.$product->image_path) }}" alt=""
+                                     class="h-10 w-10 rounded-lg object-cover border">
+                            @else
+                                <div class="h-10 w-10 rounded-lg bg-gray-100 border flex items-center justify-center text-gray-300 text-xs">—</div>
+                            @endif
+                        </td>
                         <td class="px-5 py-3 font-medium text-gray-800">{{ $product->name }}</td>
                         <td class="px-5 py-3 text-gray-500">{{ $product->category?->name ?? '—' }}</td>
                         <td class="px-5 py-3 text-right">Rp {{ number_format($product->price, 0, ',', '.') }}</td>
