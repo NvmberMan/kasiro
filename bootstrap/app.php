@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\EnsureTenantContext;
+use App\Http\Middleware\EnsureTenantMember;
 use App\Http\Middleware\ResolveTenant;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -13,9 +14,14 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->redirectGuestsTo(
+            fn () => 'http://'.config('tenancy.central_domain').'/login'
+        );
+
         $middleware->alias([
             'tenant' => ResolveTenant::class,
             'tenant.context' => EnsureTenantContext::class,
+            'tenant.member' => EnsureTenantMember::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
