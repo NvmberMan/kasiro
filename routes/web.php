@@ -1,9 +1,12 @@
 <?php
 
+use App\Http\Controllers\AcceptInvitationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Tenant\CategoryController;
 use App\Http\Controllers\Tenant\CreateTenantController;
+use App\Http\Controllers\Tenant\EmployeeController;
+use App\Http\Controllers\Tenant\InvitationController;
 use App\Http\Controllers\Tenant\PosController;
 use App\Http\Controllers\Tenant\ProductController;
 use App\Http\Controllers\Tenant\TenantArchiveController;
@@ -53,6 +56,11 @@ Route::domain($central)->group(function () {
         Route::get('/tenants/showcase', [CreateTenantController::class, 'showcase'])->name('tenants.showcase');
         Route::post('/tenants/showcase', [CreateTenantController::class, 'storeFromShowcase'])->name('tenants.store.showcase');
     });
+
+    Route::middleware('auth')->group(function () {
+        Route::get('/invitations/{token}', [AcceptInvitationController::class, 'show'])->name('invitations.show');
+        Route::post('/invitations/{token}/accept', [AcceptInvitationController::class, 'accept'])->name('invitations.accept');
+    });
 });
 
 /*
@@ -95,4 +103,10 @@ Route::domain('{subdomain}.'.$central)
             ->names('tenant.products');
 
         Route::get('/transactions', [TransactionController::class, 'index'])->name('tenant.transactions');
+
+        Route::get('/employees', [EmployeeController::class, 'index'])->name('tenant.employees.index');
+        Route::patch('/employees/{user}', [EmployeeController::class, 'update'])->name('tenant.employees.update');
+        Route::delete('/employees/{user}', [EmployeeController::class, 'destroy'])->name('tenant.employees.destroy');
+        Route::post('/invitations', [InvitationController::class, 'store'])->name('tenant.invitations.store');
+        Route::delete('/invitations/{invitation}', [InvitationController::class, 'destroy'])->name('tenant.invitations.destroy');
     });
