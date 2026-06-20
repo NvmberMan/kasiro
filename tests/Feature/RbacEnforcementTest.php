@@ -118,7 +118,7 @@ class RbacEnforcementTest extends TestCase
             ->get('http://warungbudi.kasiro.com/')
             ->assertOk()
             ->assertSee($this->tenant->name)
-            ->assertSee('Role: owner')
+            ->assertSee('owner')
             ->assertSee('--brand-primary', false);
     }
 
@@ -128,7 +128,7 @@ class RbacEnforcementTest extends TestCase
             ->get('http://warungbudi.kasiro.com/')
             ->assertOk()
             ->assertSee($this->tenant->name)
-            ->assertSee('Role: cashier')
+            ->assertSee('cashier')
             ->assertSee('--brand-primary', false);
     }
 

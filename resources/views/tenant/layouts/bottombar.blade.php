@@ -25,15 +25,18 @@
     {{-- Top brand header --}}
     <header class="bg-white border-b border-gray-200 shadow-sm flex-shrink-0">
         <div class="mx-auto max-w-7xl px-4 py-3 flex items-center gap-3">
-            @if (!empty($tenant->logo_path))
-                <img src="{{ asset('storage/'.$tenant->logo_path) }}" alt="{{ $tenant->name }}"
-                     class="h-8 w-8 rounded object-cover">
-            @else
-                <div class="h-8 w-8 rounded flex items-center justify-center text-white font-bold text-sm brand-primary">
-                    {{ mb_strtoupper(mb_substr($tenant->name, 0, 1)) }}
-                </div>
-            @endif
-            <span class="font-bold text-lg tracking-wide brand-text">{{ $tenant->name }}</span>
+            <a href="{{ route('tenant.home', ['subdomain' => $sub]) }}"
+               class="flex items-center gap-3 hover:opacity-80 transition" aria-label="Beranda {{ $tenant->name }}">
+                @if (!empty($tenant->logo_path))
+                    <img src="{{ asset('storage/'.$tenant->logo_path) }}" alt="{{ $tenant->name }}"
+                         class="h-8 w-8 rounded object-cover">
+                @else
+                    <div class="h-8 w-8 rounded flex items-center justify-center text-white font-bold text-sm brand-primary">
+                        {{ mb_strtoupper(mb_substr($tenant->name, 0, 1)) }}
+                    </div>
+                @endif
+                <span class="font-bold text-lg tracking-wide brand-text">{{ $tenant->name }}</span>
+            </a>
             <span class="ml-auto text-xs text-gray-400">{{ $navUser?->name }} (Role: {{ $navRole?->value ?? '-' }})</span>
         </div>
     </header>
