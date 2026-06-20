@@ -29,6 +29,18 @@
             Transaksi
         </a>
         @endif
+        @if ($navRole?->canManageStaff())
+        <a href="{{ route('tenant.employees.index', ['subdomain' => $sub]) }}"
+           class="px-4 py-2 text-sm font-medium text-white/90 hover:text-white hover:bg-white/10 transition whitespace-nowrap
+                  {{ request()->routeIs('tenant.employees.*') ? 'text-white border-b-2 border-white' : '' }}">
+            Karyawan
+        </a>
+        <a href="{{ route('tenant.settings.edit', ['subdomain' => $sub]) }}"
+           class="px-4 py-2 text-sm font-medium text-white/90 hover:text-white hover:bg-white/10 transition whitespace-nowrap
+                  {{ request()->routeIs('tenant.settings.*') ? 'text-white border-b-2 border-white' : '' }}">
+            Pengaturan
+        </a>
+        @endif
         <div class="ml-auto flex items-center gap-2 py-1 text-xs text-white/70">
             {{ $navUser?->name }} ({{ $navRole?->value ?? '-' }})
         </div>
