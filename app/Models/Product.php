@@ -13,7 +13,7 @@ class Product extends Model
 {
     use BelongsToTenant, HasFactory;
 
-    protected $fillable = ['tenant_id', 'category_id', 'name', 'sku', 'price', 'stock', 'is_active'];
+    protected $fillable = ['tenant_id', 'category_id', 'name', 'sku', 'image_path', 'price', 'stock', 'is_active'];
 
     protected $casts = [
         'price'     => 'decimal:2',

@@ -44,13 +44,21 @@
                 x-show="filterCategory === null || filterCategory === {{ $product->category_id ?? 'null' }}"
                 @click="addToCart({{ $product->id }}, '{{ addslashes($product->name) }}', {{ $product->price }}, {{ $product->stock }})"
                 :disabled="{{ $product->stock }} === 0"
-                class="text-left bg-white rounded-xl border-2 border-transparent p-3 hover:border-indigo-400 transition disabled:opacity-40 disabled:cursor-not-allowed shadow-sm">
+                class="text-left bg-white rounded-xl border-2 border-transparent hover:border-indigo-400 transition disabled:opacity-40 disabled:cursor-not-allowed shadow-sm overflow-hidden">
+                @if ($product->image_path)
+                    <img src="{{ asset('storage/'.$product->image_path) }}" alt="{{ $product->name }}"
+                         class="w-full h-24 object-cover">
+                @else
+                    <div class="w-full h-24 bg-gray-100 flex items-center justify-center text-gray-300 text-xs">Foto</div>
+                @endif
+                <div class="p-3">
                 <p class="font-medium text-sm text-gray-800 leading-tight mb-1 line-clamp-2">{{ $product->name }}</p>
                 <p class="text-xs text-gray-500 mb-2">{{ $product->category?->name ?? '' }}</p>
                 <p class="font-bold text-indigo-600 text-sm">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
                 <p class="text-xs mt-1 {{ $product->stock === 0 ? 'text-red-500' : 'text-gray-400' }}">
                     Stok: {{ $product->stock }}
                 </p>
+                </div>
             </button>
             @endforeach
         </div>
