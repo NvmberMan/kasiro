@@ -28,7 +28,9 @@
            :class="open ? 'w-52' : 'w-14'">
 
         {{-- Store identity --}}
-        <div class="px-3 py-4 flex items-center gap-3 border-b border-white/20 min-h-[60px]">
+        <a href="{{ route('tenant.home', ['subdomain' => $sub]) }}"
+           class="px-3 py-4 flex items-center gap-3 border-b border-white/20 min-h-[60px] hover:bg-white/10 transition"
+           aria-label="Beranda {{ $tenant->name }}">
             @if (!empty($tenant->logo_path))
                 <img src="{{ asset('storage/'.$tenant->logo_path) }}" alt="{{ $tenant->name }}"
                      class="h-8 w-8 rounded object-cover flex-shrink-0">
@@ -40,7 +42,7 @@
             <span class="font-bold text-sm truncate" :class="open ? '' : 'hidden'">
                 {{ $tenant->name }}
             </span>
-        </div>
+        </a>
 
         {{-- Nav --}}
         <nav class="flex-1 overflow-y-auto py-2 space-y-0.5">
