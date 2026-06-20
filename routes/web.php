@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Tenant\CreateTenantController;
+use App\Http\Controllers\Tenant\TenantArchiveController;
 use App\Support\TenantContext;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
@@ -22,9 +24,8 @@ Route::domain($central)->group(function () {
         return 'Kasiro platform';
     })->name('platform.home');
 
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->middleware(['auth', 'verified'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'home'])
+        ->middleware(['auth', 'verified'])->name('dashboard');
 
     Route::middleware('auth')->group(function () {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -35,6 +36,11 @@ Route::domain($central)->group(function () {
     require __DIR__.'/auth.php';
 
     Route::middleware(['auth', 'verified'])->group(function () {
+        Route::get('/my-stores', [DashboardController::class, 'myStores'])->name('my-stores');
+        Route::get('/archive', [DashboardController::class, 'archive'])->name('archive');
+        Route::post('/tenants/{tenant}/archive', [TenantArchiveController::class, 'store'])->name('tenants.archive');
+        Route::delete('/tenants/{tenant}/archive', [TenantArchiveController::class, 'destroy'])->name('tenants.restore');
+
         Route::get('/tenants/create', [CreateTenantController::class, 'chooseFlow'])->name('tenants.choose');
         Route::get('/tenants/create/custom', [CreateTenantController::class, 'createCustom'])->name('tenants.create.custom');
         Route::post('/tenants/create/custom', [CreateTenantController::class, 'storeCustom'])->name('tenants.store.custom');
