@@ -13,9 +13,9 @@
 
 <div class="max-w-2xl mx-auto px-4 py-8"
      x-data="{
-         activeTheme: '{{ $currentTheme }}',
-         activePalette: '{{ $currentPalette }}',
-         themePalettes: @json($validPalettes),
+         activeTheme: @js($currentTheme),
+         activePalette: @js($currentPalette),
+         themePalettes: @js($validPalettes),
          changeTheme(t) {
              this.activeTheme = t;
              const ps = this.themePalettes[t] ?? [];
@@ -117,7 +117,7 @@
                 @foreach ($themes as $key => $theme)
                     <label class="cursor-pointer">
                         <input type="radio" name="theme" value="{{ $key }}" class="sr-only peer"
-                            :checked="activeTheme === '{{ $key }}'"
+                            @checked($currentTheme === $key)
                             @change="changeTheme('{{ $key }}')">
                         <div class="border-2 rounded-lg p-3 transition cursor-pointer
                                     peer-checked:border-indigo-500 peer-checked:bg-indigo-50
