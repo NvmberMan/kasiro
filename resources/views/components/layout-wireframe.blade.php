@@ -16,6 +16,23 @@
             @endfor
         </div>
     </div>
+@elseif ($type === 'bottombar')
+    <div class="aspect-[4/3] w-full rounded-md border border-gray-200 bg-gray-50 overflow-hidden flex flex-col">
+        {{-- Thin top header --}}
+        <div class="h-2 bg-gray-200 flex-shrink-0"></div>
+        {{-- Content cards grid --}}
+        <div class="flex-1 grid grid-cols-3 gap-1 p-1.5">
+            @for ($i = 0; $i < 6; $i++)
+                <div class="rounded-sm bg-gray-200"></div>
+            @endfor
+        </div>
+        {{-- Bottom nav bar --}}
+        <div class="h-3 bg-indigo-300 flex items-center justify-around px-1 flex-shrink-0">
+            @for ($i = 0; $i < 4; $i++)
+                <span class="h-1.5 w-1.5 rounded-sm bg-white/80"></span>
+            @endfor
+        </div>
+    </div>
 @else
     <div class="aspect-[4/3] w-full rounded-md border border-gray-200 bg-gray-50 overflow-hidden flex">
         {{-- Left sidebar nav --}}

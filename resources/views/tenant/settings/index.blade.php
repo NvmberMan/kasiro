@@ -80,7 +80,7 @@
         <div class="bg-white rounded-xl shadow-sm border p-6">
             <h2 class="font-semibold text-gray-700 mb-1">Layout</h2>
             <p class="text-xs text-gray-400 mb-3">Posisi navigasi dan susunan halaman.</p>
-            <div class="grid grid-cols-2 gap-3">
+            <div class="grid grid-cols-3 gap-3">
                 @foreach ($layouts as $key => $layout)
                     <label class="cursor-pointer relative block">
                         <input type="radio" name="layout" value="{{ $key }}" class="sr-only peer"
@@ -88,21 +88,8 @@
                         <div class="border-2 rounded-lg p-3 transition
                                     peer-checked:border-indigo-500 peer-checked:bg-indigo-50
                                     border-gray-200 hover:border-gray-300">
-                            {{-- Structural mockup --}}
-                            @if ($key === 'topbar')
-                            <div class="mb-2 rounded overflow-hidden border border-gray-200 text-[7px] leading-tight">
-                                <div class="bg-indigo-400 text-white px-1.5 py-0.5">━━━━ nav ━━━━</div>
-                                <div class="bg-gray-50 px-1.5 py-1 text-gray-400">konten</div>
-                            </div>
-                            @else
-                            <div class="mb-2 rounded overflow-hidden border border-gray-200 text-[7px] leading-tight flex">
-                                <div class="bg-indigo-400 text-white px-1 py-1 flex flex-col gap-0.5 text-[6px]">
-                                    <span>n</span><span>a</span><span>v</span>
-                                </div>
-                                <div class="bg-gray-50 flex-1 px-1 py-1 text-gray-400">konten</div>
-                            </div>
-                            @endif
-                            <p class="text-sm font-medium text-gray-700 text-center">{{ $layout['label'] }}</p>
+                            <x-layout-wireframe :type="$key" />
+                            <p class="mt-2 text-sm font-medium text-gray-700 text-center">{{ $layout['label'] }}</p>
                         </div>
                     </label>
                 @endforeach
