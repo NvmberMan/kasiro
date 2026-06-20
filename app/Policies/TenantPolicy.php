@@ -21,4 +21,14 @@ class TenantPolicy
     {
         return $user->roleFor($tenant)?->canManageBilling() ?? false;
     }
+
+    public function archive(User $user, Tenant $tenant): bool
+    {
+        return $user->roleFor($tenant)?->canManageTenantSettings() ?? false;
+    }
+
+    public function restore(User $user, Tenant $tenant): bool
+    {
+        return $user->roleFor($tenant)?->canManageTenantSettings() ?? false;
+    }
 }
