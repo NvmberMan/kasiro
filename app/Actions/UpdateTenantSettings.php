@@ -5,12 +5,15 @@ namespace App\Actions;
 use App\Models\Tenant;
 use App\Support\ThemeConfig;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 class UpdateTenantSettings
 {
     public function handle(Tenant $tenant, array $data): Tenant
     {
+        $oldSubdomain = $tenant->subdomain;
+
         $updates = [
             'name'      => $data['name'],
             'subdomain' => $data['subdomain'],
@@ -29,6 +32,9 @@ class UpdateTenantSettings
         $updates['theme_config'] = ThemeConfig::fromCustomInput(array_merge($existing, $data));
 
         $tenant->update($updates);
+
+        // Bust the subdomain → tenant cache so the next request sees fresh data.
+        Cache::forget("tenant:subdomain:{$oldSubdomain}");
 
         return $tenant->fresh();
     }
