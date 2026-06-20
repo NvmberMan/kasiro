@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\EnsureTenantContext;
 use App\Http\Middleware\EnsureTenantMember;
+use App\Http\Middleware\ForceHttps;
 use App\Http\Middleware\ResolveTenant;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -14,9 +15,14 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->redirectGuestsTo(
-            fn () => 'http://'.config('tenancy.central_domain').'/login'
-        );
+        // Redirect insecure requests to HTTPS before anything else runs.
+        $middleware->prepend(ForceHttps::class);
+
+        $middleware->redirectGuestsTo(function () {
+            $scheme = config('app.force_https') ? 'https' : 'http';
+
+            return $scheme.'://'.config('tenancy.central_domain').'/login';
+        });
 
         $middleware->alias([
             'tenant' => ResolveTenant::class,
