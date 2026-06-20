@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Policies\TenantPolicy;
 use App\Support\TenantContext;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -21,6 +22,13 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // Pin every generated URL (routes, redirects, assets) to https so links
+        // never downgrade the connection. The ForceHttps middleware handles the
+        // remaining case of a request that arrives over http directly.
+        if (config('app.force_https')) {
+            URL::forceScheme('https');
+        }
+
         Gate::policy(Tenant::class, TenantPolicy::class);
 
         // Permission matrix (PRD §12).
