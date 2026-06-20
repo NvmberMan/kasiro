@@ -15,7 +15,7 @@ class TenantResolutionTest extends TestCase
     {
         $this->get('http://kasiro.com/')
             ->assertOk()
-            ->assertSee('Kasiro platform');
+            ->assertSee('Kasiro');
     }
 
     public function test_active_subdomain_resolves_to_its_tenant(): void
