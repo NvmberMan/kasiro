@@ -104,6 +104,11 @@ class Tenant extends Model
         return $this->theme_config['layout'] ?? config('branding.defaults.layout');
     }
 
+    public function theme(): string
+    {
+        return $this->theme_config['theme'] ?? config('branding.defaults.theme');
+    }
+
     public function colorPalette(): string
     {
         return $this->theme_config['color_palette'] ?? config('branding.defaults.color_palette');

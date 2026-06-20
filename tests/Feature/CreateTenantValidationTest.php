@@ -39,9 +39,9 @@ class CreateTenantValidationTest extends TestCase
         $this->post('http://kasiro.com/tenants/create/custom', [
             'name'          => 'X',
             'subdomain'     => 'x',
-            'layout'        => 'modern',
-            'theme'         => 'light',
-            'color_palette' => 'default',
+            'layout'        => 'topbar',
+            'theme'         => 'modern',
+            'color_palette' => 'violet',
         ])->assertRedirect();
     }
 
@@ -53,9 +53,9 @@ class CreateTenantValidationTest extends TestCase
             ->post('http://kasiro.com/tenants/create/custom', [
                 'name'          => 'Admin Shop',
                 'subdomain'     => 'admin',
-                'layout'        => 'modern',
-                'theme'         => 'light',
-                'color_palette' => 'default',
+                'layout'        => 'topbar',
+                'theme'         => 'modern',
+                'color_palette' => 'violet',
             ])
             ->assertSessionHasErrors('subdomain');
     }
@@ -68,9 +68,9 @@ class CreateTenantValidationTest extends TestCase
             ->post('http://kasiro.com/tenants/create/custom', [
                 'name'          => 'Another',
                 'subdomain'     => 'taken',
-                'layout'        => 'modern',
-                'theme'         => 'light',
-                'color_palette' => 'default',
+                'layout'        => 'topbar',
+                'theme'         => 'modern',
+                'color_palette' => 'violet',
             ])
             ->assertSessionHasErrors('subdomain');
     }
@@ -81,9 +81,9 @@ class CreateTenantValidationTest extends TestCase
             ->post('http://kasiro.com/tenants/create/custom', [
                 'name'          => 'Bad',
                 'subdomain'     => 'MyShop',
-                'layout'        => 'modern',
-                'theme'         => 'light',
-                'color_palette' => 'default',
+                'layout'        => 'topbar',
+                'theme'         => 'modern',
+                'color_palette' => 'violet',
             ])
             ->assertSessionHasErrors('subdomain');
     }
@@ -94,9 +94,9 @@ class CreateTenantValidationTest extends TestCase
             ->post('http://kasiro.com/tenants/create/custom', [
                 'name'          => 'Bad',
                 'subdomain'     => '-badstart',
-                'layout'        => 'modern',
-                'theme'         => 'light',
-                'color_palette' => 'default',
+                'layout'        => 'topbar',
+                'theme'         => 'modern',
+                'color_palette' => 'violet',
             ])
             ->assertSessionHasErrors('subdomain');
     }
@@ -110,8 +110,8 @@ class CreateTenantValidationTest extends TestCase
                 'name'          => 'Shop',
                 'subdomain'     => 'myshop',
                 'layout'        => 'hacker-layout',
-                'theme'         => 'light',
-                'color_palette' => 'default',
+                'theme'         => 'modern',
+                'color_palette' => 'violet',
             ])
             ->assertSessionHasErrors('layout');
     }
@@ -122,8 +122,8 @@ class CreateTenantValidationTest extends TestCase
             ->post('http://kasiro.com/tenants/create/custom', [
                 'name'          => 'Shop',
                 'subdomain'     => 'myshop',
-                'layout'        => 'modern',
-                'theme'         => 'light',
+                'layout'        => 'topbar',
+                'theme'         => 'modern',
                 'color_palette' => 'rainbow-unicorn',
             ])
             ->assertSessionHasErrors('color_palette');

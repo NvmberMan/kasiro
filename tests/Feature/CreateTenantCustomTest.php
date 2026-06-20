@@ -25,9 +25,9 @@ class CreateTenantCustomTest extends TestCase
         return array_merge([
             'name'          => 'Warung Budi',
             'subdomain'     => 'warungbudi',
-            'layout'        => 'modern',
-            'theme'         => 'light',
-            'color_palette' => 'emerald',
+            'layout'        => 'topbar',
+            'theme'         => 'modern',
+            'color_palette' => 'violet',
         ], $overrides);
     }
 
@@ -48,9 +48,9 @@ class CreateTenantCustomTest extends TestCase
         $tenant = Tenant::where('subdomain', 'warungbudi')->firstOrFail();
 
         $this->assertSame('Warung Budi', $tenant->name);
-        $this->assertSame('modern', $tenant->theme_config['layout']);
-        $this->assertSame('light', $tenant->theme_config['theme']);
-        $this->assertSame('emerald', $tenant->theme_config['color_palette']);
+        $this->assertSame('topbar', $tenant->theme_config['layout']);
+        $this->assertSame('modern', $tenant->theme_config['theme']);
+        $this->assertSame('violet', $tenant->theme_config['color_palette']);
         $this->assertNull($tenant->template_id);
     }
 
