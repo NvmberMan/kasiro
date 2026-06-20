@@ -56,6 +56,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Force HTTPS
+    |--------------------------------------------------------------------------
+    |
+    | When enabled, every incoming insecure (HTTP) request is redirected to its
+    | HTTPS equivalent and all generated URLs use the "https" scheme. Keep this
+    | on wherever a TLS certificate is available (Laragon locally, production).
+    |
+    */
+
+    'force_https' => (bool) env('FORCE_HTTPS', false),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Timezone
     |--------------------------------------------------------------------------
     |
