@@ -21,58 +21,96 @@
     @if ($products->isEmpty())
         <div class="text-center py-12 text-gray-400">Belum ada produk.</div>
     @else
-        <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-            <table class="w-full text-sm">
-                <thead class="bg-gray-50 text-gray-500 text-xs uppercase">
-                    <tr>
-                        <th class="px-5 py-3"></th>
-                        <th class="px-5 py-3 text-left">Nama</th>
-                        <th class="px-5 py-3 text-left">Kategori</th>
-                        <th class="px-5 py-3 text-right">Harga</th>
-                        <th class="px-5 py-3 text-right">Stok</th>
-                        <th class="px-5 py-3 text-center">Status</th>
-                        <th class="px-5 py-3"></th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-100">
-                    @foreach ($products as $product)
-                    <tr class="{{ $product->is_active ? '' : 'opacity-50' }}">
-                        <td class="px-3 py-2 w-12">
-                            @if ($product->image_path)
-                                <img src="{{ asset('storage/'.$product->image_path) }}" alt=""
-                                     class="h-10 w-10 rounded-lg object-cover border">
-                            @else
-                                <div class="h-10 w-10 rounded-lg bg-gray-100 border flex items-center justify-center text-gray-300 text-xs">—</div>
-                            @endif
-                        </td>
-                        <td class="px-5 py-3 font-medium text-gray-800">{{ $product->name }}</td>
-                        <td class="px-5 py-3 text-gray-500">{{ $product->category?->name ?? '—' }}</td>
-                        <td class="px-5 py-3 text-right">Rp {{ number_format($product->price, 0, ',', '.') }}</td>
-                        <td class="px-5 py-3 text-right {{ $product->stock === 0 ? 'text-red-500 font-semibold' : '' }}">
-                            {{ $product->stock }}
-                        </td>
-                        <td class="px-5 py-3 text-center">
-                            <span class="inline-flex rounded-full px-2 py-0.5 text-xs font-medium
-                                {{ $product->is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500' }}">
-                                {{ $product->is_active ? 'Aktif' : 'Nonaktif' }}
-                            </span>
-                        </td>
-                        <td class="px-5 py-3 text-right">
-                            @can('update', $product)
-                            <a href="{{ route('tenant.products.edit', ['subdomain' => $tenant->subdomain, 'product' => $product]) }}"
-                               class="text-indigo-600 hover:underline mr-3">Edit</a>
-                            <form method="POST" class="inline"
-                                  action="{{ route('tenant.products.destroy', ['subdomain' => $tenant->subdomain, 'product' => $product]) }}"
-                                  onsubmit="return confirm('Hapus produk ini?')">
-                                @csrf @method('DELETE')
-                                <button type="submit" class="text-red-500 hover:underline">Hapus</button>
-                            </form>
-                            @endcan
-                        </td>
-                    </tr>
+        <div x-data="listController({ defaultSort: 'name:asc' })" x-init="init()">
+
+            {{-- Controls --}}
+            <div class="flex flex-wrap gap-2 mb-4">
+                <input type="search" x-model="search" @input="apply()" placeholder="Cari nama produk atau SKU..."
+                       class="flex-1 min-w-[200px] border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+
+                <select x-model="filter" @change="apply()"
+                        class="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <option value="">Semua Kategori</option>
+                    @foreach ($categories as $cat)
+                        <option value="{{ $cat->id }}">{{ $cat->name }}</option>
                     @endforeach
-                </tbody>
-            </table>
+                </select>
+
+                <select x-model="sort" @change="apply()"
+                        class="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <option value="name:asc">Nama A-Z</option>
+                    <option value="name:desc">Nama Z-A</option>
+                    <option value="price:asc">Harga Terendah</option>
+                    <option value="price:desc">Harga Tertinggi</option>
+                    <option value="stock:desc">Stok Terbanyak</option>
+                    <option value="stock:asc">Stok Tersedikit</option>
+                </select>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+                <table class="w-full text-sm">
+                    <thead class="bg-gray-50 text-gray-500 text-xs uppercase">
+                        <tr>
+                            <th class="px-5 py-3"></th>
+                            <th class="px-5 py-3 text-left">Nama</th>
+                            <th class="px-5 py-3 text-left">Kategori</th>
+                            <th class="px-5 py-3 text-right">Harga</th>
+                            <th class="px-5 py-3 text-right">Stok</th>
+                            <th class="px-5 py-3 text-center">Status</th>
+                            <th class="px-5 py-3"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100" x-ref="list">
+                        @foreach ($products as $product)
+                        <tr class="{{ $product->is_active ? '' : 'opacity-50' }}"
+                            data-name="{{ mb_strtolower($product->name) }}"
+                            data-search="{{ mb_strtolower($product->sku ?? '') }}"
+                            data-filter="{{ $product->category_id }}"
+                            data-price="{{ $product->price }}"
+                            data-stock="{{ $product->stock }}">
+                            <td class="px-3 py-2 w-12">
+                                @if ($product->image_path)
+                                    <img src="{{ asset('storage/'.$product->image_path) }}" alt=""
+                                         class="h-10 w-10 rounded-lg object-cover border">
+                                @else
+                                    <div class="h-10 w-10 rounded-lg bg-gray-100 border flex items-center justify-center text-gray-300 text-xs">—</div>
+                                @endif
+                            </td>
+                            <td class="px-5 py-3 font-medium text-gray-800">{{ $product->name }}</td>
+                            <td class="px-5 py-3 text-gray-500">{{ $product->category?->name ?? '—' }}</td>
+                            <td class="px-5 py-3 text-right">Rp {{ number_format($product->price, 0, ',', '.') }}</td>
+                            <td class="px-5 py-3 text-right {{ $product->stock === 0 ? 'text-red-500 font-semibold' : '' }}">
+                                {{ $product->stock }}
+                            </td>
+                            <td class="px-5 py-3 text-center">
+                                <span class="inline-flex rounded-full px-2 py-0.5 text-xs font-medium
+                                    {{ $product->is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500' }}">
+                                    {{ $product->is_active ? 'Aktif' : 'Nonaktif' }}
+                                </span>
+                            </td>
+                            <td class="px-5 py-3 text-right whitespace-nowrap">
+                                @can('update', $product)
+                                <a href="{{ route('tenant.products.edit', ['subdomain' => $tenant->subdomain, 'product' => $product]) }}"
+                                   class="text-indigo-600 hover:underline mr-3">Edit</a>
+                                <form method="POST" class="inline"
+                                      action="{{ route('tenant.products.destroy', ['subdomain' => $tenant->subdomain, 'product' => $product]) }}"
+                                      onsubmit="return confirm('Hapus produk ini?')">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="text-red-500 hover:underline">Hapus</button>
+                                </form>
+                                @endcan
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+            <p x-show="visibleCount === 0" style="display:none" class="text-center py-10 text-gray-400">
+                Tidak ada produk yang cocok dengan pencarian.
+            </p>
         </div>
+
+        @include('partials.list-controller')
     @endif
 </x-tenant-page>
