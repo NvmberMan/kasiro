@@ -48,7 +48,10 @@
                                 </div>
 
                                 <form method="POST" action="{{ route('tenants.restore', $tenant) }}"
-                                      onsubmit="return confirm('Pulihkan toko ini?')">
+                                      data-confirm="Toko ini akan dipulihkan dan kembali aktif."
+                                      data-confirm-title="Pulihkan Toko?"
+                                      data-confirm-action="Ya, Pulihkan"
+                                      data-confirm-type="primary">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"

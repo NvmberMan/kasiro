@@ -35,4 +35,13 @@ return [
         ],
     ],
 
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        // Socialite requires this key to exist when building the driver. The
+        // controller still overrides it via route() so the absolute central-domain
+        // URL is always used; this default just keeps them in sync.
+        'redirect' => env('GOOGLE_REDIRECT_URI', '/auth/google/callback'),
+    ],
+
 ];
