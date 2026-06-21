@@ -30,15 +30,17 @@
 {{-- ===== Navbar ===== --}}
 <header class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-slate-100">
     <div class="mx-auto max-w-6xl px-4 sm:px-6 flex items-center justify-between h-16">
-        <a href="/" class="flex items-center">
-            <img src="{{ asset('images/kasiro-logo-black.png') }}" alt="Kasiro" class="h-6 w-auto">
-        </a>
 
-        <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
-            <a href="#beranda" class="hover:text-slate-900 transition">Beranda</a>
-            <a href="#tentang" class="hover:text-slate-900 transition">Tentang</a>
-            <a href="#bantuan" class="hover:text-slate-900 transition">Bantuan</a>
-        </nav>
+        <div class="flex gap-[50px]">
+            <a href="/" class="flex items-center">
+                <img src="{{ asset('images/kasiro-logo-black.png') }}" alt="Kasiro" class="h-5 w-auto">
+            </a>
+            
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+                <a href="#tentang" class="hover:text-slate-900 transition">Tentang</a>
+                <a href="#bantuan" class="hover:text-slate-900 transition">Bantuan</a>
+            </nav>
+        </div>
 
         <div class="flex items-center gap-2">
             @auth
@@ -63,7 +65,7 @@
 
     <div class="relative mx-auto max-w-6xl px-4 sm:px-6 py-16 sm:py-20 grid lg:grid-cols-2 gap-10 items-center">
         <div>
-            <h1 class="text-4xl sm:text-5xl font-extrabold leading-tight tracking-tight text-slate-900">
+            <h1 class="text-3xl sm:text-4xl font-bold leading-tight tracking-tight text-slate-900">
                 Transaksi Mudah,<br>Usaha Terarah
             </h1>
             <p class="mt-5 max-w-md text-sm sm:text-base text-slate-500 leading-relaxed">
@@ -78,7 +80,7 @@
         </div>
 
         <div class="relative">
-            <div class="ph aspect-[4/3] w-full rounded-2xl ring-1 ring-slate-200"></div>
+            <div class="ph aspect-[3/2] w-full rounded-2xl ring-1 ring-slate-200"></div>
         </div>
     </div>
 </section>
