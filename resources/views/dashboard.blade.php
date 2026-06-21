@@ -28,25 +28,25 @@
                 </div>
             </div>
 
-            {{-- Platform activation funnel --}}
+            {{-- Ringkasan toko milik user --}}
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <h4 class="font-semibold text-gray-700 mb-4">Statistik Platform</h4>
+                <h4 class="font-semibold text-gray-700 mb-4">Ringkasan Toko Anda</h4>
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
                     <div>
-                        <span class="block text-2xl font-bold text-gray-800">{{ $platformStats['total_users'] }}</span>
-                        <span class="text-xs text-gray-500">Pengguna Terdaftar</span>
-                    </div>
-                    <div>
-                        <span class="block text-2xl font-bold text-gray-800">{{ $platformStats['total_tenants'] }}</span>
-                        <span class="text-xs text-gray-500">Total Toko</span>
-                    </div>
-                    <div>
-                        <span class="block text-2xl font-bold text-indigo-600">{{ $platformStats['active_tenants'] }}</span>
+                        <span class="block text-2xl font-bold text-indigo-600">{{ number_format($activeCount, 0, ',', '.') }}</span>
                         <span class="text-xs text-gray-500">Toko Aktif</span>
                     </div>
                     <div>
-                        <span class="block text-2xl font-bold text-green-600">{{ $platformStats['activated_tenants'] }}</span>
-                        <span class="text-xs text-gray-500">Sudah Bertransaksi</span>
+                        <span class="block text-2xl font-bold text-gray-800">{{ number_format($summary['products'], 0, ',', '.') }}</span>
+                        <span class="text-xs text-gray-500">Produk Aktif</span>
+                    </div>
+                    <div>
+                        <span class="block text-2xl font-bold text-gray-800">{{ number_format($summary['transactions'], 0, ',', '.') }}</span>
+                        <span class="text-xs text-gray-500">Total Transaksi</span>
+                    </div>
+                    <div>
+                        <span class="block text-2xl font-bold text-green-600">Rp {{ number_format($summary['revenue'], 0, ',', '.') }}</span>
+                        <span class="text-xs text-gray-500">Total Omzet</span>
                     </div>
                 </div>
             </div>

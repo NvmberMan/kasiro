@@ -55,7 +55,6 @@
                 <span :class="open ? '' : 'hidden'">Kasir</span>
             </a>
 
-            @if ($navRole?->canManageProducts())
             <a href="{{ route('tenant.products.index', ['subdomain' => $sub]) }}"
                class="{{ $link }} {{ request()->routeIs('tenant.products.*') ? $active : '' }}">
                 <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -72,7 +71,6 @@
                 </svg>
                 <span :class="open ? '' : 'hidden'">Kategori</span>
             </a>
-            @endif
 
             @if ($navRole?->canViewReports())
             <a href="{{ route('tenant.reports', ['subdomain' => $sub]) }}"
@@ -111,6 +109,14 @@
                 <span :class="open ? '' : 'hidden'">Pengaturan</span>
             </a>
             @endif
+
+            <a href="{{ route('dashboard') }}" class="{{ $link }} mt-2 border-t border-white/10 pt-3">
+                <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1V10"/>
+                </svg>
+                <span :class="open ? '' : 'hidden'">Dashboard</span>
+            </a>
         </nav>
 
         {{-- User info + collapse toggle --}}

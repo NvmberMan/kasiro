@@ -23,26 +23,55 @@
                     </a>
                 </div>
             @else
-                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    @foreach ($tenants as $tenant)
-                        @php $role = auth()->user()->roleFor($tenant); @endphp
-                        <x-tenant-card :tenant="$tenant" :role="$role">
-                            @if ($role?->canManageTenantSettings())
-                                <form method="POST" action="{{ route('tenants.archive', $tenant) }}"
-                                      data-confirm="Toko akan diarsipkan. Data tidak dihapus dan bisa dipulihkan kapan saja."
-                                      data-confirm-title="Arsipkan Toko?"
-                                      data-confirm-action="Ya, Arsipkan"
-                                      data-confirm-type="primary"
-                                      class="mt-2">
-                                    @csrf
-                                    <button type="submit"
-                                            class="text-xs text-red-500 hover:text-red-700 font-medium">
-                                        Arsipkan
-                                    </button>
-                                </form>
-                            @endif
-                        </x-tenant-card>
-                    @endforeach
+                <div x-data="listController({ defaultSort: 'name:asc' })" x-init="init()">
+
+                    {{-- Controls --}}
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <input type="search" x-model="search" @input="apply()" placeholder="Cari nama toko..."
+                               class="flex-1 min-w-[200px] border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+
+                        <select x-model="filter" @change="apply()"
+                                class="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="">Semua Peran</option>
+                            <option value="owner">Pemilik</option>
+                            <option value="manager">Manajer</option>
+                            <option value="cashier">Kasir</option>
+                        </select>
+
+                        <select x-model="sort" @change="apply()"
+                                class="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="name:asc">Nama A-Z</option>
+                            <option value="name:desc">Nama Z-A</option>
+                        </select>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3" x-ref="list">
+                        @foreach ($tenants as $tenant)
+                            @php $role = auth()->user()->roleFor($tenant); @endphp
+                            <div data-name="{{ mb_strtolower($tenant->name) }}" data-filter="{{ $role?->value }}">
+                                <x-tenant-card :tenant="$tenant" :role="$role">
+                                    @if ($role?->canManageTenantSettings())
+                                        <form method="POST" action="{{ route('tenants.archive', $tenant) }}"
+                                              data-confirm="Toko akan diarsipkan. Datanya tidak akan dihapus dan bisa dipulihkan nanti."
+                                              data-confirm-title="Arsipkan Toko?"
+                                              data-confirm-action="Ya, Arsipkan"
+                                              data-confirm-type="primary"
+                                              class="mt-2">
+                                            @csrf
+                                            <button type="submit"
+                                                    class="text-xs text-red-500 hover:text-red-700 font-medium">
+                                                Arsipkan
+                                            </button>
+                                        </form>
+                                    @endif
+                                </x-tenant-card>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <p x-show="visibleCount === 0" style="display:none" class="text-center py-10 text-gray-400">
+                        Tidak ada toko yang cocok.
+                    </p>
                 </div>
 
                 <div class="mt-8 text-center">
@@ -51,6 +80,8 @@
                         + Buat Toko Baru
                     </a>
                 </div>
+
+                @include('partials.list-controller')
             @endif
 
         </div>
