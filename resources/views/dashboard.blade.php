@@ -1,87 +1,82 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Beranda') }}
-        </h2>
-    </x-slot>
+    @php
+        $roleLabels = ['owner' => 'Pemilik', 'manager' => 'Manajer', 'cashier' => 'Kasir'];
+        $scheme = request()->isSecure() ? 'https' : 'http';
+        $central = config('tenancy.central_domain');
+    @endphp
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-8">
+    {{-- Header: greeting + stat cards --}}
+    <div class="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+            <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">Halo, {{ auth()->user()->name }}!</h1>
+            <p class="mt-1 text-sm text-slate-500">Kelola sistem kasir untuk toko Anda di sini.</p>
+        </div>
 
-            {{-- Greeting & stats --}}
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <h3 class="text-lg font-semibold text-gray-900">
-                    Halo, {{ auth()->user()->name }}!
-                </h3>
-                <p class="mt-1 text-sm text-gray-500">Kelola semua toko kasir Anda dari sini.</p>
+        <div class="flex gap-4">
+            <a href="{{ route('my-stores') }}" class="min-w-[6rem] rounded-2xl bg-white px-6 py-4 text-center shadow-sm ring-1 ring-slate-100 transition hover:shadow">
+                <span class="block text-3xl font-extrabold text-blue-600">{{ $activeCount }}</span>
+                <span class="text-xs text-slate-500">Toko Aktif</span>
+            </a>
+            <a href="{{ route('archive') }}" class="min-w-[6rem] rounded-2xl bg-white px-6 py-4 text-center shadow-sm ring-1 ring-slate-100 transition hover:shadow">
+                <span class="block text-3xl font-extrabold text-slate-800">{{ $archivedCount }}</span>
+                <span class="text-xs text-slate-500">Diarsipkan</span>
+            </a>
+        </div>
+    </div>
 
-                <div class="mt-4 flex gap-6">
-                    <a href="{{ route('my-stores') }}" class="text-center">
-                        <span class="block text-3xl font-bold text-indigo-600">{{ $activeCount }}</span>
-                        <span class="text-xs text-gray-500">Toko Aktif</span>
+    {{-- Recent stores --}}
+    <div class="mt-10">
+        <div class="mb-6 flex items-center justify-between">
+            <h2 class="text-lg font-bold text-slate-900">Sistem Kasir Terbaru</h2>
+            <a href="{{ route('my-stores') }}"
+               class="rounded-full border border-blue-600 px-4 py-1.5 text-sm font-semibold text-blue-600 transition hover:bg-blue-50">
+                Lihat Semua
+            </a>
+        </div>
+
+        @if ($recent->isEmpty())
+            <div class="rounded-2xl border-2 border-dashed border-slate-200 bg-white p-12 text-center">
+                <p class="mb-4 text-slate-400">Belum ada toko. Mulai buat toko pertama Anda!</p>
+                <a href="{{ route('tenants.choose') }}"
+                   class="inline-flex rounded-full bg-lime-400 px-6 py-2.5 text-sm font-semibold text-slate-900 transition hover:bg-lime-500">
+                    Buat Toko Baru
+                </a>
+            </div>
+        @else
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                @foreach ($recent as $tenant)
+                    @php
+                        $role = auth()->user()->roleFor($tenant);
+                        $roleLabel = $role ? ($roleLabels[$role->value] ?? ucfirst($role->value)) : null;
+                        $storeUrl = $scheme.'://'.$tenant->subdomain.'.'.$central;
+                    @endphp
+                    <a href="{{ $storeUrl }}" class="group block">
+                        <div class="ph h-44 w-full rounded-xl ring-1 ring-slate-200 transition group-hover:ring-blue-400 overflow-hidden">
+                            @if ($tenant->logo_path)
+                                <img src="{{ asset('storage/'.$tenant->logo_path) }}" alt="{{ $tenant->name }}" class="h-full w-full object-cover">
+                            @endif
+                        </div>
+                        @if ($roleLabel)
+                            <span class="mt-3 inline-block rounded-full border border-lime-500 bg-lime-50 px-3 py-0.5 text-xs font-medium text-lime-700">
+                                {{ $roleLabel }}
+                            </span>
+                        @endif
+                        <p class="mt-2 font-semibold text-slate-800">{{ $tenant->name }}</p>
                     </a>
-                    <div class="border-l border-gray-200"></div>
-                    <a href="{{ route('archive') }}" class="text-center">
-                        <span class="block text-3xl font-bold text-gray-400">{{ $archivedCount }}</span>
-                        <span class="text-xs text-gray-500">Diarsipkan</span>
-                    </a>
-                </div>
+                @endforeach
             </div>
+        @endif
+    </div>
 
-            {{-- Ringkasan toko milik user --}}
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <h4 class="font-semibold text-gray-700 mb-4">Ringkasan Toko Anda</h4>
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
-                    <div>
-                        <span class="block text-2xl font-bold text-indigo-600">{{ number_format($activeCount, 0, ',', '.') }}</span>
-                        <span class="text-xs text-gray-500">Toko Aktif</span>
-                    </div>
-                    <div>
-                        <span class="block text-2xl font-bold text-gray-800">{{ number_format($summary['products'], 0, ',', '.') }}</span>
-                        <span class="text-xs text-gray-500">Produk Aktif</span>
-                    </div>
-                    <div>
-                        <span class="block text-2xl font-bold text-gray-800">{{ number_format($summary['transactions'], 0, ',', '.') }}</span>
-                        <span class="text-xs text-gray-500">Total Transaksi</span>
-                    </div>
-                    <div>
-                        <span class="block text-2xl font-bold text-green-600">Rp {{ number_format($summary['revenue'], 0, ',', '.') }}</span>
-                        <span class="text-xs text-gray-500">Total Omzet</span>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Recent stores --}}
-            <div>
-                <div class="flex items-center justify-between mb-4">
-                    <h4 class="font-semibold text-gray-700">Toko Terbaru</h4>
-                    <a href="{{ route('my-stores') }}" class="text-sm text-indigo-600 hover:underline">Lihat semua →</a>
-                </div>
-
-                @if ($recent->isEmpty())
-                    <div class="bg-white rounded-xl border-2 border-dashed border-gray-200 p-10 text-center">
-                        <p class="text-gray-400 mb-4">Belum ada toko. Mulai buat toko pertama Anda!</p>
-                        <a href="{{ route('tenants.choose') }}"
-                           class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition">
-                            + Buat Toko Baru
-                        </a>
-                    </div>
-                @else
-                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                        @foreach ($recent as $tenant)
-                            <x-tenant-card :tenant="$tenant" :role="auth()->user()->roleFor($tenant)" />
-                        @endforeach
-                    </div>
-
-                    <div class="mt-6 text-center">
-                        <a href="{{ route('tenants.choose') }}"
-                           class="inline-flex items-center px-5 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-semibold hover:bg-indigo-700 transition">
-                            + Buat Toko Baru
-                        </a>
-                    </div>
-                @endif
-            </div>
-
+    {{-- CTA banner --}}
+    <div class="mt-10 border-t border-slate-200 pt-10">
+        <div class="flex flex-col items-center justify-between gap-4 rounded-3xl bg-gradient-to-r from-blue-300 via-blue-400 to-blue-600 px-8 py-6 sm:flex-row">
+            <h3 class="text-xl font-bold text-slate-900">Buat Sistem Kasir Impian Anda</h3>
+            <a href="{{ route('tenants.choose') }}"
+               class="inline-flex items-center gap-2 rounded-full bg-lime-400 px-6 py-2.5 text-sm font-semibold text-slate-900 transition hover:bg-lime-500">
+                Buat Sekarang
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M9 7h8v8"/></svg>
+            </a>
         </div>
     </div>
 </x-app-layout>
