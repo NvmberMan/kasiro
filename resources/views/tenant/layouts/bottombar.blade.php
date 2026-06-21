@@ -58,7 +58,6 @@
                 <span class="text-[10px] font-medium">Kasir</span>
             </a>
 
-            @if ($navRole?->canManageProducts())
             <a href="{{ route('tenant.products.index', ['subdomain' => $sub]) }}"
                class="{{ $item }} {{ request()->routeIs('tenant.products.*') ? $active : '' }}">
                 <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -75,7 +74,6 @@
                 </svg>
                 <span class="text-[10px] font-medium">Kategori</span>
             </a>
-            @endif
 
             @if ($navRole?->canViewReports())
             <a href="{{ route('tenant.reports', ['subdomain' => $sub]) }}"
@@ -115,6 +113,15 @@
                 <span class="text-[10px] font-medium">Pengaturan</span>
             </a>
             @endif
+
+            <a href="{{ route('dashboard') }}"
+               class="{{ $item }}">
+                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1V10"/>
+                </svg>
+                <span class="text-[10px] font-medium">Dashboard</span>
+            </a>
         </div>
     </nav>
 </body>
