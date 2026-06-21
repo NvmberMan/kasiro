@@ -70,7 +70,10 @@
                                     </select>
                                 </form>
                                 <form method="POST" action="{{ route('tenant.employees.destroy', ['subdomain' => $tenant->subdomain, 'user' => $member->id]) }}"
-                                    onsubmit="return confirm('Cabut akses {{ $member->name }}?')">
+                                    data-confirm="Akses {{ $member->name }} ke toko ini akan dicabut."
+                                    data-confirm-title="Cabut Akses?"
+                                    data-confirm-action="Ya, Cabut"
+                                    data-confirm-type="danger">
                                     @csrf @method('DELETE')
                                     <button class="text-xs text-red-600 hover:underline">Cabut</button>
                                 </form>

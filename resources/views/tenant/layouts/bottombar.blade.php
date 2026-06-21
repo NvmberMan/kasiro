@@ -124,5 +124,6 @@
             </a>
         </div>
     </nav>
+    @include('partials.confirm-modal')
 </body>
 </html>

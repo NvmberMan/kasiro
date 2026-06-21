@@ -94,7 +94,10 @@
                                    class="text-indigo-600 hover:underline mr-3">Edit</a>
                                 <form method="POST" class="inline"
                                       action="{{ route('tenant.products.destroy', ['subdomain' => $tenant->subdomain, 'product' => $product]) }}"
-                                      onsubmit="return confirm('Hapus produk ini?')">
+                                      data-confirm="Produk ini akan dihapus permanen dan tidak bisa dikembalikan."
+                                      data-confirm-title="Hapus Produk?"
+                                      data-confirm-action="Ya, Hapus"
+                                      data-confirm-type="danger">
                                     @csrf @method('DELETE')
                                     <button type="submit" class="text-red-500 hover:underline">Hapus</button>
                                 </form>
