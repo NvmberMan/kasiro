@@ -18,10 +18,11 @@ class ProductController extends Controller
     {
         Gate::authorize('viewAny', Product::class);
 
-        $tenant   = app(TenantContext::class)->get();
-        $products = Product::with('category')->orderBy('name')->get();
+        $tenant     = app(TenantContext::class)->get();
+        $products   = Product::with('category')->orderBy('name')->get();
+        $categories = Category::orderBy('name')->get();
 
-        return view('tenant.products.index', compact('tenant', 'products'));
+        return view('tenant.products.index', compact('tenant', 'products', 'categories'));
     }
 
     public function create(): View
