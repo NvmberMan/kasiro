@@ -1,31 +1,26 @@
 <x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
+    <div class="text-center">
+        <h1 class="text-2xl font-bold text-gray-900">{{ __('Verifikasi Email') }}</h1>
+        <p class="mt-1 text-sm text-gray-500">
+            {{ __('Terima kasih sudah mendaftar! Sebelum mulai, silakan verifikasi email Anda lewat tautan yang baru kami kirim. Jika belum menerimanya, kami bisa kirim ulang.') }}
+        </p>
     </div>
 
     @if (session('status') == 'verification-link-sent')
-        <div class="mb-4 font-medium text-sm text-green-600">
-            {{ __('A new verification link has been sent to the email address you provided during registration.') }}
+        <div class="mt-4 rounded-lg bg-green-50 px-4 py-2 text-center text-sm font-medium text-green-700">
+            {{ __('Tautan verifikasi baru telah dikirim ke email Anda.') }}
         </div>
     @endif
 
-    <div class="mt-4 flex items-center justify-between">
-        <form method="POST" action="{{ route('verification.send') }}">
-            @csrf
+    <form method="POST" action="{{ route('verification.send') }}" class="mt-6">
+        @csrf
+        <x-auth-button>{{ __('Kirim Ulang Email Verifikasi') }}</x-auth-button>
+    </form>
 
-            <div>
-                <x-primary-button>
-                    {{ __('Resend Verification Email') }}
-                </x-primary-button>
-            </div>
-        </form>
-
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-
-            <button type="submit" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                {{ __('Log Out') }}
-            </button>
-        </form>
-    </div>
+    <form method="POST" action="{{ route('logout') }}" class="mt-4 text-center">
+        @csrf
+        <button type="submit" class="text-sm font-medium text-gray-500 hover:text-gray-700">
+            {{ __('Keluar') }}
+        </button>
+    </form>
 </x-guest-layout>
