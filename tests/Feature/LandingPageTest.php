@@ -22,16 +22,16 @@ class LandingPageTest extends TestCase
     {
         $this->get('http://kasiro.com/')
             ->assertOk()
-            ->assertSee('Mulai Gratis')
-            ->assertSee('POS bermerek');
+            ->assertSee('Transaksi Mudah')
+            ->assertSee('Usaha Terarah')
+            ->assertSee('Buat Sekarang');
     }
 
-    public function test_landing_shows_register_and_login_links_for_guests(): void
+    public function test_landing_shows_login_link_for_guests(): void
     {
         $this->get('http://kasiro.com/')
             ->assertOk()
-            ->assertSee('Daftar Gratis')
-            ->assertSee('Masuk');
+            ->assertSee('Login');
     }
 
     public function test_landing_shows_dashboard_link_for_authenticated_user(): void
@@ -41,8 +41,7 @@ class LandingPageTest extends TestCase
         $this->actingAs($user)
             ->get('http://kasiro.com/')
             ->assertOk()
-            ->assertSee('Dashboard')
-            ->assertSee('Buat Toko');
+            ->assertSee('Dashboard');
     }
 
     public function test_landing_shows_published_templates(): void
@@ -69,21 +68,13 @@ class LandingPageTest extends TestCase
             ->assertDontSee('Draft Template');
     }
 
-    public function test_landing_shows_features_section(): void
+    public function test_landing_shows_main_sections(): void
     {
         $this->get('http://kasiro.com/')
             ->assertOk()
-            ->assertSee('POS Bermerek')
-            ->assertSee('Manajemen Karyawan')
-            ->assertSee('Laporan Penjualan');
-    }
-
-    public function test_landing_shows_how_it_works_steps(): void
-    {
-        $this->get('http://kasiro.com/')
-            ->assertOk()
-            ->assertSee('Daftar akun')
-            ->assertSee('Pilih template')
-            ->assertSee('Mulai bertransaksi');
+            ->assertSee('Template Kasir')
+            ->assertSee('3 Hal yang membuat KASIRO berbeda')
+            ->assertSee('Pertanyaan Umum')
+            ->assertSee('Kami Mendengar Anda!');
     }
 }
