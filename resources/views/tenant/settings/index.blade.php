@@ -4,6 +4,16 @@
     $currentPalette = old('color_palette', $tenant->colorPalette());
     $currentLayout  = old('layout', $tenant->layout());
 
+    // Toleransi data lama: jika theme/layout tersimpan tidak lagi terdaftar di
+    // config branding (mis. dari seeder/template lama), pakai default valid agar
+    // kartu pilihan tetap ter-select.
+    if (! isset($themes[$currentTheme])) {
+        $currentTheme = array_key_first($themes);
+    }
+    if (! isset($layouts[$currentLayout])) {
+        $currentLayout = array_key_first($layouts);
+    }
+
     // Ensure currentPalette is valid for currentTheme on load
     $validPalettes = collect($themes)->map(fn($t) => $t['palettes']);
     if (! in_array($currentPalette, $themes[$currentTheme]['palettes'] ?? [], true)) {
