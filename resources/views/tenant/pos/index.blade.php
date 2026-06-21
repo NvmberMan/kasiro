@@ -16,6 +16,20 @@
         </div>
         @enderror
 
+        {{-- Search + sort --}}
+        <div class="flex flex-wrap gap-2 mb-4">
+            <input type="search" x-model="search" placeholder="Cari produk..."
+                   class="flex-1 min-w-[180px] border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <select x-model="sort" @change="sortProducts()"
+                    class="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option value="name:asc">Nama A-Z</option>
+                <option value="name:desc">Nama Z-A</option>
+                <option value="price:asc">Harga Terendah</option>
+                <option value="price:desc">Harga Tertinggi</option>
+                <option value="stock:desc">Stok Terbanyak</option>
+            </select>
+        </div>
+
         {{-- Category filter --}}
         @if ($categories->isNotEmpty())
         <div class="flex gap-2 flex-wrap mb-4">
@@ -38,10 +52,13 @@
         @if ($products->isEmpty())
             <p class="text-gray-400 text-center py-12">Belum ada produk aktif.</p>
         @else
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3" x-ref="grid">
             @foreach ($products as $product)
             <button
-                x-show="filterCategory === null || filterCategory === {{ $product->category_id ?? 'null' }}"
+                data-name="{{ mb_strtolower($product->name) }}"
+                data-price="{{ $product->price }}"
+                data-stock="{{ $product->stock }}"
+                x-show="(filterCategory === null || filterCategory === {{ $product->category_id ?? 'null' }}) && nameMatches('{{ addslashes(mb_strtolower($product->name)) }}')"
                 @click="addToCart({{ $product->id }}, '{{ addslashes($product->name) }}', {{ $product->price }}, {{ $product->stock }})"
                 :disabled="{{ $product->stock }} === 0"
                 class="text-left bg-white rounded-xl border-2 border-transparent hover:border-indigo-400 transition disabled:opacity-40 disabled:cursor-not-allowed shadow-sm overflow-hidden">
@@ -134,7 +151,34 @@ function posApp() {
     return {
         cart: {},
         filterCategory: null,
+        search: '',
+        sort: 'name:asc',
         paid: 0,
+
+        init() {
+            this.sortProducts();
+        },
+
+        nameMatches(name) {
+            return this.search === '' || name.includes(this.search.toLowerCase().trim());
+        },
+
+        sortProducts() {
+            const grid = this.$refs.grid;
+            if (!grid) return;
+            const [key, dir] = this.sort.split(':');
+            const mult = dir === 'desc' ? -1 : 1;
+            Array.from(grid.children).sort((a, b) => {
+                const av = a.dataset[key] ?? '';
+                const bv = b.dataset[key] ?? '';
+                const an = parseFloat(av);
+                const bn = parseFloat(bv);
+                const cmp = (!isNaN(an) && !isNaN(bn))
+                    ? an - bn
+                    : String(av).localeCompare(String(bv), 'id');
+                return cmp * mult;
+            }).forEach((el) => grid.appendChild(el));
+        },
 
         get cartItems() {
             return Object.values(this.cart);
