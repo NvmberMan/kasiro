@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Enums\MembershipStatus;
+use App\Models\Product;
 use App\Models\Tenant;
 use App\Models\Transaction;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -15,10 +15,13 @@ class DashboardController extends Controller
     {
         $user = $request->user();
 
-        $activeCount = $user->tenants()
+        // Toko aktif yang diikuti user (sebagai owner maupun anggota).
+        $activeTenantIds = $user->tenants()
             ->wherePivot('status', MembershipStatus::Active->value)
             ->where('tenants.status', Tenant::STATUS_ACTIVE)
-            ->count();
+            ->pluck('tenants.id');
+
+        $activeCount = $activeTenantIds->count();
 
         $archivedCount = $user->ownedTenants()
             ->where('status', Tenant::STATUS_ARCHIVED)
@@ -31,15 +34,22 @@ class DashboardController extends Controller
             ->take(3)
             ->get();
 
-        // Platform-wide activation funnel (visible to all authenticated users)
-        $platformStats = [
-            'total_users'        => User::count(),
-            'total_tenants'      => Tenant::count(),
-            'active_tenants'     => Tenant::where('status', Tenant::STATUS_ACTIVE)->count(),
-            'activated_tenants'  => Tenant::whereHas('transactions')->count(),
+        // Ringkasan agregat lintas toko milik user. Memakai withoutTenantScope
+        // lalu membatasi ke tenant user, jadi tidak ada kebocoran data tenant lain.
+        $summary = [
+            'products' => Product::withoutTenantScope()
+                ->whereIn('tenant_id', $activeTenantIds)
+                ->where('is_active', true)
+                ->count(),
+            'transactions' => Transaction::withoutTenantScope()
+                ->whereIn('tenant_id', $activeTenantIds)
+                ->count(),
+            'revenue' => (float) Transaction::withoutTenantScope()
+                ->whereIn('tenant_id', $activeTenantIds)
+                ->sum('total'),
         ];
 
-        return view('dashboard', compact('activeCount', 'archivedCount', 'recent', 'platformStats'));
+        return view('dashboard', compact('activeCount', 'archivedCount', 'recent', 'summary'));
     }
 
     public function myStores(Request $request): View
