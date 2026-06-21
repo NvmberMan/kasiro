@@ -29,7 +29,10 @@
                         <x-tenant-card :tenant="$tenant" :role="$role">
                             @if ($role?->canManageTenantSettings())
                                 <form method="POST" action="{{ route('tenants.archive', $tenant) }}"
-                                      onsubmit="return confirm('Arsipkan toko ini? Data tidak akan dihapus.')"
+                                      data-confirm="Toko akan diarsipkan. Data tidak dihapus dan bisa dipulihkan kapan saja."
+                                      data-confirm-title="Arsipkan Toko?"
+                                      data-confirm-action="Ya, Arsipkan"
+                                      data-confirm-type="primary"
                                       class="mt-2">
                                     @csrf
                                     <button type="submit"
