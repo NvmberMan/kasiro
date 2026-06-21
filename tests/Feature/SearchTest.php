@@ -115,14 +115,14 @@ class SearchTest extends TestCase
         $response->assertSee(route('tenant.categories.index', ['subdomain' => $this->tenant->subdomain]));
     }
 
-    /* ---- #4: dashboard shows the user's own store summary ---- */
+    /* ---- #4: dashboard (studio beranda) shows the user's own stores ---- */
 
-    public function test_dashboard_shows_user_store_summary(): void
+    public function test_dashboard_shows_user_stores(): void
     {
         $this->actingAs($this->owner)
             ->get('http://kasiro.com/dashboard')
             ->assertOk()
-            ->assertSee('Ringkasan Toko Anda')
-            ->assertSee('Total Omzet');
+            ->assertSee('Toko Aktif')
+            ->assertSee('Sistem Kasir Terbaru');
     }
 }
