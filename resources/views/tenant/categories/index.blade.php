@@ -31,7 +31,10 @@
                            class="text-sm text-indigo-600 hover:underline">Edit</a>
                         <form method="POST"
                               action="{{ route('tenant.categories.destroy', ['subdomain' => $tenant->subdomain, 'category' => $category]) }}"
-                              onsubmit="return confirm('Hapus kategori ini?')">
+                              data-confirm="Kategori ini akan dihapus."
+                              data-confirm-title="Hapus Kategori?"
+                              data-confirm-action="Ya, Hapus"
+                              data-confirm-type="danger">
                             @csrf @method('DELETE')
                             <button type="submit" class="text-sm text-red-500 hover:underline">Hapus</button>
                         </form>
