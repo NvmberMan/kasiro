@@ -1,8 +1,9 @@
 <x-tenant-page>
-<div x-data="posApp()" class="flex gap-4 h-full overflow-hidden p-6">
+<div x-data="posApp()" @keydown.escape.window="cartOpen = false"
+     class="flex flex-col lg:flex-row gap-4 lg:h-full lg:overflow-hidden p-4 sm:p-6">
 
     {{-- Product grid --}}
-    <div class="flex-1 overflow-y-auto">
+    <div class="flex-1 lg:overflow-y-auto">
 
         @if (session('status') === 'checkout-success')
         <div class="mb-3 p-3 bg-green-50 border border-green-200 text-green-800 text-sm rounded-lg">
@@ -82,9 +83,29 @@
         @endif
     </div>
 
-    {{-- Cart sidebar --}}
-    <div class="w-80 flex flex-col bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div class="px-4 py-3 border-b font-semibold text-gray-700">Keranjang</div>
+    {{-- Mobile cart trigger (floating) --}}
+    <button type="button" @click="cartOpen = true"
+            class="lg:hidden fixed bottom-5 right-5 z-30 flex items-center gap-2 rounded-full bg-indigo-600 text-white shadow-lg px-5 py-3 active:scale-95 transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+        <span class="text-sm font-semibold" x-text="'Rp ' + total.toLocaleString('id')"></span>
+        <span x-show="cartCount > 0" class="inline-flex items-center justify-center min-w-[20px] h-5 px-1 rounded-full bg-white text-indigo-700 text-xs font-bold" x-text="cartCount"></span>
+    </button>
+
+    {{-- Drawer overlay (mobile) --}}
+    <div x-show="cartOpen" x-transition.opacity @click="cartOpen = false"
+         class="lg:hidden fixed inset-0 bg-black/40 z-40" style="display:none"></div>
+
+    {{-- Cart: right column on desktop, slide-in drawer on mobile --}}
+    <div class="flex-shrink-0 flex flex-col bg-white border border-gray-200 overflow-hidden
+                fixed inset-y-0 right-0 z-50 w-full max-w-sm shadow-2xl transition-transform duration-300
+                lg:static lg:inset-auto lg:z-auto lg:w-80 lg:max-w-none lg:rounded-xl lg:shadow-sm lg:translate-x-0"
+         :class="cartOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'">
+        <div class="px-4 py-3 border-b font-semibold text-gray-700 flex items-center justify-between">
+            <span>Keranjang</span>
+            <button type="button" @click="cartOpen = false" class="lg:hidden text-gray-400 hover:text-gray-600" aria-label="Tutup keranjang">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+        </div>
 
         <div class="flex-1 overflow-y-auto divide-y">
             <template x-if="Object.keys(cart).length === 0">
@@ -150,6 +171,7 @@
 function posApp() {
     return {
         cart: {},
+        cartOpen: false,
         filterCategory: null,
         search: '',
         sort: 'name:asc',
@@ -186,6 +208,10 @@ function posApp() {
 
         get total() {
             return this.cartItems.reduce((sum, i) => sum + i.price * i.qty, 0);
+        },
+
+        get cartCount() {
+            return this.cartItems.reduce((sum, i) => sum + i.qty, 0);
         },
 
         get change() {

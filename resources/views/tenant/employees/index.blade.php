@@ -45,12 +45,12 @@
             <ul class="divide-y">
                 @forelse ($members as $member)
                     @php $role = $member->pivot->role->value; $status = $member->pivot->status; @endphp
-                    <li class="px-6 py-4 flex items-center justify-between">
-                        <div>
-                            <p class="font-medium text-sm">{{ $member->name }}</p>
-                            <p class="text-xs text-gray-500">{{ $member->email }}</p>
+                    <li class="px-6 py-4 flex items-center justify-between gap-3 flex-wrap">
+                        <div class="min-w-0">
+                            <p class="font-medium text-sm truncate">{{ $member->name }}</p>
+                            <p class="text-xs text-gray-500 truncate">{{ $member->email }}</p>
                         </div>
-                        <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-2 flex-wrap">
                             <span @class([
                                 'px-2 py-0.5 text-xs rounded-full font-medium',
                                 'bg-purple-100 text-purple-700' => $role === 'owner',
