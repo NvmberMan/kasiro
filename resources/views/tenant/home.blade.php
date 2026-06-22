@@ -1,5 +1,5 @@
 <x-tenant-page>
-    @php($sub = $tenant->subdomain)
+    @php $sub = $tenant->subdomain; @endphp
 
     {{-- Welcome --}}
     <div class="mb-6">
@@ -34,6 +34,26 @@
             @endif
         </div>
     </div>
+
+    {{-- Sales sparkline (last 7 days) --}}
+    @if ($canViewReports)
+        @php
+            $weekLabels = collect($weekSeries)->map(fn ($r) => \Carbon\Carbon::parse($r['date'])->isoFormat('ddd'))->all();
+            $weekValues = collect($weekSeries)->pluck('revenue')->all();
+            $weekTotal = collect($weekSeries)->sum('revenue');
+        @endphp
+        <div class="brand-card shadow-sm p-5 mb-8">
+            <div class="flex items-center justify-between mb-3">
+                <div>
+                    <h2 class="text-sm font-semibold" style="color:var(--brand-fg)">Penjualan 7 Hari Terakhir</h2>
+                    <p class="text-xs brand-muted">Total Rp {{ number_format($weekTotal, 0, ',', '.') }}</p>
+                </div>
+                <a href="{{ route('tenant.reports', ['subdomain' => $sub]) }}" class="text-xs font-medium brand-text hover:underline">Lihat laporan</a>
+            </div>
+            <x-chart type="line" :labels="$weekLabels" :values="$weekValues" :height="130"
+                     format="currency" empty="Belum ada penjualan minggu ini." />
+        </div>
+    @endif
 
     {{-- Quick actions --}}
     <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Akses Cepat</h2>
