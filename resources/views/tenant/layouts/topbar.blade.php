@@ -39,6 +39,7 @@
     </main>
 
 
+    <x-flash-modal />
     @include('partials.confirm-modal')
 </body>
 </html>

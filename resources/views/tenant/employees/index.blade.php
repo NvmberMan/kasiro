@@ -4,15 +4,6 @@
             <h1 class="text-2xl font-bold">Manajemen Karyawan</h1>
         </div>
 
-        @if (session('invitation_link'))
-            <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-                <p class="text-sm font-medium text-green-800 mb-2">Undangan berhasil dibuat. Bagikan link berikut:</p>
-                <code class="block text-xs bg-white border border-green-300 rounded px-3 py-2 break-all">
-                    {{ session('invitation_link') }}
-                </code>
-            </div>
-        @endif
-
         @if ($errors->any())
             <div class="mb-4 p-3 bg-red-50 border border-red-200 rounded text-sm text-red-700">
                 {{ $errors->first() }}
@@ -22,12 +13,12 @@
         {{-- Invite form --}}
         <div class="bg-white rounded-xl shadow-sm border p-6 mb-8">
             <h2 class="text-lg font-semibold mb-4">Undang Karyawan Baru</h2>
-            <form method="POST" action="{{ route('tenant.invitations.store', ['subdomain' => $tenant->subdomain]) }}" class="flex flex-col sm:flex-row gap-3">
+            <form method="POST" data-loading action="{{ route('tenant.invitations.store', ['subdomain' => $tenant->subdomain]) }}" class="flex flex-col sm:flex-row gap-3">
                 @csrf
                 <input type="email" name="email" placeholder="Email karyawan" required
                     value="{{ old('email') }}"
                     class="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
-                <select name="role" class="rounded-lg border border-gray-300 px-3 py-2 text-sm">
+                <select name="role" class="min-w-[120px] rounded-lg border border-gray-300 px-3 py-2 text-sm">
                     <option value="cashier" @selected(old('role','cashier')==='cashier')>Kasir</option>
                     <option value="manager" @selected(old('role')==='manager')>Manager</option>
                 </select>
@@ -64,7 +55,7 @@
                             @elseif ($role !== 'owner')
                                 <form method="POST" action="{{ route('tenant.employees.update', ['subdomain' => $tenant->subdomain, 'user' => $member->id]) }}">
                                     @csrf @method('PATCH')
-                                    <select name="role" onchange="this.form.submit()" class="text-xs border rounded px-2 py-1">
+                                    <select name="role" onchange="this.form.submit()" class="min-w-[100px] text-xs border rounded px-2 py-1">
                                         <option value="cashier" @selected($role==='cashier')>Kasir</option>
                                         <option value="manager" @selected($role==='manager')>Manager</option>
                                     </select>

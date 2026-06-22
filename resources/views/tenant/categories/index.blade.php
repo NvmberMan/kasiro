@@ -10,18 +10,6 @@
             @endcan
         </div>
 
-        @if (session('status'))
-            <div class="mb-4 p-3 bg-green-50 border border-green-200 text-green-800 text-sm rounded-lg">
-                @if (session('status') === 'category-created')
-                    Kategori berhasil ditambahkan.
-                @elseif (session('status') === 'category-updated')
-                    Kategori berhasil diperbarui.
-                @elseif (session('status') === 'category-deleted')
-                    Kategori berhasil dihapus.
-                @endif
-            </div>
-        @endif
-
         @if ($categories->isEmpty())
             <div class="text-center py-12 text-gray-400">Belum ada kategori.</div>
         @else
@@ -33,7 +21,7 @@
                         class="flex-1 min-w-[200px] border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
 
                     <select x-model="sort" @change="apply()"
-                        class="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        class="min-w-[120px] border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
                         <option value="name:asc">Nama A-Z</option>
                         <option value="name:desc">Nama Z-A</option>
                     </select>

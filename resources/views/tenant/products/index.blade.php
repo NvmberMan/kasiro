@@ -10,18 +10,6 @@
             @endcan
         </div>
 
-        @if (session('status'))
-            <div class="mb-4 p-3 bg-green-50 border border-green-200 text-green-800 text-sm rounded-lg">
-                @if (session('status') === 'product-created')
-                    Produk berhasil ditambahkan.
-                @elseif (session('status') === 'product-updated')
-                    Produk berhasil diperbarui.
-                @elseif (session('status') === 'product-deleted')
-                    Produk berhasil dihapus.
-                @endif
-            </div>
-        @endif
-
         @if ($products->isEmpty())
             <div class="text-center py-12 text-gray-400">Belum ada produk.</div>
         @else
@@ -33,7 +21,7 @@
                         class="flex-1 min-w-[200px] border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
 
                     <select x-model="filter" @change="apply()"
-                        class="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        class="border min-w-[160px] border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
                         <option value="">Semua Kategori</option>
                         @foreach ($categories as $cat)
                             <option value="{{ $cat->id }}">{{ $cat->name }}</option>
@@ -41,7 +29,7 @@
                     </select>
 
                     <select x-model="sort" @change="apply()"
-                        class="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        class="min-w-[150px] border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
                         <option value="name:asc">Nama A-Z</option>
                         <option value="name:desc">Nama Z-A</option>
                         <option value="price:asc">Harga Terendah</option>
