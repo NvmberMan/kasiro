@@ -4,7 +4,7 @@
             {{ isset($category) ? 'Edit Kategori' : 'Tambah Kategori' }}
         </h1>
 
-        <form method="POST"
+        <form method="POST" data-loading
               action="{{ isset($category)
                   ? route('tenant.categories.update', ['subdomain' => $tenant->subdomain, 'category' => $category])
                   : route('tenant.categories.store', ['subdomain' => $tenant->subdomain]) }}"
