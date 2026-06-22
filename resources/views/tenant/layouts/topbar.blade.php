@@ -6,33 +6,39 @@
     <title>{{ $tenant->name ?? config('app.name') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <x-brand-styles :config="$tenant->theme_config ?? []" />
-    <style>
-        body { background-color: var(--brand-bg); color: var(--brand-fg); }
-        .brand-primary { background-color: var(--brand-primary); }
-        .brand-accent  { background-color: var(--brand-accent); }
-        .brand-text    { color: var(--brand-primary); }
-        .brand-rounded { border-radius: var(--brand-radius, 0.5rem); }
-    </style>
 </head>
-<body class="antialiased">
-    <header class="brand-primary text-white shadow">
-        <div class="mx-auto max-w-7xl px-4 py-4 flex items-center gap-3">
+<body class="antialiased h-screen flex flex-col">
+    @php $navUser = auth()->user(); $navRole = $navUser?->roleFor($tenant); @endphp
+
+    <header class="brand-surface border-b brand-border">
+        <div class="mx-auto max-w-7xl px-4 py-3 flex items-center gap-3">
             <a href="{{ route('tenant.home', ['subdomain' => $tenant->subdomain]) }}"
-               class="flex items-center gap-3 hover:opacity-90 transition" aria-label="Beranda {{ $tenant->name }}">
+               class="flex items-center gap-3 transition hover:opacity-80" aria-label="Beranda {{ $tenant->name }}">
                 @if (!empty($tenant->logo_path))
                     <img src="{{ asset('storage/'.$tenant->logo_path) }}" alt="{{ $tenant->name }}"
-                         class="h-8 w-8 rounded object-cover">
+                         class="h-9 w-9 rounded-lg object-cover brand-rounded">
+                @else
+                    <span class="flex h-9 w-9 items-center justify-center brand-primary brand-rounded text-sm font-bold text-white">
+                        {{ mb_strtoupper(mb_substr($tenant->name, 0, 1)) }}
+                    </span>
                 @endif
-                <span class="font-bold text-lg tracking-wide">{{ $tenant->name }}</span>
+                <span class="text-lg font-bold tracking-tight brand-text">{{ $tenant->name }}</span>
             </a>
+
+            <div class="ml-auto flex items-center gap-2 text-sm">
+                <span class="hidden sm:block brand-muted">{{ $navUser?->name }}</span>
+                <span class="rounded-full brand-soft brand-text px-2.5 py-0.5 text-xs font-medium capitalize">{{ $navRole?->value ?? '—' }}</span>
+            </div>
         </div>
     </header>
 
     @include('tenant.partials.nav', ['tenant' => $tenant])
 
-    <main class="mx-auto max-w-7xl px-4 py-8">
+    <main class="flex-1 max-w-7xl mx-auto overflow-y-auto w-full">
         {{ $slot }}
     </main>
+
+
     @include('partials.confirm-modal')
 </body>
 </html>
