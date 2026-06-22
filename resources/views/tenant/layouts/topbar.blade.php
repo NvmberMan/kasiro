@@ -7,7 +7,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <x-brand-styles :config="$tenant->theme_config ?? []" />
 </head>
-<body class="antialiased min-h-screen">
+<body class="antialiased h-screen flex flex-col">
     @php $navUser = auth()->user(); $navRole = $navUser?->roleFor($tenant); @endphp
 
     <header class="brand-surface border-b brand-border">
@@ -34,9 +34,11 @@
 
     @include('tenant.partials.nav', ['tenant' => $tenant])
 
-    <main class="mx-auto max-w-7xl px-4 py-8">
+    <main class="flex-1 max-w-7xl mx-auto overflow-y-auto w-full">
         {{ $slot }}
     </main>
+
+
     @include('partials.confirm-modal')
 </body>
 </html>
