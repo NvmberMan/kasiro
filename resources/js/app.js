@@ -111,6 +111,24 @@ function initCharts(root = document) {
 
 window.initCharts = initCharts;
 
+/**
+ * Forms marked `data-loading` show a spinner on their submit button while the
+ * request is in flight (native validation gates the submit event, so the
+ * spinner only appears on a real submission).
+ */
+document.addEventListener('submit', (e) => {
+    const form = e.target;
+    if (!(form instanceof HTMLFormElement) || !form.hasAttribute('data-loading')) return;
+    const btn = form.querySelector('button[type="submit"], input[type="submit"], button:not([type])');
+    if (!btn || btn.dataset.loading) return;
+    btn.dataset.loading = '1';
+    btn.disabled = true;
+    btn.innerHTML =
+        '<span class="inline-flex items-center justify-center gap-2">' +
+        '<svg class="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path></svg>' +
+        'Memproses…</span>';
+}, true);
+
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => initCharts());
 } else {

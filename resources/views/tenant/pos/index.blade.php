@@ -16,7 +16,7 @@
             <input type="search" x-model="search" placeholder="Cari produk..."
                    class="flex-1 min-w-[180px] border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
             <select x-model="sort" @change="sortProducts()"
-                    class="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    class="border min-w-[150px] border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 <option value="name:asc">Nama A-Z</option>
                 <option value="name:desc">Nama Z-A</option>
                 <option value="price:asc">Harga Terendah</option>
@@ -89,9 +89,9 @@
         @endif
     </div>
 
-    {{-- Mobile cart trigger (floating) --}}
+    {{-- Mobile cart trigger (floating). Lift above the bottom nav on the bottombar layout. --}}
     <button type="button" @click="cartOpen = true"
-            class="lg:hidden fixed bottom-5 right-5 z-30 flex items-center gap-2 rounded-full bg-indigo-600 text-white shadow-lg px-5 py-3 active:scale-95 transition">
+            class="lg:hidden fixed {{ $tenant->layout() === 'bottombar' ? 'bottom-[60px]' : 'bottom-5' }} right-5 z-30 flex items-center gap-2 rounded-full bg-indigo-600 text-white shadow-lg px-5 py-3 active:scale-95 transition">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
         <span class="text-sm font-semibold" x-text="'Rp ' + grandTotal.toLocaleString('id')"></span>
         <span x-show="cartCount > 0" class="inline-flex items-center justify-center min-w-[20px] h-5 px-1 rounded-full bg-white text-indigo-700 text-xs font-bold" x-text="cartCount"></span>
@@ -177,7 +177,7 @@
                 </button>
             </div>
 
-            <div class="flex justify-between text-sm" x-show="paid > 0">
+            <div class="flex justify-between text-sm">
                 <span class="text-gray-500">Kembalian</span>
                 <span :class="change < 0 ? 'text-red-600 font-bold' : 'text-gray-700'" x-text="'Rp ' + Math.max(0, change).toLocaleString('id')"></span>
             </div>

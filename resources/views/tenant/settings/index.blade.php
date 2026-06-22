@@ -35,19 +35,13 @@
 
     <h1 class="text-2xl font-bold mb-6">Pengaturan Toko</h1>
 
-    @if (session('status') === 'settings-updated')
-        <div class="mb-4 p-3 bg-green-50 border border-green-200 rounded text-sm text-green-700">
-            Pengaturan berhasil disimpan.
-        </div>
-    @endif
-
     @if ($errors->any())
         <div class="mb-4 p-3 bg-red-50 border border-red-200 rounded text-sm text-red-700">
             {{ $errors->first() }}
         </div>
     @endif
 
-    <form method="POST"
+    <form method="POST" data-loading
           action="{{ route('tenant.settings.update', ['subdomain' => $tenant->subdomain]) }}"
           enctype="multipart/form-data"
           class="space-y-6">

@@ -37,6 +37,7 @@
     <main class="mx-auto max-w-7xl px-4 py-8">
         {{ $slot }}
     </main>
+    <x-flash-modal />
     @include('partials.confirm-modal')
 </body>
 </html>
