@@ -84,6 +84,17 @@
                     class="text-sm text-gray-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-sm file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
                 <p class="mt-1 text-xs text-gray-400">Maks. 2MB. Kosongkan jika tidak ingin mengganti.</p>
             </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Pajak (%)</label>
+                <div class="flex items-center gap-2">
+                    <input type="number" name="tax_percent" min="0" max="100" step="0.01"
+                        value="{{ old('tax_percent', rtrim(rtrim(number_format($tenant->taxPercent(), 2, '.', ''), '0'), '.')) }}"
+                        class="w-32 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <span class="text-sm text-gray-400">%</span>
+                </div>
+                <p class="mt-1 text-xs text-gray-400">Dikenakan pada subtotal saat pembayaran. Isi 0 untuk menonaktifkan.</p>
+            </div>
         </div>
 
         {{-- Layout (structural) --}}

@@ -28,7 +28,7 @@ class CreateTransaction
                 ->get()
                 ->keyBy('id');
 
-            $total = 0;
+            $subtotal = 0;
             $lineItems = [];
 
             foreach ($items as $item) {
@@ -45,17 +45,24 @@ class CreateTransaction
                     throw new RuntimeException("Stok \"{$product->name}\" tidak cukup (tersisa {$product->stock}).");
                 }
 
-                $subtotal    = $product->price * $qty;
-                $total      += $subtotal;
-                $lineItems[] = [
+                $lineSubtotal = $product->price * $qty;
+                $subtotal    += $lineSubtotal;
+                $lineItems[]  = [
                     'product'  => $product,
                     'qty'      => $qty,
-                    'subtotal' => $subtotal,
+                    'subtotal' => $lineSubtotal,
                 ];
             }
 
+            // Tax is a per-store percentage applied on top of the subtotal.
+            $taxPercent = (float) (app(\App\Support\TenantContext::class)->get()?->taxPercent() ?? 0);
+            $tax        = round($subtotal * $taxPercent / 100);
+            $total      = $subtotal + $tax;
+
             $transaction = Transaction::create([
                 'cashier_id'     => $cashier->id,
+                'subtotal'       => $subtotal,
+                'tax'            => $tax,
                 'total'          => $total,
                 'paid'           => $paid,
                 'change'         => max(0, $paid - $total),

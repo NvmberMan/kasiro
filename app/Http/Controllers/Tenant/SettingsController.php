@@ -35,6 +35,7 @@ class SettingsController extends Controller
             'name'          => ['required', 'string', 'max:100'],
             'subdomain'     => ['required', new ValidSubdomain($tenant->id)],
             'logo'          => ['nullable', 'image', 'max:2048'],
+            'tax_percent'   => ['nullable', 'numeric', 'min:0', 'max:100'],
             'layout'        => ['required', 'in:' . implode(',', array_keys(config('branding.layouts')))],
             'theme'         => ['required', 'in:' . implode(',', array_keys(config('branding.themes')))],
             'color_palette' => ['required', 'in:' . implode(',', array_keys(config('branding.palettes')))],
