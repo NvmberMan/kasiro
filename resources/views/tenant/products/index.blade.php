@@ -1,5 +1,5 @@
 <x-tenant-page>
-    <div class="p-6 h-full">
+    <div class="p-4 sm:p-6 h-full">
         <div class="flex items-center justify-between mb-6">
             <h1 class="text-xl font-semibold">Produk</h1>
             @can('create', \App\Models\Product::class)
@@ -52,7 +52,8 @@
                 </div>
 
                 <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-                    <table class="w-full text-sm">
+                    <div class="overflow-x-auto">
+                    <table class="w-full text-sm min-w-[680px]">
                         <thead class="bg-gray-50 text-gray-500 text-xs uppercase">
                             <tr>
                                 <th class="px-5 py-3"></th>
@@ -114,6 +115,7 @@
                             @endforeach
                         </tbody>
                     </table>
+                    </div>
                 </div>
 
                 <p x-show="visibleCount === 0" style="display:none" class="text-center py-10 text-gray-400">
