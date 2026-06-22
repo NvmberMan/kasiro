@@ -48,6 +48,9 @@ class PosController extends Controller
             return redirect()
                 ->route('tenant.pos', ['subdomain' => $tenant->subdomain])
                 ->with('transaction_id', $transaction->id)
+                ->with('checkout_total', (float) $transaction->total)
+                ->with('checkout_paid', (float) $transaction->paid)
+                ->with('checkout_change', (float) $transaction->change)
                 ->with('status', 'checkout-success');
         } catch (RuntimeException $e) {
             return back()->withErrors(['cart' => $e->getMessage()]);

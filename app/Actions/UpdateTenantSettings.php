@@ -15,8 +15,9 @@ class UpdateTenantSettings
         $oldSubdomain = $tenant->subdomain;
 
         $updates = [
-            'name'      => $data['name'],
-            'subdomain' => $data['subdomain'],
+            'name'        => $data['name'],
+            'subdomain'   => $data['subdomain'],
+            'tax_percent' => $data['tax_percent'] ?? 0,
         ];
 
         // Logo: replace old file only if a new one is uploaded

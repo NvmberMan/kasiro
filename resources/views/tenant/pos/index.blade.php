@@ -5,12 +5,6 @@
     {{-- Product grid --}}
     <div class="flex-1 lg:overflow-y-auto">
 
-        @if (session('status') === 'checkout-success')
-        <div class="mb-3 p-3 bg-green-50 border border-green-200 text-green-800 text-sm rounded-lg">
-            Transaksi berhasil dicatat.
-        </div>
-        @endif
-
         @error('cart')
         <div class="mb-3 p-3 bg-red-50 border border-red-200 text-red-800 text-sm rounded-lg">
             {{ $message }}
@@ -55,14 +49,26 @@
         @else
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3" x-ref="grid">
             @foreach ($products as $product)
-            <button
+            <div
                 data-name="{{ mb_strtolower($product->name) }}"
                 data-price="{{ $product->price }}"
                 data-stock="{{ $product->stock }}"
                 x-show="(filterCategory === null || filterCategory === {{ $product->category_id ?? 'null' }}) && nameMatches('{{ addslashes(mb_strtolower($product->name)) }}')"
-                @click="addToCart({{ $product->id }}, '{{ addslashes($product->name) }}', {{ $product->price }}, {{ $product->stock }})"
-                :disabled="{{ $product->stock }} === 0"
-                class="text-left bg-white rounded-xl border-2 border-transparent hover:border-indigo-400 transition disabled:opacity-40 disabled:cursor-not-allowed shadow-sm overflow-hidden">
+                @click="{{ $product->stock }} > 0 && addToCart({{ $product->id }}, '{{ addslashes($product->name) }}', {{ $product->price }}, {{ $product->stock }})"
+                :class="cart[{{ $product->id }}] ? 'border-indigo-500 ring-2 ring-indigo-200' : 'border-transparent hover:border-indigo-400'"
+                class="relative text-left bg-white rounded-xl border-2 transition shadow-sm overflow-hidden select-none
+                       {{ $product->stock === 0 ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer' }}">
+
+                {{-- In-grid quantity stepper (shown once added) --}}
+                <div x-show="cart[{{ $product->id }}]" @click.stop style="display:none"
+                     class="absolute top-2 right-2 z-10 flex items-center gap-1 rounded-full bg-white/95 backdrop-blur border border-gray-200 shadow px-1 py-0.5">
+                    <button type="button" @click.stop="decrement({{ $product->id }})"
+                            class="w-6 h-6 rounded-full bg-gray-100 text-gray-700 hover:bg-red-100 hover:text-red-600 text-sm font-bold leading-none flex items-center justify-center">−</button>
+                    <span class="min-w-[18px] text-center text-xs font-bold text-gray-800" x-text="cart[{{ $product->id }}]?.qty || 0"></span>
+                    <button type="button" @click.stop="increment({{ $product->id }})"
+                            class="w-6 h-6 rounded-full bg-indigo-600 text-white hover:bg-indigo-700 text-sm font-bold leading-none flex items-center justify-center">+</button>
+                </div>
+
                 @if ($product->image_path)
                     <img src="{{ asset('storage/'.$product->image_path) }}" alt="{{ $product->name }}"
                          class="w-full h-24 object-cover">
@@ -77,7 +83,7 @@
                     Stok: {{ $product->stock }}
                 </p>
                 </div>
-            </button>
+            </div>
             @endforeach
         </div>
         @endif
@@ -87,7 +93,7 @@
     <button type="button" @click="cartOpen = true"
             class="lg:hidden fixed bottom-5 right-5 z-30 flex items-center gap-2 rounded-full bg-indigo-600 text-white shadow-lg px-5 py-3 active:scale-95 transition">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-        <span class="text-sm font-semibold" x-text="'Rp ' + total.toLocaleString('id')"></span>
+        <span class="text-sm font-semibold" x-text="'Rp ' + grandTotal.toLocaleString('id')"></span>
         <span x-show="cartCount > 0" class="inline-flex items-center justify-center min-w-[20px] h-5 px-1 rounded-full bg-white text-indigo-700 text-xs font-bold" x-text="cartCount"></span>
     </button>
 
@@ -129,16 +135,46 @@
         </div>
 
         <div class="border-t px-4 py-4 space-y-3">
-            <div class="flex justify-between text-sm font-semibold">
-                <span>Total</span>
-                <span class="text-indigo-700" x-text="'Rp ' + total.toLocaleString('id')"></span>
+            {{-- Totals --}}
+            <div class="space-y-1">
+                <div class="flex justify-between text-sm text-gray-600">
+                    <span>Subtotal</span>
+                    <span x-text="'Rp ' + subtotal.toLocaleString('id')"></span>
+                </div>
+                <div class="flex justify-between text-sm text-gray-600" x-show="taxPercent > 0">
+                    <span>Pajak (<span x-text="taxPercent"></span>%)</span>
+                    <span x-text="'Rp ' + tax.toLocaleString('id')"></span>
+                </div>
+                <div class="flex justify-between text-base font-semibold pt-1 border-t border-dashed">
+                    <span>Total</span>
+                    <span class="text-indigo-700" x-text="'Rp ' + grandTotal.toLocaleString('id')"></span>
+                </div>
             </div>
 
             <div>
                 <label class="text-xs text-gray-500">Uang Bayar</label>
-                <input type="number" x-model="paid" @input="calcChange()"
+                <input type="number" x-model.number="paid"
                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm mt-1 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                        min="0" step="1000" placeholder="0">
+            </div>
+
+            {{-- Quick cash --}}
+            <div class="grid grid-cols-4 gap-1.5">
+                <template x-for="amt in quickAmounts" :key="amt">
+                    <button type="button" @click="addPaid(amt)"
+                            class="py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-xs font-medium text-gray-700 transition"
+                            x-text="(amt / 1000) + 'rb'"></button>
+                </template>
+            </div>
+            <div class="flex gap-1.5">
+                <button type="button" @click="payExact()" :disabled="grandTotal === 0"
+                        class="flex-1 py-1.5 rounded-lg bg-indigo-50 text-indigo-700 text-xs font-medium hover:bg-indigo-100 transition disabled:opacity-40">
+                    Uang Pas
+                </button>
+                <button type="button" @click="paid = 0"
+                        class="px-3 py-1.5 rounded-lg bg-gray-100 text-gray-500 text-xs hover:bg-gray-200 transition">
+                    Reset
+                </button>
             </div>
 
             <div class="flex justify-between text-sm" x-show="paid > 0">
@@ -153,9 +189,10 @@
                 <input type="hidden" name="cart" x-ref="cartInput">
                 <input type="hidden" name="paid" x-ref="paidInput">
                 <button type="submit"
-                        :disabled="Object.keys(cart).length === 0 || paid < total"
-                        class="w-full py-2.5 bg-indigo-600 text-white font-semibold text-sm rounded-lg hover:bg-indigo-700 transition disabled:opacity-40 disabled:cursor-not-allowed">
-                    Bayar
+                        :disabled="Object.keys(cart).length === 0 || paid < grandTotal || submitting"
+                        class="w-full py-2.5 bg-indigo-600 text-white font-semibold text-sm rounded-lg hover:bg-indigo-700 transition disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                    <svg x-show="submitting" class="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none" style="display:none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path></svg>
+                    <span x-text="submitting ? 'Memproses…' : 'Bayar'"></span>
                 </button>
             </form>
 
@@ -165,17 +202,53 @@
             </button>
         </div>
     </div>
+
+    {{-- Loading overlay --}}
+    <div x-show="submitting" style="display:none"
+         class="fixed inset-0 z-[60] bg-black/40 flex items-center justify-center">
+        <div class="bg-white rounded-2xl px-6 py-5 flex flex-col items-center gap-3 shadow-xl">
+            <svg class="animate-spin h-7 w-7 text-indigo-600" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path></svg>
+            <p class="text-sm text-gray-600">Memproses pembayaran…</p>
+        </div>
+    </div>
 </div>
+
+@if (session('status') === 'checkout-success')
+{{-- Success modal --}}
+<div x-data="{ open: true }" x-show="open" style="display:none"
+     class="fixed inset-0 z-[70] flex items-center justify-center p-4">
+    <div class="fixed inset-0 bg-black/50" @click="open = false"></div>
+    <div x-show="open" x-transition class="relative bg-white rounded-2xl shadow-xl w-full max-w-sm p-6 text-center">
+        <div class="mx-auto mb-4 h-14 w-14 rounded-full bg-green-100 flex items-center justify-center">
+            <svg class="h-8 w-8 text-green-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+        </div>
+        <h3 class="text-lg font-bold text-gray-800">Pembayaran Berhasil</h3>
+        <p class="text-sm text-gray-500 mt-1">Transaksi telah dicatat.</p>
+        <div class="mt-4 rounded-xl bg-gray-50 p-4 text-sm space-y-1.5 text-left">
+            <div class="flex justify-between"><span class="text-gray-500">Total</span><span class="font-semibold text-gray-800">Rp {{ number_format((float) session('checkout_total'), 0, ',', '.') }}</span></div>
+            <div class="flex justify-between"><span class="text-gray-500">Uang Bayar</span><span class="text-gray-700">Rp {{ number_format((float) session('checkout_paid'), 0, ',', '.') }}</span></div>
+            <div class="flex justify-between"><span class="text-gray-500">Kembalian</span><span class="font-semibold text-green-600">Rp {{ number_format((float) session('checkout_change'), 0, ',', '.') }}</span></div>
+        </div>
+        <button @click="open = false"
+                class="mt-5 w-full py-2.5 bg-indigo-600 text-white rounded-xl font-semibold text-sm hover:bg-indigo-700 transition">
+            Transaksi Baru
+        </button>
+    </div>
+</div>
+@endif
 
 <script>
 function posApp() {
     return {
         cart: {},
         cartOpen: false,
+        submitting: false,
         filterCategory: null,
         search: '',
         sort: 'name:asc',
         paid: 0,
+        taxPercent: {{ (float) $tenant->taxPercent() }},
+        quickAmounts: [10000, 20000, 50000, 100000],
 
         init() {
             this.sortProducts();
@@ -206,8 +279,16 @@ function posApp() {
             return Object.values(this.cart);
         },
 
-        get total() {
+        get subtotal() {
             return this.cartItems.reduce((sum, i) => sum + i.price * i.qty, 0);
+        },
+
+        get tax() {
+            return Math.round(this.subtotal * this.taxPercent / 100);
+        },
+
+        get grandTotal() {
+            return this.subtotal + this.tax;
         },
 
         get cartCount() {
@@ -215,7 +296,15 @@ function posApp() {
         },
 
         get change() {
-            return Number(this.paid) - this.total;
+            return Number(this.paid) - this.grandTotal;
+        },
+
+        addPaid(amt) {
+            this.paid = (Number(this.paid) || 0) + amt;
+        },
+
+        payExact() {
+            this.paid = this.grandTotal;
         },
 
         addToCart(id, name, price, stock) {
@@ -246,12 +335,12 @@ function posApp() {
             this.paid = 0;
         },
 
-        calcChange() {},
-
         submitCheckout(form) {
+            if (this.submitting) return;
             const items = this.cartItems.map(i => ({ product_id: i.id, qty: i.qty }));
             this.$refs.cartInput.value = JSON.stringify(items);
             this.$refs.paidInput.value = this.paid;
+            this.submitting = true;
             form.submit();
         },
     };
