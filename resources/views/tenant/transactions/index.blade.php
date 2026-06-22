@@ -1,6 +1,6 @@
 <x-tenant-page>
-    <div class="p-6">
-        <div class="flex items-center justify-between mb-6">
+    <div class="p-4 sm:p-6">
+        <div class="flex items-center justify-between gap-3 mb-6">
             <h1 class="text-xl font-semibold">Riwayat Transaksi</h1>
             <a href="{{ route('tenant.pos', ['subdomain' => $tenant->subdomain]) }}"
                 class="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition">
@@ -12,7 +12,8 @@
             <div class="text-center py-12 text-gray-400">Belum ada transaksi.</div>
         @else
             <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-                <table class="w-full text-sm">
+                <div class="overflow-x-auto">
+                <table class="w-full text-sm min-w-[560px]">
                     <thead class="bg-gray-50 text-gray-500 text-xs uppercase">
                         <tr>
                             <th class="px-5 py-3 text-left">Waktu</th>
@@ -37,6 +38,7 @@
                         @endforeach
                     </tbody>
                 </table>
+                </div>
             </div>
             <div class="mt-4">{{ $transactions->links() }}</div>
         @endif
