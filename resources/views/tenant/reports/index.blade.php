@@ -22,6 +22,28 @@
             </div>
         </div>
 
+        {{-- Revenue trend chart --}}
+        @php
+            $trendLabels = collect($dailySeries)->map(fn ($r) => \Carbon\Carbon::parse($r['date'])->isoFormat('D MMM'))->all();
+            $trendValues = collect($dailySeries)->pluck('revenue')->all();
+            $seriesTotal = collect($dailySeries)->sum('revenue');
+            $peak = collect($dailySeries)->max('revenue');
+        @endphp
+        <div class="brand-card shadow-sm p-5 mb-6">
+            <div class="flex items-start justify-between mb-3">
+                <div>
+                    <h2 class="font-semibold" style="color:var(--brand-fg)">Tren Pendapatan</h2>
+                    <p class="text-xs brand-muted">30 hari terakhir &middot; total Rp {{ number_format($seriesTotal, 0, ',', '.') }}</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-xs brand-muted">Tertinggi/hari</p>
+                    <p class="text-sm font-semibold" style="color:var(--brand-fg)">Rp {{ number_format($peak, 0, ',', '.') }}</p>
+                </div>
+            </div>
+            <x-chart type="line" :labels="$trendLabels" :values="$trendValues" :height="180"
+                     format="currency" empty="Belum ada transaksi dalam 30 hari." />
+        </div>
+
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {{-- Daily sales last 30 days --}}
             <div class="bg-white rounded-xl border shadow-sm">
@@ -52,34 +74,19 @@
                 </div>
             </div>
 
-            {{-- Top 10 products --}}
+            {{-- Top 10 products (bar chart) --}}
             <div class="bg-white rounded-xl border shadow-sm">
                 <div class="px-5 py-4 border-b">
                     <h2 class="font-semibold text-gray-700">Produk Terlaris</h2>
                 </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-sm">
-                        <thead>
-                            <tr class="text-left text-xs text-gray-500 border-b">
-                                <th class="px-5 py-2 font-medium">#</th>
-                                <th class="px-5 py-2 font-medium">Produk</th>
-                                <th class="px-5 py-2 font-medium text-right">Terjual</th>
-                                <th class="px-5 py-2 font-medium text-right">Total</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y">
-                            @forelse ($topProducts as $i => $item)
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-5 py-2.5 text-gray-400">{{ $i + 1 }}</td>
-                                    <td class="px-5 py-2.5">{{ $item->product?->name ?? '(dihapus)' }}</td>
-                                    <td class="px-5 py-2.5 text-right">{{ $item->total_qty }}</td>
-                                    <td class="px-5 py-2.5 text-right">Rp {{ number_format($item->total_revenue, 0, ',', '.') }}</td>
-                                </tr>
-                            @empty
-                                <tr><td colspan="4" class="px-5 py-8 text-center text-gray-400">Belum ada data.</td></tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+                <div class="p-5">
+                    @php
+                        $prodLabels = $topProducts->map(fn ($item) => $item->product?->name ?? '(dihapus)')->all();
+                        $prodValues = $topProducts->pluck('total_qty')->all();
+                        $prodHeight = max(180, $topProducts->count() * 34);
+                    @endphp
+                    <x-chart type="bar" horizontal :labels="$prodLabels" :values="$prodValues"
+                             :height="$prodHeight" format="number" empty="Belum ada data." />
                 </div>
             </div>
         </div>

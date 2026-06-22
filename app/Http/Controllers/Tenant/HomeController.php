@@ -28,8 +28,24 @@ class HomeController extends Controller
         $canViewReports = (bool) $role?->canViewReports();
         $stats = null;
         $recent = collect();
+        $weekSeries = collect();
 
         if ($canViewReports) {
+            // Zero-filled 7-day revenue series for the home sparkline.
+            $weekRaw = Transaction::query()
+                ->selectRaw('DATE(transacted_at) as date, SUM(total) as revenue')
+                ->where('transacted_at', '>=', now()->subDays(6)->startOfDay())
+                ->groupByRaw('DATE(transacted_at)')
+                ->get()
+                ->keyBy('date');
+            for ($i = 6; $i >= 0; $i--) {
+                $date = now()->subDays($i)->toDateString();
+                $weekSeries->push([
+                    'date'    => $date,
+                    'revenue' => (float) ($weekRaw->get($date)->revenue ?? 0),
+                ]);
+            }
+
             $stats = [
                 'todaySales' => (float) Transaction::query()->whereDate('transacted_at', today())->sum('total'),
                 'todayCount' => Transaction::query()->whereDate('transacted_at', today())->count(),
@@ -55,6 +71,7 @@ class HomeController extends Controller
             'lowStock' => $lowStock,
             'stats' => $stats,
             'recent' => $recent,
+            'weekSeries' => $weekSeries,
         ]);
     }
 }
