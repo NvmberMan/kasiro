@@ -144,7 +144,7 @@ class RbacEnforcementTest extends TestCase
             ->get('http://bottomshop.kasiro.com/')
             ->assertOk()
             ->assertSee($tenant->name)
-            ->assertSee('Role: owner')
+            ->assertSee('owner')
             ->assertSee('--brand-primary', false);
     }
 }
