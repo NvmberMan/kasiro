@@ -27,8 +27,8 @@ return [
             'label'    => 'Modern',
             'palettes' => ['violet', 'sky', 'orange'],
             'vars'     => [
-                '--brand-font'   => '"Inter", system-ui, sans-serif',
-                '--brand-radius' => '0.75rem',
+                '--brand-font'   => '"Wix Madefor Text", system-ui, sans-serif',
+                '--brand-radius' => '0.875rem',
             ],
         ],
         'classic' => [
@@ -36,7 +36,7 @@ return [
             'palettes' => ['slate', 'indigo', 'emerald'],
             'vars'     => [
                 '--brand-font'   => 'Georgia, "Times New Roman", serif',
-                '--brand-radius' => '0.25rem',
+                '--brand-radius' => '0.375rem',
             ],
         ],
         'retro' => [
@@ -54,6 +54,9 @@ return [
     | Color palettes → CSS custom property values
     | Grouped conceptually by theme but stored flat for lookup efficiency.
     | Add new palettes here; register them in the parent theme's 'palettes' list.
+    | Each palette is multi-dimensional: a brand primary + darker accent, a calm
+    | tinted page background, a white-ish card surface, a soft border, dark body
+    | text, and a muted secondary text — so the UI never collapses into one hue.
     |--------------------------------------------------------------------------
     */
 
@@ -62,64 +65,94 @@ return [
         'violet' => [
             '--brand-primary' => '#7c3aed',
             '--brand-accent'  => '#6d28d9',
-            '--brand-bg'      => '#faf5ff',
-            '--brand-fg'      => '#2e1065',
+            '--brand-bg'      => '#f6f4fb',
+            '--brand-surface' => '#ffffff',
+            '--brand-border'  => '#e8e2f6',
+            '--brand-fg'      => '#241b38',
+            '--brand-muted'   => '#6c6685',
         ],
         'sky' => [
-            '--brand-primary' => '#0ea5e9',
-            '--brand-accent'  => '#0284c7',
-            '--brand-bg'      => '#f0f9ff',
-            '--brand-fg'      => '#0c4a6e',
+            '--brand-primary' => '#0284c7',
+            '--brand-accent'  => '#0369a1',
+            '--brand-bg'      => '#f1f7fb',
+            '--brand-surface' => '#ffffff',
+            '--brand-border'  => '#d9e9f4',
+            '--brand-fg'      => '#0d2a3a',
+            '--brand-muted'   => '#5a7689',
         ],
         'orange' => [
-            '--brand-primary' => '#f97316',
-            '--brand-accent'  => '#ea580c',
-            '--brand-bg'      => '#fff7ed',
-            '--brand-fg'      => '#431407',
+            '--brand-primary' => '#ea580c',
+            '--brand-accent'  => '#c2410c',
+            '--brand-bg'      => '#fcf6f1',
+            '--brand-surface' => '#ffffff',
+            '--brand-border'  => '#f6e2d3',
+            '--brand-fg'      => '#3a1e0e',
+            '--brand-muted'   => '#8a6c5b',
         ],
         // classic
         'slate' => [
             '--brand-primary' => '#475569',
             '--brand-accent'  => '#334155',
-            '--brand-bg'      => '#f8fafc',
+            '--brand-bg'      => '#f7f8fa',
+            '--brand-surface' => '#ffffff',
+            '--brand-border'  => '#e2e8f0',
             '--brand-fg'      => '#0f172a',
+            '--brand-muted'   => '#64748b',
         ],
         'indigo' => [
             '--brand-primary' => '#4f46e5',
-            '--brand-accent'  => '#7c3aed',
-            '--brand-bg'      => '#eef2ff',
+            '--brand-accent'  => '#4338ca',
+            '--brand-bg'      => '#f3f4fb',
+            '--brand-surface' => '#ffffff',
+            '--brand-border'  => '#e0e2f6',
             '--brand-fg'      => '#1e1b4b',
+            '--brand-muted'   => '#6b6fa0',
         ],
         'emerald' => [
-            '--brand-primary' => '#10b981',
-            '--brand-accent'  => '#059669',
-            '--brand-bg'      => '#f0fdf4',
-            '--brand-fg'      => '#064e3b',
+            '--brand-primary' => '#059669',
+            '--brand-accent'  => '#047857',
+            '--brand-bg'      => '#f2faf6',
+            '--brand-surface' => '#ffffff',
+            '--brand-border'  => '#d4ece0',
+            '--brand-fg'      => '#073a2c',
+            '--brand-muted'   => '#5b8473',
         ],
         // retro
         'amber' => [
-            '--brand-primary' => '#f59e0b',
-            '--brand-accent'  => '#d97706',
-            '--brand-bg'      => '#fffbeb',
-            '--brand-fg'      => '#451a03',
+            '--brand-primary' => '#d97706',
+            '--brand-accent'  => '#b45309',
+            '--brand-bg'      => '#fcf8ee',
+            '--brand-surface' => '#fffefb',
+            '--brand-border'  => '#f0e3c4',
+            '--brand-fg'      => '#3a2606',
+            '--brand-muted'   => '#8a7242',
         ],
         'rose' => [
-            '--brand-primary' => '#f43f5e',
-            '--brand-accent'  => '#e11d48',
-            '--brand-bg'      => '#fff1f2',
+            '--brand-primary' => '#e11d48',
+            '--brand-accent'  => '#be123c',
+            '--brand-bg'      => '#fdf3f4',
+            '--brand-surface' => '#ffffff',
+            '--brand-border'  => '#f7d9de',
             '--brand-fg'      => '#4c0519',
+            '--brand-muted'   => '#9a5563',
         ],
         'teal' => [
-            '--brand-primary' => '#14b8a6',
-            '--brand-accent'  => '#0d9488',
-            '--brand-bg'      => '#f0fdfa',
-            '--brand-fg'      => '#134e4a',
+            '--brand-primary' => '#0d9488',
+            '--brand-accent'  => '#0f766e',
+            '--brand-bg'      => '#f1faf8',
+            '--brand-surface' => '#ffffff',
+            '--brand-border'  => '#cfeae5',
+            '--brand-fg'      => '#0f4a45',
+            '--brand-muted'   => '#5b8a84',
         ],
         'forest' => [
             '--brand-primary' => '#16a34a',
             '--brand-accent'  => '#15803d',
-            '--brand-bg'      => '#f0fdf4',
+            '--brand-bg'      => '#f2faf4',
+            '--brand-surface' => '#ffffff',
+            '--brand-border'  => '#d4ecd9',
             '--brand-fg'      => '#14532d',
+            '--brand-muted'   => '#5b8468',
         ],
     ],
 

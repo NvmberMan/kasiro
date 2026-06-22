@@ -1,5 +1,5 @@
 <x-tenant-page>
-    <div class="max-w-md">
+    <div class="max-w-md p-6">
         <h1 class="text-xl font-semibold mb-6">
             {{ isset($category) ? 'Edit Kategori' : 'Tambah Kategori' }}
         </h1>

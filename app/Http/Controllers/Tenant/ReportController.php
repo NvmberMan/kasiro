@@ -36,6 +36,19 @@ class ReportController extends Controller
             ->orderBy('date', 'desc')
             ->get();
 
+        // Zero-filled ascending 30-day series for the trend chart.
+        $byDate = $dailySales->keyBy('date');
+        $dailySeries = collect();
+        for ($i = 29; $i >= 0; $i--) {
+            $date = now()->subDays($i)->toDateString();
+            $row = $byDate->get($date);
+            $dailySeries->push([
+                'date'    => $date,
+                'revenue' => (float) ($row->revenue ?? 0),
+                'count'   => (int) ($row->tx_count ?? 0),
+            ]);
+        }
+
         // Top 10 products by qty sold (all time for this tenant)
         $topProducts = TransactionItem::selectRaw('product_id, SUM(qty) as total_qty, SUM(subtotal) as total_revenue')
             ->with('product:id,name')
@@ -48,7 +61,7 @@ class ReportController extends Controller
             'tenant',
             'todayTotal', 'todayCount',
             'monthTotal', 'monthCount',
-            'dailySales', 'topProducts',
+            'dailySales', 'dailySeries', 'topProducts',
         ));
     }
 }
