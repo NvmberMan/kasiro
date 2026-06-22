@@ -1,8 +1,8 @@
 <x-tenant-page>
-<div x-data="posApp()" class="flex gap-4 h-full overflow-hidden p-6">
+<div x-data="posApp()" class="flex flex-col lg:flex-row gap-4 lg:h-full lg:overflow-hidden p-4 sm:p-6">
 
     {{-- Product grid --}}
-    <div class="flex-1 overflow-y-auto">
+    <div class="flex-1 lg:overflow-y-auto">
 
         @if (session('status') === 'checkout-success')
         <div class="mb-3 p-3 bg-green-50 border border-green-200 text-green-800 text-sm rounded-lg">
@@ -83,10 +83,10 @@
     </div>
 
     {{-- Cart sidebar --}}
-    <div class="w-80 flex flex-col bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+    <div class="w-full lg:w-80 flex-shrink-0 flex flex-col bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div class="px-4 py-3 border-b font-semibold text-gray-700">Keranjang</div>
 
-        <div class="flex-1 overflow-y-auto divide-y">
+        <div class="flex-1 overflow-y-auto divide-y max-h-[45vh] lg:max-h-none">
             <template x-if="Object.keys(cart).length === 0">
                 <p class="text-center text-gray-400 text-sm py-8">Keranjang kosong</p>
             </template>
