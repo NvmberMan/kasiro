@@ -38,7 +38,7 @@
     </header>
 
     {{-- Content --}}
-    <main class="flex-1 max-w-7xl mx-auto overflow-y-auto p-4 sm:p-6">
+    <main class="flex-1 max-w-7xl mx-auto overflow-y-auto w-full">
         {{ $slot }}
     </main>
 

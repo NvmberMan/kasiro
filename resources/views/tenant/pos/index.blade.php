@@ -1,5 +1,5 @@
 <x-tenant-page>
-<div x-data="posApp()" class="flex gap-4 h-[calc(100vh-10rem)]">
+<div x-data="posApp()" class="flex gap-4 h-full overflow-hidden p-6">
 
     {{-- Product grid --}}
     <div class="flex-1 overflow-y-auto">
