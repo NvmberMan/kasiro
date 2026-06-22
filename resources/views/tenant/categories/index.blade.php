@@ -1,6 +1,6 @@
 <x-tenant-page>
-    <div class="p-6">
-        <div class="flex items-center justify-between mb-6">
+    <div class="p-4 sm:p-6">
+        <div class="flex items-center justify-between gap-3 mb-6">
             <h1 class="text-xl font-semibold">Kategori</h1>
             @can('create', \App\Models\Category::class)
                 <a href="{{ route('tenant.categories.create', ['subdomain' => $tenant->subdomain]) }}"

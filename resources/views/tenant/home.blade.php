@@ -1,5 +1,6 @@
 <x-tenant-page>
     @php $sub = $tenant->subdomain; @endphp
+    <div class="p-4 sm:p-6 max-w-7xl mx-auto">
 
     {{-- Welcome --}}
     <div class="mb-6">
@@ -128,7 +129,8 @@
             @if ($recent->isEmpty())
                 <p class="px-5 py-6 text-sm text-gray-500 text-center">Belum ada transaksi.</p>
             @else
-                <table class="w-full text-sm">
+                <div class="overflow-x-auto">
+                <table class="w-full text-sm min-w-[480px]">
                     <thead class="text-left text-xs text-gray-500 bg-gray-50">
                         <tr>
                             <th class="px-5 py-2 font-medium">Waktu</th>
@@ -148,7 +150,9 @@
                         @endforeach
                     </tbody>
                 </table>
+                </div>
             @endif
         </div>
     @endif
+    </div>
 </x-tenant-page>
