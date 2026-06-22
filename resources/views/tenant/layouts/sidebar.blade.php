@@ -92,7 +92,7 @@
     </aside>
 
     <div class="flex-1 flex flex-col overflow-hidden">
-        <main class="flex-1 overflow-y-auto p-6">
+        <main class="flex-1 overflow-y-auto">
             {{ $slot }}
         </main>
     </div>
