@@ -83,6 +83,7 @@
             </a>
         </div>
     </nav>
+    <x-flash-modal />
     @include('partials.confirm-modal')
 </body>
 </html>

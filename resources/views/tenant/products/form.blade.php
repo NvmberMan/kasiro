@@ -5,7 +5,7 @@
                 {{ isset($product) ? 'Edit Produk' : 'Tambah Produk' }}
             </h1>
 
-            <form method="POST"
+            <form method="POST" data-loading
                 action="{{ isset($product)
                     ? route('tenant.products.update', ['subdomain' => $tenant->subdomain, 'product' => $product])
                     : route('tenant.products.store', ['subdomain' => $tenant->subdomain]) }}"
