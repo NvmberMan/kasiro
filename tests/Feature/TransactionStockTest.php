@@ -109,6 +109,47 @@ class TransactionStockTest extends TestCase
         $this->assertEquals(5, $p2->fresh()->stock);
     }
 
+    public function test_tax_is_applied_using_tenant_tax_percent(): void
+    {
+        $this->tenant->update(['tax_percent' => 10]);
+        app(TenantContext::class)->set($this->tenant->fresh());
+
+        $product = Product::factory()->create([
+            'tenant_id' => $this->tenant->id,
+            'price'     => 10000,
+            'stock'     => 5,
+        ]);
+
+        $tx = app(CreateTransaction::class)->handle(
+            cashier: $this->cashier,
+            items: [['product_id' => $product->id, 'qty' => 2]],
+            paid: 25000,
+        );
+
+        $this->assertEquals(20000, $tx->subtotal);
+        $this->assertEquals(2000, $tx->tax);
+        $this->assertEquals(22000, $tx->total);
+        $this->assertEquals(3000, $tx->change);
+    }
+
+    public function test_no_tax_applied_when_tenant_tax_percent_zero(): void
+    {
+        $product = Product::factory()->create([
+            'tenant_id' => $this->tenant->id,
+            'price'     => 10000,
+            'stock'     => 5,
+        ]);
+
+        $tx = app(CreateTransaction::class)->handle(
+            cashier: $this->cashier,
+            items: [['product_id' => $product->id, 'qty' => 2]],
+            paid: 20000,
+        );
+
+        $this->assertEquals(0, $tx->tax);
+        $this->assertEquals(20000, $tx->total);
+    }
+
     public function test_empty_cart_throws_exception(): void
     {
         $this->expectException(RuntimeException::class);

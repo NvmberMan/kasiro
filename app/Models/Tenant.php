@@ -29,6 +29,7 @@ class Tenant extends Model
         'status',
         'template_id',
         'theme_config',
+        'tax_percent',
         'archived_at',
     ];
 
@@ -39,6 +40,7 @@ class Tenant extends Model
     {
         return [
             'theme_config' => 'array',
+            'tax_percent' => 'decimal:2',
             'archived_at' => 'datetime',
         ];
     }
@@ -112,5 +114,10 @@ class Tenant extends Model
     public function colorPalette(): string
     {
         return $this->theme_config['color_palette'] ?? config('branding.defaults.color_palette');
+    }
+
+    public function taxPercent(): float
+    {
+        return (float) ($this->tax_percent ?? 0);
     }
 }

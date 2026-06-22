@@ -13,11 +13,13 @@ class Transaction extends Model
     use BelongsToTenant, HasFactory;
 
     protected $fillable = [
-        'tenant_id', 'cashier_id', 'total', 'paid', 'change',
+        'tenant_id', 'cashier_id', 'subtotal', 'tax', 'total', 'paid', 'change',
         'payment_method', 'transacted_at',
     ];
 
     protected $casts = [
+        'subtotal'       => 'decimal:2',
+        'tax'            => 'decimal:2',
         'total'          => 'decimal:2',
         'paid'           => 'decimal:2',
         'change'         => 'decimal:2',
