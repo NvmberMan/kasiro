@@ -56,10 +56,9 @@
                                               data-confirm-title="Arsipkan Toko?"
                                               data-confirm-action="Ya, Arsipkan"
                                               data-confirm-type="primary"
-                                              class="mt-2">
+                                              class="mt-1">
                                             @csrf
-                                            <button type="submit"
-                                                    class="text-xs text-red-500 hover:text-red-700 font-medium">
+                                            <button type="submit" class="text-xs text-red-400 hover:text-red-600 font-medium">
                                                 Arsipkan
                                             </button>
                                         </form>
