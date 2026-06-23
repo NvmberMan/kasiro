@@ -82,7 +82,7 @@
             {{-- Sidebar --}}
             <aside class="fixed bottom-0 left-0 top-16 z-30 w-60 transform bg-[#0c2461] transition-transform duration-200 lg:translate-x-0"
                    x-bind:class="sidebar ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'">
-                <nav class="flex flex-col py-4">
+                <nav class="flex flex-col">
                     @foreach ($nav as $item)
                         @php $active = request()->routeIs($item['route']); @endphp
                         <a href="{{ route($item['route']) }}"

@@ -8,7 +8,7 @@
     {{-- Header: greeting + stat cards --}}
     <div class="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
         <div>
-            <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">Halo, {{ auth()->user()->name }}!</h1>
+            <h1 class="text-3xl font-bold tracking-tight text-slate-900">Halo, {{ auth()->user()->name }}!</h1>
             <p class="mt-1 text-sm text-slate-500">Kelola sistem kasir untuk toko Anda di sini.</p>
         </div>
 
