@@ -124,24 +124,22 @@
                             {{-- Layout --}}
                             <div>
                                 <p class="mb-3 text-sm font-semibold text-slate-800">Layout</p>
-                                <div class="flex flex-wrap gap-2">
+                                <div class="grid grid-cols-3 gap-3">
                                     @foreach ($layouts as $key => $layout)
                                         <button type="button"
                                                 @click="activeLayout = '{{ $key }}'"
                                                 :class="activeLayout === '{{ $key }}'
-                                                    ? 'bg-blue-500 text-white border-blue-500'
-                                                    : 'bg-white text-slate-700 border-slate-300 hover:border-blue-300'"
-                                                class="rounded-full border-2 px-5 py-2 text-sm font-medium transition">
-                                            {{ $layout['label'] }}
+                                                    ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-300'
+                                                    : 'border-slate-200 bg-white hover:border-blue-300'"
+                                                class="flex flex-col items-center gap-2 rounded-xl border-2 p-3 transition">
+                                            <div class="w-full">
+                                                <x-layout-wireframe :type="$key" />
+                                            </div>
+                                            <span :class="activeLayout === '{{ $key }}' ? 'text-blue-600 font-semibold' : 'text-slate-600 font-medium'"
+                                                  class="text-xs text-center leading-tight">
+                                                {{ $layout['label'] }}
+                                            </span>
                                         </button>
-                                    @endforeach
-                                </div>
-                                {{-- Wireframe preview --}}
-                                <div class="mt-4 max-w-[200px]">
-                                    @foreach ($layouts as $key => $layout)
-                                        <div x-show="activeLayout === '{{ $key }}'" style="{{ $currentLayout === $key ? '' : 'display:none' }}">
-                                            <x-layout-wireframe :type="$key" />
-                                        </div>
                                     @endforeach
                                 </div>
                                 @error('layout')
