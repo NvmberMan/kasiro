@@ -10,6 +10,7 @@ use App\Http\Controllers\Tenant\EmployeeController;
 use App\Http\Controllers\Tenant\HomeController as TenantHomeController;
 use App\Http\Controllers\Tenant\InvitationController;
 use App\Http\Controllers\Tenant\PosController;
+use App\Http\Controllers\Tenant\PreviewController;
 use App\Http\Controllers\Tenant\ProductController;
 use App\Http\Controllers\Tenant\ReportController;
 use App\Http\Controllers\Tenant\SettingsController;
@@ -70,6 +71,13 @@ Route::domain($central)->group(function () {
 | guards against any tenant route running without an active tenant. Auth +
 | membership guards (auth, tenant.member) are layered in M2 Tasks 5–6.
 */
+// Public preview — no auth required, only resolves tenant + context.
+Route::domain('{subdomain}.'.$central)
+    ->middleware(['tenant', 'tenant.context'])
+    ->group(function () {
+        Route::get('/__preview', [PreviewController::class, 'index'])->name('tenant.preview');
+    });
+
 Route::domain('{subdomain}.'.$central)
     ->middleware(['tenant', 'tenant.member', 'tenant.context'])
     ->group(function () {
