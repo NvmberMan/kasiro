@@ -21,7 +21,6 @@
             logoPreview: null,
             get c() { return this.allPalettes[this.activePalette] ?? {}; },
             get primary()  { return this.c['--brand-primary']  ?? '#6366f1'; },
-            get accent()   { return this.c['--brand-accent']   ?? '#4f46e5'; },
             get bg()       { return this.c['--brand-bg']       ?? '#f5f5f5'; },
             get surface()  { return this.c['--brand-surface']  ?? '#ffffff'; },
             get border()   { return this.c['--brand-border']   ?? '#e2e8f0'; },
@@ -29,7 +28,6 @@
             get muted()    { return this.c['--brand-muted']    ?? '#64748b'; },
             get font()     { return (this.allThemes[this.activeTheme] ?? {})['--brand-font']   ?? 'system-ui'; },
             get radius()   { return (this.allThemes[this.activeTheme] ?? {})['--brand-radius'] ?? '0.875rem'; },
-            // Theme-aware styles for the live preview
             get previewWrapStyle() {
                 if (this.activeTheme === 'retro')   return `border-radius:0; border:2px solid ${this.fg}50; box-shadow:4px 4px 0 ${this.fg}20;`;
                 if (this.activeTheme === 'classic') return `border-radius:8px; border:1px solid ${this.border}; box-shadow:0 2px 8px rgba(0,0,0,0.07);`;
@@ -81,8 +79,7 @@
         }" class="py-10">
 
         {{-- Loading overlay --}}
-        <div x-show="loading"
-             style="display:none"
+        <div x-show="loading" style="display:none"
              class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#f3f4f3]">
             <img src="{{ asset('images/kasiro-logo-black.png') }}" alt="Kasiro" class="mb-10 h-12 w-auto">
             <div class="relative h-7 w-80 overflow-hidden rounded-full bg-[#e8efb0]">
@@ -96,193 +93,24 @@
               @submit="loading = true">
             @csrf
 
-            <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
-                {{-- Live Preview --}}
-                <div class="mb-8">
-                    <p class="mb-3 text-center text-xs font-semibold uppercase tracking-widest text-slate-400">Pratinjau Langsung</p>
-                    {{-- Wrapper: shape + shadow varies by theme --}}
-                    <div class="mx-auto max-w-2xl overflow-hidden transition-all duration-300"
-                         :style="`background-color:${bg}; font-family:${font}; ${previewWrapStyle}`">
+                {{-- 3-column grid: form | preview | form --}}
+                <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 lg:items-start">
 
-                        {{-- ── TOPBAR ── --}}
-                        <div x-show="activeLayout === 'topbar'"
-                             style="{{ $currentLayout === 'topbar' ? '' : 'display:none' }}"
-                             class="flex h-56 flex-col">
-                            {{-- Nav bar --}}
-                            <div class="flex flex-shrink-0 items-center gap-2 px-4 py-2 transition-colors duration-300"
-                                 :style="`background-color:${primary};`">
-                                <div class="h-5 w-5 flex-shrink-0 transition-all duration-300"
-                                     :style="`background:rgba(255,255,255,0.5); border-radius:${activeTheme==='retro'?'0':'4px'};`"></div>
-                                <div class="flex flex-1 items-center gap-1.5 ml-1">
-                                    <div class="px-2 py-0.5 text-[7px] font-bold text-white/90 transition-all duration-300"
-                                         :style="activeNavStyle">Kasir</div>
-                                    <div class="px-2 py-0.5 transition-all duration-300"
-                                         :style="navItemStyle"><span class="block h-1.5 w-7 bg-white/50 rounded-full"></span></div>
-                                    <div class="px-2 py-0.5 transition-all duration-300"
-                                         :style="navItemStyle"><span class="block h-1.5 w-7 bg-white/50 rounded-full"></span></div>
-                                    <div class="px-2 py-0.5 transition-all duration-300"
-                                         :style="navItemStyle"><span class="block h-1.5 w-7 bg-white/50 rounded-full"></span></div>
-                                </div>
-                                <div class="h-5 w-5 flex-shrink-0 rounded-full bg-white/30"></div>
-                            </div>
-                            {{-- Category chips --}}
-                            <div class="flex flex-shrink-0 gap-1.5 px-3 py-1.5" :style="`background-color:${surface};`">
-                                <span class="px-2 py-0.5 text-[7px] font-bold transition-all duration-300" :style="activeChipStyle" :style="`color:white;`">Semua</span>
-                                <span class="px-2 py-0.5 text-[7px] transition-all duration-300" :style="`${chipStyle} color:${muted};`">Makanan</span>
-                                <span class="px-2 py-0.5 text-[7px] transition-all duration-300" :style="`${chipStyle} color:${muted};`">Minuman</span>
-                                <span class="px-2 py-0.5 text-[7px] transition-all duration-300" :style="`${chipStyle} color:${muted};`">Lainnya</span>
-                            </div>
-                            {{-- Product grid + cart --}}
-                            <div class="flex flex-1 gap-2 p-2 min-h-0">
-                                <div class="grid flex-1 grid-cols-4 gap-1.5 content-start">
-                                    @for ($i = 0; $i < 8; $i++)
-                                        <div class="flex flex-col gap-1 p-1.5 transition-all duration-300" :style="cardStyle">
-                                            <div class="h-7 transition-colors duration-300" :style="`background-color:${bg}; border-radius:${activeTheme==='retro'?'0':activeTheme==='classic'?'2px':'6px'};`"></div>
-                                            <div class="h-1 w-3/4" :style="`background-color:${muted}40; border-radius:${activeTheme==='retro'?'0':'9999px'};`"></div>
-                                            <div class="h-1" :style="`background-color:${primary}80; border-radius:${activeTheme==='retro'?'0':'9999px'};`"></div>
-                                        </div>
-                                    @endfor
-                                </div>
-                                <div class="flex w-24 flex-shrink-0 flex-col gap-1.5 p-2 transition-all duration-300"
-                                     :style="`background-color:${surface}; border:1px solid ${border}; border-radius:${activeTheme==='retro'?'0':activeTheme==='classic'?'4px':'12px'};`">
-                                    <div class="h-1 w-3/5" :style="`background-color:${fg}25; border-radius:${activeTheme==='retro'?'0':'9999px'};`"></div>
-                                    <div class="flex flex-1 flex-col gap-1">
-                                        <div class="h-3.5 transition-all duration-300" :style="`background-color:${bg}; border-radius:${activeTheme==='retro'?'0':'3px'};`"></div>
-                                        <div class="h-3.5 transition-all duration-300" :style="`background-color:${bg}; border-radius:${activeTheme==='retro'?'0':'3px'};`"></div>
-                                        <div class="h-3.5 transition-all duration-300" :style="`background-color:${bg}; border-radius:${activeTheme==='retro'?'0':'3px'};`"></div>
-                                    </div>
-                                    <div class="flex h-6 items-center justify-center text-[8px] font-bold text-white transition-all duration-300"
-                                         :style="bayarStyle">Bayar</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {{-- ── SIDEBAR ── --}}
-                        <div x-show="activeLayout === 'sidebar'"
-                             style="{{ $currentLayout === 'sidebar' ? '' : 'display:none' }}"
-                             class="flex h-56">
-                            {{-- Sidebar nav --}}
-                            <div class="flex w-14 flex-shrink-0 flex-col items-center gap-2.5 py-3 transition-colors duration-300"
-                                 :style="`background-color:${primary};`">
-                                <div class="h-5 w-5 transition-all duration-300"
-                                     :style="`background:rgba(255,255,255,0.5); border-radius:${activeTheme==='retro'?'0':'4px'};`"></div>
-                                <div class="mt-1 w-9 px-1 py-0.5 text-center text-[6px] font-bold text-white/90 transition-all duration-300"
-                                     :style="activeNavStyle">Kasir</div>
-                                <div class="w-9 px-1 py-0.5 text-center transition-all duration-300" :style="navItemStyle">
-                                    <span class="block h-1 w-full bg-white/45 rounded-full"></span>
-                                </div>
-                                <div class="w-9 px-1 py-0.5 text-center transition-all duration-300" :style="navItemStyle">
-                                    <span class="block h-1 w-full bg-white/45 rounded-full"></span>
-                                </div>
-                                <div class="w-9 px-1 py-0.5 text-center transition-all duration-300" :style="navItemStyle">
-                                    <span class="block h-1 w-full bg-white/45 rounded-full"></span>
-                                </div>
-                            </div>
-                            {{-- Content --}}
-                            <div class="flex flex-1 flex-col min-h-0">
-                                {{-- Category chips --}}
-                                <div class="flex flex-shrink-0 gap-1.5 px-2 py-1.5" :style="`background-color:${surface};`">
-                                    <span class="px-2 py-0.5 text-[7px] font-bold transition-all duration-300" :style="activeChipStyle">Semua</span>
-                                    <span class="px-2 py-0.5 text-[7px] transition-all duration-300" :style="`${chipStyle} color:${muted};`">Makanan</span>
-                                    <span class="px-2 py-0.5 text-[7px] transition-all duration-300" :style="`${chipStyle} color:${muted};`">Minuman</span>
-                                </div>
-                                <div class="flex flex-1 gap-2 p-2 min-h-0">
-                                    <div class="grid flex-1 grid-cols-4 gap-1.5 content-start">
-                                        @for ($i = 0; $i < 8; $i++)
-                                            <div class="flex flex-col gap-1 p-1.5 transition-all duration-300" :style="cardStyle">
-                                                <div class="h-7 transition-colors duration-300" :style="`background-color:${bg}; border-radius:${activeTheme==='retro'?'0':activeTheme==='classic'?'2px':'6px'};`"></div>
-                                                <div class="h-1 w-3/4" :style="`background-color:${muted}40; border-radius:${activeTheme==='retro'?'0':'9999px'};`"></div>
-                                                <div class="h-1" :style="`background-color:${primary}80; border-radius:${activeTheme==='retro'?'0':'9999px'};`"></div>
-                                            </div>
-                                        @endfor
-                                    </div>
-                                    <div class="flex w-24 flex-shrink-0 flex-col gap-1.5 p-2 transition-all duration-300"
-                                         :style="`background-color:${surface}; border:1px solid ${border}; border-radius:${activeTheme==='retro'?'0':activeTheme==='classic'?'4px':'12px'};`">
-                                        <div class="h-1 w-3/5" :style="`background-color:${fg}25; border-radius:${activeTheme==='retro'?'0':'9999px'};`"></div>
-                                        <div class="flex flex-1 flex-col gap-1">
-                                            <div class="h-3.5 transition-all duration-300" :style="`background-color:${bg}; border-radius:${activeTheme==='retro'?'0':'3px'};`"></div>
-                                            <div class="h-3.5 transition-all duration-300" :style="`background-color:${bg}; border-radius:${activeTheme==='retro'?'0':'3px'};`"></div>
-                                            <div class="h-3.5 transition-all duration-300" :style="`background-color:${bg}; border-radius:${activeTheme==='retro'?'0':'3px'};`"></div>
-                                        </div>
-                                        <div class="flex h-6 items-center justify-center text-[8px] font-bold text-white transition-all duration-300"
-                                             :style="bayarStyle">Bayar</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {{-- ── BOTTOMBAR ── --}}
-                        <div x-show="activeLayout === 'bottombar'"
-                             style="{{ $currentLayout === 'bottombar' ? '' : 'display:none' }}"
-                             class="flex h-56 flex-col">
-                            {{-- Category chips --}}
-                            <div class="flex flex-shrink-0 gap-1.5 px-3 py-1.5" :style="`background-color:${surface};`">
-                                <span class="px-2 py-0.5 text-[7px] font-bold transition-all duration-300" :style="activeChipStyle">Semua</span>
-                                <span class="px-2 py-0.5 text-[7px] transition-all duration-300" :style="`${chipStyle} color:${muted};`">Makanan</span>
-                                <span class="px-2 py-0.5 text-[7px] transition-all duration-300" :style="`${chipStyle} color:${muted};`">Minuman</span>
-                                <span class="px-2 py-0.5 text-[7px] transition-all duration-300" :style="`${chipStyle} color:${muted};`">Lainnya</span>
-                            </div>
-                            {{-- Product grid + cart --}}
-                            <div class="flex flex-1 gap-2 p-2 min-h-0">
-                                <div class="grid flex-1 grid-cols-4 gap-1.5 content-start">
-                                    @for ($i = 0; $i < 8; $i++)
-                                        <div class="flex flex-col gap-1 p-1.5 transition-all duration-300" :style="cardStyle">
-                                            <div class="h-7 transition-colors duration-300" :style="`background-color:${bg}; border-radius:${activeTheme==='retro'?'0':activeTheme==='classic'?'2px':'6px'};`"></div>
-                                            <div class="h-1 w-3/4" :style="`background-color:${muted}40; border-radius:${activeTheme==='retro'?'0':'9999px'};`"></div>
-                                            <div class="h-1" :style="`background-color:${primary}80; border-radius:${activeTheme==='retro'?'0':'9999px'};`"></div>
-                                        </div>
-                                    @endfor
-                                </div>
-                                <div class="flex w-24 flex-shrink-0 flex-col gap-1.5 p-2 transition-all duration-300"
-                                     :style="`background-color:${surface}; border:1px solid ${border}; border-radius:${activeTheme==='retro'?'0':activeTheme==='classic'?'4px':'12px'};`">
-                                    <div class="h-1 w-3/5" :style="`background-color:${fg}25; border-radius:${activeTheme==='retro'?'0':'9999px'};`"></div>
-                                    <div class="flex flex-1 flex-col gap-1">
-                                        <div class="h-3.5 transition-all duration-300" :style="`background-color:${bg}; border-radius:${activeTheme==='retro'?'0':'3px'};`"></div>
-                                        <div class="h-3.5 transition-all duration-300" :style="`background-color:${bg}; border-radius:${activeTheme==='retro'?'0':'3px'};`"></div>
-                                        <div class="h-3.5 transition-all duration-300" :style="`background-color:${bg}; border-radius:${activeTheme==='retro'?'0':'3px'};`"></div>
-                                    </div>
-                                    <div class="flex h-6 items-center justify-center text-[8px] font-bold text-white transition-all duration-300"
-                                         :style="bayarStyle">Bayar</div>
-                                </div>
-                            </div>
-                            {{-- Bottom nav --}}
-                            <div class="flex flex-shrink-0 items-center justify-around px-6 py-2 transition-colors duration-300"
-                                 :style="`background-color:${primary};`">
-                                <div class="flex flex-col items-center gap-0.5 px-2 py-0.5 transition-all duration-300" :style="activeNavStyle">
-                                    <div class="h-3 w-3" :style="`background:rgba(255,255,255,0.9); border-radius:${activeTheme==='retro'?'0':'2px'};`"></div>
-                                    <span class="text-[5px] text-white/90 font-bold">Kasir</span>
-                                </div>
-                                @for ($i = 0; $i < 3; $i++)
-                                    <div class="flex flex-col items-center gap-0.5 px-2 py-0.5 transition-all duration-300" :style="navItemStyle">
-                                        <div class="h-3 w-3" :style="`background:rgba(255,255,255,0.45); border-radius:${activeTheme==='retro'?'0':'2px'};`"></div>
-                                        <span class="h-1 w-5 block" :style="`background:rgba(255,255,255,0.35); border-radius:${activeTheme==='retro'?'0':'9999px'};`"></span>
-                                    </div>
-                                @endfor
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
-
-                    {{-- Left: Rincian Kasir --}}
+                    {{-- Col 1: Rincian Kasir --}}
                     <div>
                         <h2 class="mb-4 text-2xl font-bold tracking-tight text-slate-900">Rincian Kasir</h2>
                         <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
 
-                            {{-- Nama Toko --}}
                             <div>
                                 <label class="mb-1.5 block text-sm font-semibold text-slate-800">Nama Toko</label>
                                 <input type="text" name="name" value="{{ old('name') }}" required autofocus
                                        placeholder="Contoh: Warung Budi"
                                        class="w-full rounded-full border border-slate-300 px-5 py-3 text-sm text-slate-900 placeholder-slate-400 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
-                                @error('name')
-                                    <p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>
-                                @enderror
+                                @error('name')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
                             </div>
 
-                            {{-- Nama Domain --}}
                             <div class="mt-5">
                                 <label class="mb-1.5 block text-sm font-semibold text-slate-800">Nama Domain</label>
                                 <div class="flex items-center">
@@ -294,12 +122,9 @@
                                     </span>
                                 </div>
                                 <p class="mt-1.5 text-xs text-slate-400">Huruf kecil, angka, dan tanda penghubung</p>
-                                @error('subdomain')
-                                    <p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>
-                                @enderror
+                                @error('subdomain')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
                             </div>
 
-                            {{-- Logo --}}
                             <div class="mt-5">
                                 <label class="mb-1.5 block text-sm font-semibold text-slate-800">Logo</label>
                                 <label class="flex cursor-pointer items-center justify-center gap-2 rounded-full border-2 border-blue-400 px-5 py-3 text-sm font-semibold text-blue-500 transition hover:bg-blue-50">
@@ -321,14 +146,152 @@
                                            class="sr-only" @change="handleLogo($event)">
                                 </label>
                                 <p class="mt-1.5 text-xs text-slate-400">PNG, JPG (maks. 2 MB)</p>
-                                @error('logo')
-                                    <p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>
-                                @enderror
+                                @error('logo')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
                             </div>
                         </div>
                     </div>
 
-                    {{-- Right: Personalisasi Kasir --}}
+                    {{-- Col 2: Live Preview (16:9) --}}
+                    <div>
+                        <p class="mb-4 text-center text-xs font-semibold uppercase tracking-widest text-slate-400">Pratinjau</p>
+                        <div class="w-full overflow-hidden transition-all duration-300"
+                             style="aspect-ratio:16/9"
+                             :style="`background-color:${bg}; font-family:${font}; ${previewWrapStyle}`">
+
+                            {{-- TOPBAR --}}
+                            <div x-show="activeLayout === 'topbar'"
+                                 style="{{ $currentLayout === 'topbar' ? '' : 'display:none' }}"
+                                 class="flex h-full flex-col">
+                                <div class="flex flex-shrink-0 items-center gap-1.5 px-3 py-1.5 transition-colors duration-300"
+                                     :style="`background-color:${primary};`">
+                                    <div class="h-4 w-4 flex-shrink-0 transition-all duration-300"
+                                         :style="`background:rgba(255,255,255,0.5); border-radius:${activeTheme==='retro'?'0':'3px'};`"></div>
+                                    <div class="flex flex-1 items-center gap-1 ml-1">
+                                        <div class="px-1.5 py-0.5 text-[6px] font-bold text-white/90 transition-all duration-300" :style="activeNavStyle">Kasir</div>
+                                        <div class="px-1.5 py-0.5 transition-all duration-300" :style="navItemStyle"><span class="block h-1 w-5 bg-white/50 rounded-full"></span></div>
+                                        <div class="px-1.5 py-0.5 transition-all duration-300" :style="navItemStyle"><span class="block h-1 w-5 bg-white/50 rounded-full"></span></div>
+                                    </div>
+                                    <div class="h-4 w-4 flex-shrink-0 rounded-full bg-white/30"></div>
+                                </div>
+                                <div class="flex flex-shrink-0 gap-1 px-2 py-1 transition-colors duration-300" :style="`background-color:${surface};`">
+                                    <span class="px-1.5 py-0.5 text-[6px] font-bold transition-all duration-300" :style="activeChipStyle">Semua</span>
+                                    <span class="px-1.5 py-0.5 text-[6px] transition-all duration-300" :style="`${chipStyle} color:${muted};`">Makanan</span>
+                                    <span class="px-1.5 py-0.5 text-[6px] transition-all duration-300" :style="`${chipStyle} color:${muted};`">Minuman</span>
+                                </div>
+                                <div class="flex flex-1 gap-1.5 p-1.5 min-h-0">
+                                    <div class="grid flex-1 grid-cols-3 gap-1 content-start">
+                                        @for ($i = 0; $i < 6; $i++)
+                                            <div class="flex flex-col gap-0.5 p-1 transition-all duration-300" :style="cardStyle">
+                                                <div class="h-6 transition-colors duration-300" :style="`background-color:${bg}; border-radius:${activeTheme==='retro'?'0':activeTheme==='classic'?'2px':'4px'};`"></div>
+                                                <div class="h-0.5 w-3/4" :style="`background-color:${muted}40; border-radius:${activeTheme==='retro'?'0':'9999px'};`"></div>
+                                                <div class="h-0.5" :style="`background-color:${primary}80; border-radius:${activeTheme==='retro'?'0':'9999px'};`"></div>
+                                            </div>
+                                        @endfor
+                                    </div>
+                                    <div class="flex w-16 flex-shrink-0 flex-col gap-1 p-1.5 transition-all duration-300"
+                                         :style="`background-color:${surface}; border:1px solid ${border}; border-radius:${activeTheme==='retro'?'0':activeTheme==='classic'?'3px':'8px'};`">
+                                        <div class="h-0.5 w-3/5" :style="`background-color:${fg}25; border-radius:9999px;`"></div>
+                                        <div class="flex flex-1 flex-col gap-1">
+                                            <div class="h-3 transition-all duration-300" :style="`background-color:${bg}; border-radius:${activeTheme==='retro'?'0':'2px'};`"></div>
+                                            <div class="h-3 transition-all duration-300" :style="`background-color:${bg}; border-radius:${activeTheme==='retro'?'0':'2px'};`"></div>
+                                            <div class="h-3 transition-all duration-300" :style="`background-color:${bg}; border-radius:${activeTheme==='retro'?'0':'2px'};`"></div>
+                                        </div>
+                                        <div class="flex h-5 items-center justify-center text-[7px] font-bold text-white transition-all duration-300" :style="bayarStyle">Bayar</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- SIDEBAR --}}
+                            <div x-show="activeLayout === 'sidebar'"
+                                 style="{{ $currentLayout === 'sidebar' ? '' : 'display:none' }}"
+                                 class="flex h-full">
+                                <div class="flex w-10 flex-shrink-0 flex-col items-center gap-2 py-2 transition-colors duration-300"
+                                     :style="`background-color:${primary};`">
+                                    <div class="h-4 w-4 transition-all duration-300"
+                                         :style="`background:rgba(255,255,255,0.5); border-radius:${activeTheme==='retro'?'0':'3px'};`"></div>
+                                    <div class="mt-0.5 w-7 px-1 py-0.5 text-center text-[5px] font-bold text-white/90 transition-all duration-300" :style="activeNavStyle">Kasir</div>
+                                    <div class="w-7 py-0.5 transition-all duration-300" :style="navItemStyle"><span class="block h-0.5 w-full bg-white/45 rounded-full"></span></div>
+                                    <div class="w-7 py-0.5 transition-all duration-300" :style="navItemStyle"><span class="block h-0.5 w-full bg-white/45 rounded-full"></span></div>
+                                    <div class="w-7 py-0.5 transition-all duration-300" :style="navItemStyle"><span class="block h-0.5 w-full bg-white/45 rounded-full"></span></div>
+                                </div>
+                                <div class="flex flex-1 flex-col min-h-0">
+                                    <div class="flex flex-shrink-0 gap-1 px-2 py-1 transition-colors duration-300" :style="`background-color:${surface};`">
+                                        <span class="px-1.5 py-0.5 text-[6px] font-bold transition-all duration-300" :style="activeChipStyle">Semua</span>
+                                        <span class="px-1.5 py-0.5 text-[6px] transition-all duration-300" :style="`${chipStyle} color:${muted};`">Makanan</span>
+                                        <span class="px-1.5 py-0.5 text-[6px] transition-all duration-300" :style="`${chipStyle} color:${muted};`">Minuman</span>
+                                    </div>
+                                    <div class="flex flex-1 gap-1.5 p-1.5 min-h-0">
+                                        <div class="grid flex-1 grid-cols-3 gap-1 content-start">
+                                            @for ($i = 0; $i < 6; $i++)
+                                                <div class="flex flex-col gap-0.5 p-1 transition-all duration-300" :style="cardStyle">
+                                                    <div class="h-6 transition-colors duration-300" :style="`background-color:${bg}; border-radius:${activeTheme==='retro'?'0':activeTheme==='classic'?'2px':'4px'};`"></div>
+                                                    <div class="h-0.5 w-3/4" :style="`background-color:${muted}40; border-radius:${activeTheme==='retro'?'0':'9999px'};`"></div>
+                                                    <div class="h-0.5" :style="`background-color:${primary}80; border-radius:${activeTheme==='retro'?'0':'9999px'};`"></div>
+                                                </div>
+                                            @endfor
+                                        </div>
+                                        <div class="flex w-16 flex-shrink-0 flex-col gap-1 p-1.5 transition-all duration-300"
+                                             :style="`background-color:${surface}; border:1px solid ${border}; border-radius:${activeTheme==='retro'?'0':activeTheme==='classic'?'3px':'8px'};`">
+                                            <div class="h-0.5 w-3/5" :style="`background-color:${fg}25; border-radius:9999px;`"></div>
+                                            <div class="flex flex-1 flex-col gap-1">
+                                                <div class="h-3 transition-all duration-300" :style="`background-color:${bg}; border-radius:${activeTheme==='retro'?'0':'2px'};`"></div>
+                                                <div class="h-3 transition-all duration-300" :style="`background-color:${bg}; border-radius:${activeTheme==='retro'?'0':'2px'};`"></div>
+                                                <div class="h-3 transition-all duration-300" :style="`background-color:${bg}; border-radius:${activeTheme==='retro'?'0':'2px'};`"></div>
+                                            </div>
+                                            <div class="flex h-5 items-center justify-center text-[7px] font-bold text-white transition-all duration-300" :style="bayarStyle">Bayar</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- BOTTOMBAR --}}
+                            <div x-show="activeLayout === 'bottombar'"
+                                 style="{{ $currentLayout === 'bottombar' ? '' : 'display:none' }}"
+                                 class="flex h-full flex-col">
+                                <div class="flex flex-shrink-0 gap-1 px-2 py-1 transition-colors duration-300" :style="`background-color:${surface};`">
+                                    <span class="px-1.5 py-0.5 text-[6px] font-bold transition-all duration-300" :style="activeChipStyle">Semua</span>
+                                    <span class="px-1.5 py-0.5 text-[6px] transition-all duration-300" :style="`${chipStyle} color:${muted};`">Makanan</span>
+                                    <span class="px-1.5 py-0.5 text-[6px] transition-all duration-300" :style="`${chipStyle} color:${muted};`">Minuman</span>
+                                </div>
+                                <div class="flex flex-1 gap-1.5 p-1.5 min-h-0">
+                                    <div class="grid flex-1 grid-cols-3 gap-1 content-start">
+                                        @for ($i = 0; $i < 6; $i++)
+                                            <div class="flex flex-col gap-0.5 p-1 transition-all duration-300" :style="cardStyle">
+                                                <div class="h-6 transition-colors duration-300" :style="`background-color:${bg}; border-radius:${activeTheme==='retro'?'0':activeTheme==='classic'?'2px':'4px'};`"></div>
+                                                <div class="h-0.5 w-3/4" :style="`background-color:${muted}40; border-radius:${activeTheme==='retro'?'0':'9999px'};`"></div>
+                                                <div class="h-0.5" :style="`background-color:${primary}80; border-radius:${activeTheme==='retro'?'0':'9999px'};`"></div>
+                                            </div>
+                                        @endfor
+                                    </div>
+                                    <div class="flex w-16 flex-shrink-0 flex-col gap-1 p-1.5 transition-all duration-300"
+                                         :style="`background-color:${surface}; border:1px solid ${border}; border-radius:${activeTheme==='retro'?'0':activeTheme==='classic'?'3px':'8px'};`">
+                                        <div class="h-0.5 w-3/5" :style="`background-color:${fg}25; border-radius:9999px;`"></div>
+                                        <div class="flex flex-1 flex-col gap-1">
+                                            <div class="h-3 transition-all duration-300" :style="`background-color:${bg}; border-radius:${activeTheme==='retro'?'0':'2px'};`"></div>
+                                            <div class="h-3 transition-all duration-300" :style="`background-color:${bg}; border-radius:${activeTheme==='retro'?'0':'2px'};`"></div>
+                                            <div class="h-3 transition-all duration-300" :style="`background-color:${bg}; border-radius:${activeTheme==='retro'?'0':'2px'};`"></div>
+                                        </div>
+                                        <div class="flex h-5 items-center justify-center text-[7px] font-bold text-white transition-all duration-300" :style="bayarStyle">Bayar</div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-shrink-0 items-center justify-around px-4 py-1.5 transition-colors duration-300"
+                                     :style="`background-color:${primary};`">
+                                    <div class="flex flex-col items-center gap-0.5 px-1.5 py-0.5 transition-all duration-300" :style="activeNavStyle">
+                                        <div class="h-2.5 w-2.5" :style="`background:rgba(255,255,255,0.9); border-radius:${activeTheme==='retro'?'0':'2px'};`"></div>
+                                        <span class="text-[5px] text-white/90 font-bold">Kasir</span>
+                                    </div>
+                                    @for ($i = 0; $i < 3; $i++)
+                                        <div class="flex flex-col items-center gap-0.5 px-1.5 py-0.5 transition-all duration-300" :style="navItemStyle">
+                                            <div class="h-2.5 w-2.5" :style="`background:rgba(255,255,255,0.45); border-radius:${activeTheme==='retro'?'0':'2px'};`"></div>
+                                            <span class="h-0.5 w-4 block" :style="`background:rgba(255,255,255,0.35); border-radius:${activeTheme==='retro'?'0':'9999px'};`"></span>
+                                        </div>
+                                    @endfor
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Col 3: Personalisasi Kasir --}}
                     <div>
                         <h2 class="mb-4 text-2xl font-bold tracking-tight text-slate-900">Personalisasi Kasir</h2>
                         <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
@@ -357,9 +320,7 @@
                                         </button>
                                     @endforeach
                                 </div>
-                                @error('layout')
-                                    <p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>
-                                @enderror
+                                @error('layout')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
                             </div>
 
                             {{-- Tema --}}
@@ -377,16 +338,15 @@
                                         </button>
                                     @endforeach
                                 </div>
-                                @error('theme')
-                                    <p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>
-                                @enderror
+                                @error('theme')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
                             </div>
 
                             {{-- Palet Warna --}}
                             <div class="mt-6">
                                 <p class="mb-3 text-sm font-semibold text-slate-800">Palet Warna</p>
                                 @foreach ($themes as $themeKey => $theme)
-                                    <div x-show="activeTheme === '{{ $themeKey }}'" style="{{ $currentTheme === $themeKey ? '' : 'display:none' }}"
+                                    <div x-show="activeTheme === '{{ $themeKey }}'"
+                                         style="{{ $currentTheme === $themeKey ? '' : 'display:none' }}"
                                          class="flex flex-wrap gap-3">
                                         @foreach ($theme['palettes'] as $paletteKey)
                                             @php $p = $palettes[$paletteKey] @endphp
@@ -408,9 +368,7 @@
                                         @endforeach
                                     </div>
                                 @endforeach
-                                @error('color_palette')
-                                    <p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>
-                                @enderror
+                                @error('color_palette')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
                             </div>
                         </div>
                     </div>
