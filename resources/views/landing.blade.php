@@ -80,7 +80,8 @@
         </div>
 
         <div class="relative">
-            <div class="ph aspect-[3/2] w-full rounded-2xl ring-1 ring-slate-200"></div>
+            <img src="{{ asset('images/hero.png') }}"
+            {{-- <div class="ph aspect-[3/2] w-full rounded-2xl ring-1 ring-slate-200"></div> --}}
         </div>
     </div>
 </section>
@@ -100,7 +101,8 @@
         @for ($i = 0; $i < 3; $i++)
             @php $tpl = $templates[$i] ?? null; @endphp
             <div>
-                <div class="ph h-44 w-full rounded-xl ring-1 ring-slate-200"></div>
+                {{-- <div class="ph h-44 w-full rounded-xl ring-1 ring-slate-200"></div> --}}
+                <img class="ph h-44 w-full rounded-xl ring-1" src="{{ asset('images/photo' . ($i + 1) . '.png') }}"
                 <p class="mt-3 text-sm font-medium text-slate-700">{{ $tpl?->name ?? 'Nama Template' }}</p>
             </div>
         @endfor
@@ -209,7 +211,7 @@
         </p>
         <a href="{{ auth()->check() ? route('tenants.choose') : route('register') }}"
            class="mt-6 inline-block rounded-full bg-lime-400 px-8 py-2.5 text-sm font-semibold text-slate-900 hover:bg-lime-500 transition">
-            Mulai Sekarang
+            Hubungin kami!
         </a>
     </div>
 </section>
