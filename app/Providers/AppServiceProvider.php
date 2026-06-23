@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\Product;
 use App\Models\Tenant;
 use App\Models\User;
+use App\Observers\ProductObserver;
+use App\Observers\TenantObserver;
 use App\Policies\TenantPolicy;
 use App\Support\TenantContext;
 use Illuminate\Support\Facades\Gate;
@@ -28,6 +31,9 @@ class AppServiceProvider extends ServiceProvider
         if (config('app.force_https')) {
             URL::forceScheme('https');
         }
+
+        Tenant::observe(TenantObserver::class);
+        Product::observe(ProductObserver::class);
 
         Gate::policy(Tenant::class, TenantPolicy::class);
 
