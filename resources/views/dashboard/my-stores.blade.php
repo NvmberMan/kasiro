@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <div >
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
             @if (session('status') === 'tenant-archived')
@@ -31,7 +31,7 @@
                                class="flex-1 min-w-[200px] border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
 
                         <select x-model="filter" @change="apply()"
-                                class="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                class="w-[130px] border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             <option value="">Semua Peran</option>
                             <option value="owner">Pemilik</option>
                             <option value="manager">Manajer</option>
@@ -39,7 +39,7 @@
                         </select>
 
                         <select x-model="sort" @change="apply()"
-                                class="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                class="w-[110px] border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             <option value="name:asc">Nama A-Z</option>
                             <option value="name:desc">Nama Z-A</option>
                         </select>

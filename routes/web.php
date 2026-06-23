@@ -3,8 +3,6 @@
 use App\Http\Controllers\AcceptInvitationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LandingController;
-use App\Http\Controllers\Tenant\ReportController;
-use App\Http\Controllers\Tenant\SettingsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Tenant\CategoryController;
 use App\Http\Controllers\Tenant\CreateTenantController;
@@ -13,6 +11,8 @@ use App\Http\Controllers\Tenant\HomeController as TenantHomeController;
 use App\Http\Controllers\Tenant\InvitationController;
 use App\Http\Controllers\Tenant\PosController;
 use App\Http\Controllers\Tenant\ProductController;
+use App\Http\Controllers\Tenant\ReportController;
+use App\Http\Controllers\Tenant\SettingsController;
 use App\Http\Controllers\Tenant\TenantArchiveController;
 use App\Http\Controllers\Tenant\TransactionController;
 use Illuminate\Support\Facades\Route;
