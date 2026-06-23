@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateTenantCustomRequest;
 use App\Http\Requests\CreateTenantFromTemplateRequest;
 use App\Models\Template;
+use App\Models\Tenant;
 use App\Support\ThemeConfig;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -38,7 +39,7 @@ class CreateTenantController extends Controller
             templateId: null,
         );
 
-        return redirect()->away($this->tenantUrl($tenant->subdomain));
+        return redirect()->route('tenants.created', $tenant);
     }
 
     public function createFromTemplate(): View
@@ -60,7 +61,17 @@ class CreateTenantController extends Controller
             templateId: $template->id,
         );
 
-        return redirect()->away($this->tenantUrl($tenant->subdomain));
+        return redirect()->route('tenants.created', $tenant);
+    }
+
+    public function created(Tenant $tenant): View
+    {
+        abort_unless(
+            $tenant->owner_id === auth()->id(),
+            403,
+        );
+
+        return view('tenants.created', compact('tenant'));
     }
 
     public function showcase(): View
@@ -82,11 +93,6 @@ class CreateTenantController extends Controller
             templateId: $template->id,
         );
 
-        return redirect()->away($this->tenantUrl($tenant->subdomain));
-    }
-
-    private function tenantUrl(string $subdomain): string
-    {
-        return 'http://'.$subdomain.'.'.config('tenancy.central_domain').'/';
+        return redirect()->route('tenants.created', $tenant);
     }
 }
