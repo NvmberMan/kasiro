@@ -26,6 +26,7 @@ class Tenant extends Model
         'name',
         'subdomain',
         'logo_path',
+        'screenshot_path',
         'status',
         'template_id',
         'theme_config',
@@ -76,6 +77,18 @@ class Tenant extends Model
     public function subdomainUrl(): string
     {
         return 'http://'.$this->subdomain.'.'.config('tenancy.central_domain').'/';
+    }
+
+    public function screenshotUrl(): ?string
+    {
+        if (! $this->screenshot_path) {
+            return null;
+        }
+
+        $abs = storage_path('app/public/'.$this->screenshot_path);
+        $version = file_exists($abs) ? filemtime($abs) : 0;
+
+        return asset('storage/'.$this->screenshot_path).'?v='.$version;
     }
 
     public function users(): BelongsToMany
