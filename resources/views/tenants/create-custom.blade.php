@@ -16,7 +16,19 @@
             activeTheme: @js($currentTheme),
             activePalette: @js($currentPalette),
             themePalettes: @js($validPalettes),
+            allPalettes: @js($palettes),
+            allThemes: @js(collect($themes)->map(fn($t) => $t['vars'])),
             logoPreview: null,
+            get c() { return this.allPalettes[this.activePalette] ?? {}; },
+            get primary()  { return this.c['--brand-primary']  ?? '#6366f1'; },
+            get accent()   { return this.c['--brand-accent']   ?? '#4f46e5'; },
+            get bg()       { return this.c['--brand-bg']       ?? '#f5f5f5'; },
+            get surface()  { return this.c['--brand-surface']  ?? '#ffffff'; },
+            get border()   { return this.c['--brand-border']   ?? '#e2e8f0'; },
+            get fg()       { return this.c['--brand-fg']       ?? '#0f172a'; },
+            get muted()    { return this.c['--brand-muted']    ?? '#64748b'; },
+            get font()     { return (this.allThemes[this.activeTheme] ?? {})['--brand-font']   ?? 'system-ui'; },
+            get radius()   { return (this.allThemes[this.activeTheme] ?? {})['--brand-radius'] ?? '0.875rem'; },
             changeTheme(t) {
                 this.activeTheme = t;
                 const ps = this.themePalettes[t] ?? [];
@@ -49,6 +61,134 @@
             @csrf
 
             <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+
+                {{-- Live Preview --}}
+                <div class="mb-8">
+                    <p class="mb-3 text-center text-xs font-semibold uppercase tracking-widest text-slate-400">Pratinjau Langsung</p>
+                    <div class="mx-auto max-w-2xl overflow-hidden rounded-2xl shadow-md ring-1 ring-slate-200 transition-all duration-300"
+                         :style="`background-color: ${bg}; font-family: ${font};`">
+
+                        {{-- TOPBAR --}}
+                        <div x-show="activeLayout === 'topbar'"
+                             style="{{ $currentLayout === 'topbar' ? '' : 'display:none' }}"
+                             class="flex h-52 flex-col">
+                            {{-- Top nav --}}
+                            <div class="flex flex-shrink-0 items-center gap-2 px-4 py-2.5 transition-colors duration-300"
+                                 :style="`background-color: ${primary};`">
+                                <div class="h-5 w-5 rounded-md bg-white/40 flex-shrink-0"></div>
+                                <div class="h-2 w-14 rounded-full bg-white/70 flex-shrink-0"></div>
+                                <div class="flex flex-1 gap-3 ml-2">
+                                    <div class="h-1.5 w-10 rounded-full bg-white/40"></div>
+                                    <div class="h-1.5 w-10 rounded-full bg-white/40"></div>
+                                    <div class="h-1.5 w-10 rounded-full bg-white/40"></div>
+                                </div>
+                                <div class="h-6 w-6 rounded-full bg-white/30 flex-shrink-0"></div>
+                            </div>
+                            {{-- Content --}}
+                            <div class="flex flex-1 gap-2.5 p-3 min-h-0">
+                                <div class="grid flex-1 grid-cols-4 gap-2 content-start">
+                                    @for ($i = 0; $i < 8; $i++)
+                                        <div class="flex flex-col gap-1 rounded-lg p-2 transition-colors duration-300"
+                                             :style="`background-color: ${surface}; border: 1px solid ${border}; border-radius: ${radius};`">
+                                            <div class="h-8 rounded-md transition-colors duration-300" :style="`background-color: ${bg};`"></div>
+                                            <div class="h-1.5 w-3/4 rounded-full" :style="`background-color: ${muted}40;`"></div>
+                                            <div class="h-1.5 rounded-full" :style="`background-color: ${primary}70;`"></div>
+                                        </div>
+                                    @endfor
+                                </div>
+                                <div class="flex w-28 flex-shrink-0 flex-col gap-2 rounded-xl p-2.5 transition-colors duration-300"
+                                     :style="`background-color: ${surface}; border: 1px solid ${border};`">
+                                    <div class="h-1.5 w-3/5 rounded-full" :style="`background-color: ${fg}20;`"></div>
+                                    <div class="flex flex-1 flex-col gap-1.5">
+                                        <div class="h-4 rounded" :style="`background-color: ${bg};`"></div>
+                                        <div class="h-4 rounded" :style="`background-color: ${bg};`"></div>
+                                        <div class="h-4 rounded" :style="`background-color: ${bg};`"></div>
+                                    </div>
+                                    <div class="flex h-7 items-center justify-center rounded-lg text-[9px] font-bold text-white transition-colors duration-300"
+                                         :style="`background-color: ${primary}; border-radius: calc(${radius} * 0.75);`">Bayar</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- SIDEBAR --}}
+                        <div x-show="activeLayout === 'sidebar'"
+                             style="{{ $currentLayout === 'sidebar' ? '' : 'display:none' }}"
+                             class="flex h-52">
+                            {{-- Left sidebar --}}
+                            <div class="flex w-16 flex-shrink-0 flex-col items-center gap-3 py-3 transition-colors duration-300"
+                                 :style="`background-color: ${primary};`">
+                                <div class="h-5 w-5 rounded-md bg-white/40"></div>
+                                <div class="mt-1 h-1.5 w-9 rounded-full bg-white/50"></div>
+                                <div class="h-1.5 w-9 rounded-full bg-white/40"></div>
+                                <div class="h-1.5 w-9 rounded-full bg-white/40"></div>
+                                <div class="h-1.5 w-9 rounded-full bg-white/30"></div>
+                            </div>
+                            {{-- Content --}}
+                            <div class="flex flex-1 gap-2.5 p-3 min-h-0">
+                                <div class="grid flex-1 grid-cols-4 gap-2 content-start">
+                                    @for ($i = 0; $i < 8; $i++)
+                                        <div class="flex flex-col gap-1 rounded-lg p-2 transition-colors duration-300"
+                                             :style="`background-color: ${surface}; border: 1px solid ${border}; border-radius: ${radius};`">
+                                            <div class="h-8 rounded-md transition-colors duration-300" :style="`background-color: ${bg};`"></div>
+                                            <div class="h-1.5 w-3/4 rounded-full" :style="`background-color: ${muted}40;`"></div>
+                                            <div class="h-1.5 rounded-full" :style="`background-color: ${primary}70;`"></div>
+                                        </div>
+                                    @endfor
+                                </div>
+                                <div class="flex w-28 flex-shrink-0 flex-col gap-2 rounded-xl p-2.5 transition-colors duration-300"
+                                     :style="`background-color: ${surface}; border: 1px solid ${border};`">
+                                    <div class="h-1.5 w-3/5 rounded-full" :style="`background-color: ${fg}20;`"></div>
+                                    <div class="flex flex-1 flex-col gap-1.5">
+                                        <div class="h-4 rounded" :style="`background-color: ${bg};`"></div>
+                                        <div class="h-4 rounded" :style="`background-color: ${bg};`"></div>
+                                        <div class="h-4 rounded" :style="`background-color: ${bg};`"></div>
+                                    </div>
+                                    <div class="flex h-7 items-center justify-center rounded-lg text-[9px] font-bold text-white transition-colors duration-300"
+                                         :style="`background-color: ${primary}; border-radius: calc(${radius} * 0.75);`">Bayar</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- BOTTOMBAR --}}
+                        <div x-show="activeLayout === 'bottombar'"
+                             style="{{ $currentLayout === 'bottombar' ? '' : 'display:none' }}"
+                             class="flex h-52 flex-col">
+                            {{-- Content --}}
+                            <div class="flex flex-1 gap-2.5 p-3 min-h-0">
+                                <div class="grid flex-1 grid-cols-4 gap-2 content-start">
+                                    @for ($i = 0; $i < 8; $i++)
+                                        <div class="flex flex-col gap-1 rounded-lg p-2 transition-colors duration-300"
+                                             :style="`background-color: ${surface}; border: 1px solid ${border}; border-radius: ${radius};`">
+                                            <div class="h-8 rounded-md transition-colors duration-300" :style="`background-color: ${bg};`"></div>
+                                            <div class="h-1.5 w-3/4 rounded-full" :style="`background-color: ${muted}40;`"></div>
+                                            <div class="h-1.5 rounded-full" :style="`background-color: ${primary}70;`"></div>
+                                        </div>
+                                    @endfor
+                                </div>
+                                <div class="flex w-28 flex-shrink-0 flex-col gap-2 rounded-xl p-2.5 transition-colors duration-300"
+                                     :style="`background-color: ${surface}; border: 1px solid ${border};`">
+                                    <div class="h-1.5 w-3/5 rounded-full" :style="`background-color: ${fg}20;`"></div>
+                                    <div class="flex flex-1 flex-col gap-1.5">
+                                        <div class="h-4 rounded" :style="`background-color: ${bg};`"></div>
+                                        <div class="h-4 rounded" :style="`background-color: ${bg};`"></div>
+                                        <div class="h-4 rounded" :style="`background-color: ${bg};`"></div>
+                                    </div>
+                                    <div class="flex h-7 items-center justify-center rounded-lg text-[9px] font-bold text-white transition-colors duration-300"
+                                         :style="`background-color: ${primary}; border-radius: calc(${radius} * 0.75);`">Bayar</div>
+                                </div>
+                            </div>
+                            {{-- Bottom nav --}}
+                            <div class="flex flex-shrink-0 items-center justify-around px-8 py-2.5 transition-colors duration-300"
+                                 :style="`background-color: ${primary};`">
+                                <div class="h-4 w-4 rounded-sm bg-white/40"></div>
+                                <div class="h-4 w-4 rounded-sm bg-white/60"></div>
+                                <div class="h-4 w-4 rounded-sm bg-white/40"></div>
+                                <div class="h-4 w-4 rounded-sm bg-white/40"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
 
                     {{-- Left: Rincian Kasir --}}
