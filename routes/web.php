@@ -53,6 +53,7 @@ Route::domain($central)->group(function () {
         Route::post('/tenants/create/custom', [CreateTenantController::class, 'storeCustom'])->name('tenants.store.custom');
         Route::get('/tenants/create/template', [CreateTenantController::class, 'createFromTemplate'])->name('tenants.create.template');
         Route::post('/tenants/create/template', [CreateTenantController::class, 'storeFromTemplate'])->name('tenants.store.template');
+        Route::get('/tenants/{tenant}/created', [CreateTenantController::class, 'created'])->name('tenants.created');
         Route::get('/tenants/showcase', [CreateTenantController::class, 'showcase'])->name('tenants.showcase');
         Route::post('/tenants/showcase', [CreateTenantController::class, 'storeFromShowcase'])->name('tenants.store.showcase');
     });
