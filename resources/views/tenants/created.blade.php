@@ -1,6 +1,14 @@
 <x-app-layout>
-    <div class="min-h-[calc(100vh-4rem)] bg-gradient-to-br from-blue-100 via-slate-100 to-blue-200 flex items-center justify-center py-16 px-4">
-        <div class="flex flex-col items-center">
+    @php
+        $screenshotBase = asset('storage/screenshots/'.$tenant->subdomain.'.jpg');
+        $screenshotReady = (bool) $tenant->screenshot_path
+            && file_exists(storage_path('app/public/screenshots/'.$tenant->subdomain.'.jpg'));
+    @endphp
+
+    {{-- Full-screen overlay: sits above the admin header (z-40) and sidebar (z-30). --}}
+    <div class="fixed inset-0 z-50 overflow-y-auto bg-gradient-to-br from-blue-100 via-slate-100 to-blue-200">
+        <div class="flex min-h-full flex-col items-center justify-center px-4 py-16">
+
             {{-- Success heading --}}
             <div class="mb-6 flex items-center gap-3">
                 <span class="flex h-8 w-8 items-center justify-center rounded-full bg-lime-400">
@@ -11,17 +19,32 @@
                 <h2 class="text-2xl font-bold text-slate-900">Berhasil membuat sistem kasir!</h2>
             </div>
 
-            {{-- Preview card --}}
-            <div class="w-[340px] sm:w-[400px]">
-                @php $screenshot = $tenant->screenshotUrl(); @endphp
-                @if ($screenshot)
-                    <div class="overflow-hidden rounded-2xl shadow-md">
-                        <img src="{{ $screenshot }}" alt="{{ $tenant->name }}"
-                             class="w-full object-cover object-top">
+            {{-- Preview card — lazy-retries until the background screenshot is ready --}}
+            <div class="w-[340px] sm:w-[400px]"
+                 x-data="{
+                    loaded: false,
+                    attempts: 0,
+                    src: '{{ $screenshotBase }}?v={{ time() }}',
+                    onError() {
+                        if (this.attempts++ >= 15) return; // give up after ~30s
+                        setTimeout(() => { this.src = '{{ $screenshotBase }}?v=' + Date.now(); }, 2000);
+                    }
+                 }">
+                <div class="relative overflow-hidden rounded-2xl bg-slate-200/80 shadow-md">
+                    <img :src="src" alt="{{ $tenant->name }}"
+                         x-on:load="loaded = true" x-on:error="loaded = false; onError()"
+                         x-show="loaded" x-cloak
+                         class="w-full object-cover object-top">
+                    <div x-show="!loaded" class="flex h-60 w-full items-center justify-center">
+                        <div class="flex flex-col items-center gap-2 text-slate-400">
+                            <svg class="h-6 w-6 animate-spin" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"/>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v3a5 5 0 00-5 5H4z"/>
+                            </svg>
+                            <span class="text-xs">Menyiapkan pratinjau…</span>
+                        </div>
                     </div>
-                @else
-                    <div class="h-60 w-full rounded-2xl bg-slate-200/80 shadow-md"></div>
-                @endif
+                </div>
             </div>
 
             {{-- Subdomain link --}}

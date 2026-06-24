@@ -49,6 +49,10 @@ class GenerateTenantScreenshot implements ShouldBeUnique, ShouldQueue
             ->windowSize(1280, 800)
             ->setScreenshotType('jpeg', 80)
             ->dismissDialogs()
+            // Local tenant subdomains are served over HTTPS with a self-signed
+            // cert (Laragon). Without this Chrome blocks the page load and the
+            // screenshot times out before reaching network idle.
+            ->ignoreHttpsErrors()
             ->waitUntilNetworkIdle()
             ->timeout(30);
 
