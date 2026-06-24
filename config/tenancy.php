@@ -57,4 +57,29 @@ return [
         'max' => 63, // DNS label limit
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Tenant screenshot generation
+    |--------------------------------------------------------------------------
+    |
+    | The preview screenshot is produced by Browsershot (headless Chrome), which
+    | takes up to ~60s and makes an HTTP request back to this same app at
+    | /__preview. Running that inline (dispatchAfterResponse) keeps the serving
+    | PHP worker busy for the whole duration and competes with normal navigation.
+    |
+    | When 'queue' is true the job is pushed onto the queue so a separate worker
+    | (php artisan queue:work / queue:listen) runs Chrome out-of-band — the web
+    | request returns immediately. `composer dev` already starts a queue:listen,
+    | so this is the recommended default.
+    |
+    | Set TENANT_SCREENSHOT_QUEUE=false ONLY if you run the app without any queue
+    | worker; the job then falls back to running after the response (the old
+    | blocking behaviour) so screenshots still get generated.
+    |
+    */
+
+    'screenshot' => [
+        'queue' => (bool) env('TENANT_SCREENSHOT_QUEUE', true),
+    ],
+
 ];
