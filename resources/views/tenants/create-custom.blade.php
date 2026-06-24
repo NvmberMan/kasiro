@@ -12,6 +12,28 @@
 
     <div x-data="{
             loading: false,
+            fields: { name: @js(old('name', '')), subdomain: @js(old('subdomain', '')) },
+            errors: { name: '', subdomain: '' },
+            validateName() {
+                return this.fields.name.trim() === '' ? 'Nama toko wajib diisi.' : '';
+            },
+            validateSubdomain() {
+                const v = this.fields.subdomain.trim();
+                if (v === '') return 'Nama domain wajib diisi.';
+                if (!/^[a-z0-9]([a-z0-9-]*[a-z0-9])?$/.test(v)) return 'Hanya huruf kecil, angka, dan tanda penghubung; harus diawali dan diakhiri huruf atau angka.';
+                if (v.length < 3) return 'Nama domain minimal 3 karakter.';
+                if (v.length > 63) return 'Nama domain maksimal 63 karakter.';
+                return '';
+            },
+            submitForm(e) {
+                this.errors.name = this.validateName();
+                this.errors.subdomain = this.validateSubdomain();
+                if (this.errors.name || this.errors.subdomain) {
+                    e.preventDefault();
+                    return;
+                }
+                this.loading = true;
+            },
             activeLayout: @js($currentLayout),
             activeTheme: @js($currentTheme),
             activePalette: @js($currentPalette),
@@ -90,7 +112,7 @@
 
         <form method="POST" action="{{ route('tenants.store.custom') }}"
               enctype="multipart/form-data"
-              @submit="loading = true">
+              @submit="submitForm($event)">
             @csrf
 
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -105,24 +127,28 @@
 
                             <div>
                                 <label class="mb-1.5 block text-sm font-semibold text-slate-800">Nama Toko</label>
-                                <input type="text" name="name" value="{{ old('name') }}" required autofocus
+                                <input type="text" name="name" x-model="fields.name" autofocus
+                                       @input="errors.name = ''"
                                        placeholder="Contoh: Warung Budi"
                                        class="w-full rounded-full border border-slate-300 px-5 py-3 text-sm text-slate-900 placeholder-slate-400 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
-                                @error('name')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
+                                <p x-show="errors.name" x-text="errors.name" style="display:none" class="mt-1.5 text-xs text-red-500"></p>
+                                @error('name')<p x-show="!errors.name" class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
                             </div>
 
                             <div class="mt-5">
                                 <label class="mb-1.5 block text-sm font-semibold text-slate-800">Nama Domain</label>
                                 <div class="flex items-center">
-                                    <input type="text" name="subdomain" value="{{ old('subdomain') }}" required
+                                    <input type="text" name="subdomain" x-model="fields.subdomain"
+                                           @input="errors.subdomain = ''"
                                            placeholder="namatoko"
                                            class="flex-1 rounded-l-full border border-r-0 border-slate-300 px-5 py-3 text-sm text-slate-900 placeholder-slate-400 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:z-10">
                                     <span class="flex items-center rounded-r-full border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-500 whitespace-nowrap">
                                         .{{ config('tenancy.central_domain') }}
                                     </span>
                                 </div>
-                                <p class="mt-1.5 text-xs text-slate-400">Huruf kecil, angka, dan tanda penghubung</p>
-                                @error('subdomain')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
+                                <p class="mt-1.5 text-xs text-slate-400">Huruf kecil, angka, dan tanda penghubung (min. 3 karakter)</p>
+                                <p x-show="errors.subdomain" x-text="errors.subdomain" style="display:none" class="mt-1.5 text-xs text-red-500"></p>
+                                @error('subdomain')<p x-show="!errors.subdomain" class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
                             </div>
 
                             <div class="mt-5">
