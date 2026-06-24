@@ -1,39 +1,28 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Buat Aplikasi Kasir') }}
-        </h2>
-    </x-slot>
+    <div class="flex min-h-[60vh] flex-col items-center justify-center py-16">
+        <h1 class="mb-2 text-3xl font-bold tracking-tight text-slate-900">Buat Sistem Kasir</h1>
+        <p class="mb-10 text-slate-500">Pilih cara membuat aplikasi kasir kamu:</p>
 
-    <div class="py-12">
-        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
-            <p class="text-gray-600 mb-8 text-center">Pilih cara membuat aplikasi kasir kamu:</p>
+        <div class="grid w-full max-w-2xl grid-cols-1 gap-5 px-4 sm:grid-cols-2">
+            {{-- Custom --}}
+            <a href="{{ route('tenants.create.custom') }}"
+               class="group flex flex-col items-center rounded-2xl border-2 border-slate-200 bg-white px-8 py-10 text-center shadow-sm transition hover:border-blue-500 hover:shadow-md">
+                <div class="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-3xl transition group-hover:bg-blue-100">
+                    🎨
+                </div>
+                <h3 class="text-lg font-bold text-slate-900">Custom</h3>
+                <p class="mt-2 text-sm text-slate-500">Pilih layout, tema, dan warna sendiri dari awal.</p>
+            </a>
 
-            <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
-                {{-- Custom --}}
-                <a href="{{ route('tenants.create.custom') }}"
-                   class="block rounded-xl border-2 border-gray-200 bg-white p-6 text-center hover:border-indigo-500 hover:shadow-md transition">
-                    <div class="text-4xl mb-3">🎨</div>
-                    <h3 class="font-semibold text-gray-900 text-lg">Custom</h3>
-                    <p class="mt-2 text-sm text-gray-500">Pilih layout, tema, dan warna sendiri dari awal.</p>
-                </a>
-
-                {{-- Template --}}
-                <a href="{{ route('tenants.create.template') }}"
-                   class="block rounded-xl border-2 border-gray-200 bg-white p-6 text-center hover:border-indigo-500 hover:shadow-md transition">
-                    <div class="text-4xl mb-3">📋</div>
-                    <h3 class="font-semibold text-gray-900 text-lg">Pakai Template</h3>
-                    <p class="mt-2 text-sm text-gray-500">Pilih preset siap pakai, lalu sesuaikan nama & subdomain.</p>
-                </a>
-
-                {{-- Showcase --}}
-                <a href="{{ route('tenants.showcase') }}"
-                   class="block rounded-xl border-2 border-gray-200 bg-white p-6 text-center hover:border-indigo-500 hover:shadow-md transition">
-                    <div class="text-4xl mb-3">🏪</div>
-                    <h3 class="font-semibold text-gray-900 text-lg">Galeri Showcase</h3>
-                    <p class="mt-2 text-sm text-gray-500">Lihat contoh toko nyata, klik untuk buat seketika.</p>
-                </a>
-            </div>
+            {{-- Template --}}
+            <a href="{{ route('tenants.create.template') }}"
+               class="group flex flex-col items-center rounded-2xl border-2 border-slate-200 bg-white px-8 py-10 text-center shadow-sm transition hover:border-blue-500 hover:shadow-md">
+                <div class="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-50 text-3xl transition group-hover:bg-indigo-100">
+                    📋
+                </div>
+                <h3 class="text-lg font-bold text-slate-900">Pakai Template</h3>
+                <p class="mt-2 text-sm text-slate-500">Pilih preset siap pakai, lalu sesuaikan nama & subdomain.</p>
+            </a>
         </div>
     </div>
 </x-app-layout>
