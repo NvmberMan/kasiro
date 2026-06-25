@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Kasiro — POS Bermerek untuk UMKM</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('images/kasiro-logo.ico') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/kasiro-logo.png') }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
