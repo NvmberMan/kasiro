@@ -44,20 +44,20 @@ class ProfileController extends Controller
     public function updateAvatar(Request $request): RedirectResponse
     {
         $request->validate([
-            'avatar' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'avatar' => ['required', 'image', 'max:2048'],
         ]);
 
         $user = $request->user();
 
         if ($user->avatar && str_starts_with($user->avatar, '/storage/')) {
-            Storage::disk('public')->delete(str_replace('/storage/', '', $user->avatar));
+            Storage::disk('public')->delete(ltrim(str_replace('/storage', '', $user->avatar), '/'));
         }
 
         $path = $request->file('avatar')->store('avatars', 'public');
         $user->avatar = '/storage/' . $path;
         $user->save();
 
-        return Redirect::route('profile.edit')->with('status', 'avatar-updated');
+        return Redirect::back()->with('status', 'avatar-updated');
     }
 
     /**
