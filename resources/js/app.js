@@ -1,6 +1,60 @@
 import './bootstrap';
 
 import Alpine from 'alpinejs';
+
+// ─── Top page-loading bar ───────────────────────────────────────────────────
+(function () {
+    const bar = document.createElement('div');
+    Object.assign(bar.style, {
+        position: 'fixed', top: '0', left: '0', height: '3px', width: '0',
+        zIndex: '99999', pointerEvents: 'none', opacity: '0',
+        transition: 'opacity .2s',
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Tenant pages define --brand-primary; studio/landing do not
+        const isTenant = !!getComputedStyle(document.documentElement)
+            .getPropertyValue('--brand-primary').trim();
+
+        if (isTenant) {
+            // White bar + dark underline — visible on any brand-colored header
+            bar.style.background = 'rgba(255,255,255,0.95)';
+            bar.style.boxShadow = '0 1px 0 rgba(0,0,0,0.18), 0 0 8px 1px rgba(255,255,255,0.45)';
+        } else {
+            // Blue-600 (#2563eb) bar + white glow — matches palette used in studio & landing
+            bar.style.background = '#2563eb';
+            bar.style.boxShadow = '0 0 8px 3px rgba(255,255,255,0.7), 0 1px 2px rgba(0,0,0,0.08)';
+        }
+
+        document.body.prepend(bar);
+    });
+
+    function start() {
+        bar.style.transition = 'width 0s, opacity .15s';
+        bar.style.width = '0%';
+        bar.style.opacity = '1';
+        bar.getBoundingClientRect(); // force reflow
+        // Fast start, then decelerates — page unloads before reaching 100%
+        bar.style.transition = 'width 6s cubic-bezier(.08,.6,.25,1), opacity .15s';
+        bar.style.width = '100%';
+    }
+
+    // Links that cause a real navigation
+    document.addEventListener('click', (e) => {
+        const a = e.target.closest('a[href]');
+        if (!a) return;
+        const href = a.getAttribute('href');
+        if (!href || href.startsWith('#') || href.startsWith('javascript') ||
+            a.target === '_blank' || a.hasAttribute('download') ||
+            e.ctrlKey || e.metaKey || e.shiftKey) return;
+        start();
+    }, true);
+
+    // Native form submissions (Alpine's @submit.prevent sets defaultPrevented before bubbling)
+    document.addEventListener('submit', (e) => {
+        if (!e.defaultPrevented) start();
+    });
+})();
 import Chart from 'chart.js/auto';
 
 window.Alpine = Alpine;
