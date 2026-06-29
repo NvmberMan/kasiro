@@ -74,25 +74,4 @@ class CreateTenantController extends Controller
         return view('tenants.created', compact('tenant'));
     }
 
-    public function showcase(): View
-    {
-        return view('tenants.showcase', [
-            'templates' => Template::published()->get(),
-        ]);
-    }
-
-    public function storeFromShowcase(CreateTenantFromTemplateRequest $request, CreateTenant $action): RedirectResponse
-    {
-        $template = Template::published()->findOrFail($request->validated('template_id'));
-        $themeConfig = ThemeConfig::fromTemplate($template);
-
-        $tenant = $action->handle(
-            owner: $request->user(),
-            data: $request->validated(),
-            themeConfig: $themeConfig,
-            templateId: $template->id,
-        );
-
-        return redirect()->route('tenants.created', $tenant);
-    }
 }

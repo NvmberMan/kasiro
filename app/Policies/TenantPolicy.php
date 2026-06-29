@@ -31,4 +31,9 @@ class TenantPolicy
     {
         return $user->roleFor($tenant)?->canManageTenantSettings() ?? false;
     }
+
+    public function forceDelete(User $user, Tenant $tenant): bool
+    {
+        return $user->roleFor($tenant)?->canManageTenantSettings() ?? false;
+    }
 }

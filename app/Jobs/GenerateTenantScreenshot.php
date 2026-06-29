@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Http\Controllers\Tenant\PreviewController;
+use App\Jobs\Concerns\ResolvesBrowserBinaries;
 use App\Models\Tenant;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -16,7 +17,7 @@ use Throwable;
 
 class GenerateTenantScreenshot implements ShouldBeUnique, ShouldQueue
 {
-    use InteractsWithQueue, Queueable, SerializesModels;
+    use InteractsWithQueue, Queueable, ResolvesBrowserBinaries, SerializesModels;
 
     public int $tries = 3;
 
@@ -37,6 +38,13 @@ class GenerateTenantScreenshot implements ShouldBeUnique, ShouldQueue
 
     public function handle(): void
     {
+        // No headless Chrome during automated tests — the queue runs sync there,
+        // so model observers would otherwise fire Browsershot on every tenant/
+        // product write and fail (test subdomains don't resolve in the browser).
+        if (app()->runningUnitTests()) {
+            return;
+        }
+
         $url = $this->tenantUrl();
         $filename = 'screenshots/'.$this->tenant->subdomain.'.jpg';
         $path = storage_path('app/public/'.$filename);
@@ -108,66 +116,5 @@ class GenerateTenantScreenshot implements ShouldBeUnique, ShouldQueue
         Cache::put(PreviewController::cacheKey($this->tenant->id), $token, now()->addMinutes(10));
 
         return $scheme.'://'.$this->tenant->subdomain.'.'.$central.'/__preview?token='.$token;
-    }
-
-    private function resolveChromeExecutable(): ?string
-    {
-        $paths = [
-            config('browsershot.chrome_path'),
-            'C:/Program Files/Google/Chrome/Application/chrome.exe',
-            'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe',
-            '/usr/bin/google-chrome',
-            '/usr/bin/chromium-browser',
-        ];
-
-        foreach ($paths as $path) {
-            if ($path && file_exists($path)) {
-                return $path;
-            }
-        }
-
-        return null;
-    }
-
-    private function resolveNodePath(): ?string
-    {
-        if ($configured = config('browsershot.node_path')) {
-            return file_exists($configured) ? $configured : null;
-        }
-
-        $candidates = [
-            'C:/Program Files/nodejs/node.exe',
-            '/usr/bin/node',
-            '/usr/local/bin/node',
-        ];
-
-        foreach ($candidates as $path) {
-            if (file_exists($path)) {
-                return $path;
-            }
-        }
-
-        return null;
-    }
-
-    private function resolveNpmPath(): ?string
-    {
-        if ($configured = config('browsershot.npm_path')) {
-            return file_exists($configured) ? $configured : null;
-        }
-
-        $candidates = [
-            'C:/Program Files/nodejs/npm.cmd',
-            '/usr/bin/npm',
-            '/usr/local/bin/npm',
-        ];
-
-        foreach ($candidates as $path) {
-            if (file_exists($path)) {
-                return $path;
-            }
-        }
-
-        return null;
     }
 }
