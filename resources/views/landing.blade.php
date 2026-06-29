@@ -4,12 +4,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Kasiro — POS Bermerek untuk UMKM</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('images/kasiro-logo.ico') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/kasiro-logo.png') }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Text:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
     <style>
         [x-cloak]{display:none !important}
         /* Placeholder gambar (pola kotak-kotak transparan) */
@@ -110,28 +113,25 @@
 </section>
 
 {{-- ===== 3 Hal yang membuat KASIRO berbeda ===== --}}
-<section class="bg-[#0c2461] py-14">
+<section class="bg-[#0c2461] py-16">
     <div class="mx-auto max-w-6xl px-4 sm:px-6">
-        <h2 class="text-center text-xl sm:text-2xl font-bold text-white mb-10">3 Hal yang membuat KASIRO berbeda</h2>
+        <h2 class="text-center text-2xl sm:text-3xl font-bold text-white mb-12">3 Hal yang membuat KASIRO berbeda</h2>
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
             @php
                 $diffs = [
-                    ['01', 'Cepat & Mudah', 'Buat dan atur sistem kasir dalam hitungan menit tanpa keahlian teknis.', 'M13 10V3L4 14h7v7l9-11h-7z'],
-                    ['02', 'Sesuai Identitas', 'Sesuaikan aplikasi kasir dengan warna, logo, dan nama toko sendiri.', 'M9.5 14.5L3 21M14 4l6 6M12.5 6.5l5 5L8 21H3v-5z'],
-                    ['03', 'Selalu Terhubung', 'Akses laporan dan kelola toko dari mana saja, kapan saja.', 'M13.8 10.2a4 4 0 010 5.6l-2.8 2.8a4 4 0 01-5.6-5.6l1.4-1.4M10.2 13.8a4 4 0 010-5.6l2.8-2.8a4 4 0 015.6 5.6l-1.4 1.4'],
+                    ['01', 'Mudah dan cepat dipahami tanpa memerlukan keahlian tertentu', 'images/diff-icon-1.png'],
+                    ['02', 'Personalisasi aplikasi kasir sesuai selera dan kebutuhanmu',  'images/diff-icon-2.png'],
+                    ['03', 'Membuat link khusus untuk sistem kasirmu',                    'images/diff-icon-3.png'],
                 ];
             @endphp
-            @foreach ($diffs as [$num, $title, $text, $icon])
-                <div class="rounded-2xl bg-white/5 ring-1 ring-white/10 p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-lime-400 text-slate-900">
-                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="{{ $icon }}"/></svg>
-                        </span>
-                        <span class="text-2xl font-extrabold text-white/30">{{ $num }}</span>
+            @foreach ($diffs as [$num, $text, $icon])
+                <div class="flex items-center gap-5 rounded-2xl border border-lime-400 px-6 py-7 transition-colors duration-200 hover:bg-[#1e3a8a]">
+                    <img src="{{ asset($icon) }}" alt="" class="shrink-0 h-16 w-16 object-contain">
+                    <div>
+                        <p class="text-xs font-semibold text-lime-400 mb-1">{{ $num }}</p>
+                        <p class="text-sm text-lime-400 leading-snug">{{ $text }}</p>
                     </div>
-                    <h3 class="font-semibold text-white mb-1">{{ $title }}</h3>
-                    <p class="text-sm text-blue-100/70 leading-relaxed">{{ $text }}</p>
                 </div>
             @endforeach
         </div>
@@ -139,27 +139,67 @@
 </section>
 
 {{-- ===== Apa saja yang ada dalam sistem Kasir? ===== --}}
-<section class="relative overflow-hidden py-16">
-    <div class="pointer-events-none absolute -left-24 top-10 h-72 w-72 rounded-full bg-blue-400/20"></div>
-    <div class="pointer-events-none absolute -right-20 bottom-0 h-64 w-64 rounded-full bg-blue-500/15"></div>
+<section class="relative overflow-hidden bg-slate-100 py-16">
+
+    {{-- Lingkaran biru dekoratif --}}
+    <div class="pointer-events-none absolute -right-28 -top-28 h-72 w-72 rounded-full bg-blue-500"></div>
+    <div class="pointer-events-none absolute -left-28 -bottom-20 h-80 w-80 rounded-full bg-blue-500"></div>
+
+    @php
+        $features = [
+            [
+                'title' => 'Transaksi Penjualan',
+                'desc'  => 'Proses transaksi dengan cepat — pilih produk, hitung total otomatis, dan terima pembayaran tunai maupun QRIS.',
+                'img'   => 'images/feature-transaksi.png',
+            ],
+            [
+                'title' => 'Katalog Produk',
+                'desc'  => 'Tambah dan kelola produk beserta foto, harga, dan kategorinya dalam hitungan detik.',
+                'img'   => 'images/feature-produk.png',
+            ],
+            [
+                'title' => 'Laporan & Analitik',
+                'desc'  => 'Pantau omzet harian, produk terlaris, dan tren penjualan bulanan dari satu dasbor.',
+                'img'   => 'images/feature-laporan.png',
+            ],
+            [
+                'title' => 'Manajemen Karyawan',
+                'desc'  => 'Buat akun kasir terpisah dengan hak akses berbeda dan lacak aktivitas tiap karyawan.',
+                'img'   => 'images/feature-karyawan.png',
+            ],
+        ];
+    @endphp
 
     <div class="relative mx-auto max-w-6xl px-4 sm:px-6">
         <h2 class="text-center text-xl sm:text-2xl font-bold text-slate-900 mb-10">Apa saja yang ada dalam sistem Kasir?</h2>
 
-        <div class="grid lg:grid-cols-2 gap-6 items-stretch">
-            <div class="ph min-h-[18rem] rounded-2xl ring-1 ring-slate-200"></div>
+        <div class="relative">
+            {{-- Tombol navigasi --}}
+            <button class="feature-prev absolute left-0 top-1/2 -translate-y-1/2 -translate-x-10 z-20 flex items-center justify-center h-9 w-9 rounded-full bg-white shadow text-slate-600 hover:text-slate-900 transition text-lg">&#8249;</button>
+            <button class="feature-next absolute right-0 top-1/2 -translate-y-1/2 translate-x-10 z-20 flex items-center justify-center h-9 w-9 rounded-full bg-white shadow text-slate-600 hover:text-slate-900 transition text-lg">&#8250;</button>
 
-            <div class="relative rounded-2xl bg-lime-400 p-8 flex flex-col">
-                <h3 class="text-2xl font-bold text-slate-900">Title 1</h3>
-                <p class="mt-2 text-sm text-slate-800/70 leading-relaxed max-w-sm">
-                    Placeholder deskripsi fitur. Bagian ini akan menjelaskan salah satu fitur
-                    utama sistem kasir Kasiro.
-                </p>
-                <button type="button"
-                        class="mt-auto self-end flex h-11 w-11 items-center justify-center rounded-full bg-slate-900/90 text-white hover:bg-slate-900 transition">
-                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 6l6 6-6 6"/></svg>
-                </button>
+            <div class="swiper feature-swiper">
+                <div class="swiper-wrapper items-stretch">
+                    @foreach ($features as $f)
+                    <div class="swiper-slide">
+                        <div class="relative flex items-stretch">
+                            {{-- Gambar --}}
+                            <div class="w-[62%] rounded-l-2xl overflow-hidden">
+                                <img src="{{ asset($f['img']) }}" alt="{{ $f['title'] }}" class="ph w-full h-auto block select-none">
+                            </div>
+                            {{-- Lime card --}}
+                            <div class="absolute right-0 top-0 bottom-0 w-[38%] rounded-r-2xl bg-lime-400 p-8 flex flex-col justify-center">
+                                <h3 class="text-2xl font-bold text-slate-900">{{ $f['title'] }}</h3>
+                                <p class="mt-3 text-sm text-slate-700/80 leading-relaxed">{{ $f['desc'] }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
             </div>
+
+            {{-- Pagination --}}
+            <div class="feature-pagination flex justify-center mt-6"></div>
         </div>
     </div>
 </section>
@@ -231,5 +271,34 @@
     </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+    new Swiper('.feature-swiper', {
+        loop: true,
+        grabCursor: true,
+        speed: 500,
+        navigation: {
+            nextEl: '.feature-next',
+            prevEl: '.feature-prev',
+        },
+        pagination: {
+            el: '.feature-pagination',
+            clickable: true,
+            renderBullet(_, className) {
+                return `<button class="${className}"></button>`;
+            },
+        },
+    });
+</script>
+<style>
+    .feature-pagination .swiper-pagination-bullet {
+        width: 8px; height: 8px;
+        background: #cbd5e1; opacity: 1; border-radius: 9999px;
+        transition: width .3s, background .3s;
+    }
+    .feature-pagination .swiper-pagination-bullet-active {
+        width: 20px; background: #334155;
+    }
+</style>
 </body>
 </html>

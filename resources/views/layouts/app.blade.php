@@ -6,6 +6,8 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ config('app.name', 'Laravel') }}</title>
+        <link rel="icon" type="image/x-icon" href="{{ asset('images/kasiro-logo.ico') }}">
+        <link rel="apple-touch-icon" href="{{ asset('images/kasiro-logo.png') }}">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,6 +16,7 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @stack('head')
         <style>
             [x-cloak]{display:none !important}
             .ph{
@@ -45,8 +48,9 @@
                     <button type="button" class="lg:hidden text-slate-500" x-on:click="sidebar = ! sidebar" aria-label="Menu">
                         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
                     </button>
-                    <a href="{{ route('dashboard') }}">
+                    <a href="{{ route('dashboard') }}" class="flex items-center gap-2">
                         <img src="{{ asset('images/kasiro-logo-black.png') }}" alt="Kasiro" class="h-5 w-auto">
+                        <span class="text-sm font-semibold tracking-wide text-blue-500">STUDIO</span>
                     </a>
                 </div>
 
@@ -56,8 +60,10 @@
                             @if ($u->avatar)
                                 <img src="{{ $u->avatar }}" alt="{{ $u->name }}" class="h-9 w-9 rounded-full object-cover ring-1 ring-slate-200">
                             @else
-                                <span class="flex h-9 w-9 items-center justify-center rounded-full bg-slate-200 text-sm font-semibold text-slate-600">
-                                    {{ strtoupper(mb_substr($u->name, 0, 1)) }}
+                                <span class="flex h-9 w-9 items-center justify-center rounded-full bg-slate-200 text-slate-500">
+                                    <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+                                    </svg>
                                 </span>
                             @endif
                         </button>
@@ -80,9 +86,9 @@
             </header>
 
             {{-- Sidebar --}}
-            <aside class="fixed bottom-0 left-0 top-16 z-30 w-60 transform bg-[#0c2461] transition-transform duration-200 lg:translate-x-0"
+            <aside class="fixed bottom-0 left-0 top-16 z-30 w-60 transform bg-[#0c2461] transition-transform duration-200 lg:translate-x-0 flex flex-col"
                    x-bind:class="sidebar ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'">
-                <nav class="flex flex-col">
+                <nav class="flex flex-col flex-1">
                     @foreach ($nav as $item)
                         @php $active = request()->routeIs($item['route']); @endphp
                         <a href="{{ route($item['route']) }}"
@@ -93,6 +99,15 @@
                         </a>
                     @endforeach
                 </nav>
+                <div class="p-4 border-t border-white/10">
+                    <a href="{{ route('platform.home') }}"
+                       class="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-blue-100/70 hover:bg-white/5 hover:text-white transition">
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                        </svg>
+                        Ke Landing Page
+                    </a>
+                </div>
             </aside>
 
             {{-- Overlay (mobile) --}}
@@ -111,5 +126,6 @@
         </div>
 
         @include('partials.confirm-modal')
+        @stack('scripts')
     </body>
 </html>

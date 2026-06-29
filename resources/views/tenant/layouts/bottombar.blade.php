@@ -4,8 +4,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $tenant->name ?? config('app.name') }}</title>
+    @if (!empty($tenant->logo_path))
+        <link rel="icon" type="image/png" href="{{ asset('storage/'.$tenant->logo_path) }}">
+    @else
+        <link rel="icon" type="image/x-icon" href="{{ asset('images/kasiro-logo.ico') }}">
+    @endif
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <x-brand-styles :config="$tenant->theme_config ?? []" />
+    @stack('head')
 </head>
 <body class="antialiased h-screen flex flex-col overflow-hidden">
     @php
@@ -85,5 +91,6 @@
     </nav>
     <x-flash-modal />
     @include('partials.confirm-modal')
+    @stack('scripts')
 </body>
 </html>
