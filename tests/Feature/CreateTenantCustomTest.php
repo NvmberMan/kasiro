@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Models\Template;
 use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -23,10 +22,10 @@ class CreateTenantCustomTest extends TestCase
     private function validPayload(array $overrides = []): array
     {
         return array_merge([
-            'name'          => 'Warung Budi',
-            'subdomain'     => 'warungbudi',
-            'layout'        => 'topbar',
-            'theme'         => 'modern',
+            'name' => 'Warung Budi',
+            'subdomain' => 'warungbudi',
+            'layout' => 'topbar',
+            'theme' => 'modern',
             'color_palette' => 'violet',
         ], $overrides);
     }
@@ -73,18 +72,19 @@ class CreateTenantCustomTest extends TestCase
 
         $this->assertDatabaseHas('tenant_user', [
             'tenant_id' => $tenant->id,
-            'user_id'   => $this->user->id,
-            'role'      => 'owner',
-            'status'    => 'active',
+            'user_id' => $this->user->id,
+            'role' => 'owner',
+            'status' => 'active',
         ]);
     }
 
-    public function test_custom_flow_redirects_to_tenant_subdomain(): void
+    public function test_custom_flow_redirects_to_created_page(): void
     {
         $response = $this->actingAs($this->user)
             ->post('http://kasiro.com/tenants/create/custom', $this->validPayload());
 
-        $response->assertRedirect('http://warungbudi.kasiro.com/');
+        $tenant = Tenant::where('subdomain', 'warungbudi')->firstOrFail();
+        $response->assertRedirect(route('tenants.created', $tenant));
     }
 
     public function test_tenant_status_is_active_after_create(): void
@@ -94,7 +94,7 @@ class CreateTenantCustomTest extends TestCase
 
         $this->assertDatabaseHas('tenants', [
             'subdomain' => 'warungbudi',
-            'status'    => 'active',
+            'status' => 'active',
         ]);
     }
 }
