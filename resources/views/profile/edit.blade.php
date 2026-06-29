@@ -1,4 +1,14 @@
 <x-app-layout>
+@push('head')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
+<style>
+    .cropper-wrap-box, .cropper-canvas, .cropper-drag-box, .cropper-crop-box { max-height: 280px; }
+    .cropper-container { max-height: 280px !important; }
+</style>
+@endpush
+@push('scripts')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+@endpush
     @php
         $user = auth()->user();
         $hasPassword = $user->password !== null;
@@ -34,18 +44,59 @@
 
                 {{-- Avatar upload --}}
                 <form method="POST" action="{{ route('profile.avatar') }}" enctype="multipart/form-data"
-                      x-data="{ preview: @js($user->avatar), changed: false,
-                                 pick(e) {
-                                     const f = e.target.files[0];
-                                     if (!f) return;
-                                     this.preview = URL.createObjectURL(f);
-                                     this.changed = true;
-                                 } }"
+                      x-data="{
+                          preview: @js($user->avatar),
+                          changed: false,
+                          cropSrc: null,
+                          showCrop: false,
+                          cropper: null,
+                          pick(e) {
+                              const f = e.target.files[0];
+                              if (!f) return;
+                              this.cropSrc = URL.createObjectURL(f);
+                              this.showCrop = true;
+                              this.$nextTick(() => {
+                                  const img = document.getElementById('avatar-crop-img');
+                                  if (this.cropper) this.cropper.destroy();
+                                  this.cropper = new Cropper(img, {
+                                      aspectRatio: 1,
+                                      viewMode: 2,
+                                      dragMode: 'move',
+                                      autoCropArea: 0.85,
+                                      restore: false,
+                                      guides: true,
+                                      center: true,
+                                      highlight: false,
+                                      minContainerHeight: 280,
+                                      minContainerWidth: 100,
+                                  });
+                              });
+                          },
+                          confirmCrop() {
+                              if (!this.cropper) return;
+                              const canvas = this.cropper.getCroppedCanvas({ width: 400, height: 400 });
+                              canvas.toBlob((blob) => {
+                                  const file = new File([blob], 'avatar.png', { type: 'image/png' });
+                                  const dt = new DataTransfer();
+                                  dt.items.add(file);
+                                  document.getElementById('avatar-input').files = dt.files;
+                                  this.preview = URL.createObjectURL(blob);
+                                  this.changed = true;
+                                  this.cancelCrop();
+                              }, 'image/png');
+                          },
+                          cancelCrop() {
+                              if (this.cropper) { this.cropper.destroy(); this.cropper = null; }
+                              this.showCrop = false;
+                              this.cropSrc = null;
+                              if (!this.changed) document.getElementById('avatar-input').value = '';
+                          }
+                      }"
                       class="mb-6">
                     @csrf
                     <div class="flex items-center gap-4">
                         <div class="relative shrink-0">
-                            {{-- Avatar circle: preview jika ada, fallback ikon --}}
+                            {{-- Avatar circle --}}
                             <div class="h-16 w-16 rounded-full overflow-hidden ring-2 transition-all duration-300"
                                  :class="changed ? 'ring-[#a4c400] ring-offset-2' : 'ring-slate-200'">
                                 <template x-if="preview">
@@ -73,7 +124,7 @@
 
                         <div>
                             <p class="text-sm font-medium text-slate-700">Foto Profil</p>
-                            <p class="text-xs text-slate-400" x-show="!changed">JPG, PNG · maks 2 MB</p>
+                            <p class="text-xs text-slate-400" x-show="!changed">JPG, PNG · maks 2 MB · klik pensil untuk ganti &amp; crop</p>
                             <p class="text-xs text-[#a4c400] font-medium" x-show="changed" x-cloak>Foto baru dipilih — klik Simpan</p>
                             <button type="submit" x-show="changed" x-cloak
                                     class="mt-2 rounded-full bg-[#a4c400] px-5 py-1.5 text-xs font-semibold text-white hover:bg-[#8fad00] transition">
@@ -86,6 +137,45 @@
                                 <p x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)"
                                    class="mt-1 text-xs text-green-600 font-medium">✓ Foto berhasil diperbarui</p>
                             @endif
+                        </div>
+                    </div>
+
+                    {{-- Crop Modal --}}
+                    <div x-show="showCrop" x-cloak
+                         x-transition:enter="transition ease-out duration-150"
+                         x-transition:enter-start="opacity-0"
+                         x-transition:enter-end="opacity-100"
+                         class="fixed inset-0 z-[60] flex items-center justify-center p-4"
+                         style="background: rgba(0,0,0,0.75);"
+                         x-on:click="cancelCrop()">
+                        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden"
+                             x-on:click.stop>
+                            <div class="flex items-center justify-between px-5 py-4 border-b">
+                                <div>
+                                    <h3 class="font-semibold text-slate-800">Crop Foto Profil</h3>
+                                    <p class="text-xs text-slate-400 mt-0.5">Geser &amp; resize untuk menyesuaikan</p>
+                                </div>
+                                <button type="button" x-on:click="cancelCrop()"
+                                        class="h-8 w-8 flex items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition">
+                                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="bg-gray-900 overflow-hidden" style="height: 280px; position: relative;">
+                                <img id="avatar-crop-img" :src="cropSrc" alt="Crop"
+                                     style="display: block; max-width: 100%; max-height: 280px;">
+                            </div>
+                            <div class="flex gap-3 px-5 py-4 border-t justify-end">
+                                <button type="button" x-on:click="cancelCrop()"
+                                        class="px-4 py-2 rounded-full border border-slate-200 text-sm text-slate-700 hover:bg-slate-50 transition">
+                                    Batal
+                                </button>
+                                <button type="button" x-on:click="confirmCrop()"
+                                        class="px-5 py-2 rounded-full bg-[#a4c400] text-white text-sm font-semibold hover:bg-[#8fad00] transition">
+                                    Terapkan
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </form>

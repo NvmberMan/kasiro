@@ -16,6 +16,7 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @stack('head')
         <style>
             [x-cloak]{display:none !important}
             .ph{
@@ -125,5 +126,6 @@
         </div>
 
         @include('partials.confirm-modal')
+        @stack('scripts')
     </body>
 </html>
