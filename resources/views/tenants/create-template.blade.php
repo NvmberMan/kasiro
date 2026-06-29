@@ -1,4 +1,15 @@
 <x-app-layout>
+    @push('head')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
+    <style>
+        .cropper-wrap-box, .cropper-canvas, .cropper-drag-box, .cropper-crop-box { max-height: 300px; }
+        .cropper-container { max-height: 300px !important; }
+    </style>
+    @endpush
+    @push('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+    @endpush
+
     @php
         // Preselect from a validation redisplay (old) or a ?template=slug deep link
         // (e.g. clicking a template card on the landing page).
@@ -20,11 +31,45 @@
                 this.selectedThumb = thumb || null;
                 this.pickerOpen = false;
             },
-            handleLogo(e) {
-                const file = e.target.files[0];
-                if (file) this.logoName = file.name;
+            logoPreview: null,
+            logoCropSrc: null,
+            showCropModal: false,
+            cropper: null,
+            onLogoSelect(e) {
+                const f = e.target.files[0];
+                if (!f) return;
+                this.logoCropSrc = URL.createObjectURL(f);
+                this.showCropModal = true;
+                this.$nextTick(() => {
+                    const img = document.getElementById('logo-crop-img');
+                    if (this.cropper) this.cropper.destroy();
+                    this.cropper = new Cropper(img, {
+                        aspectRatio: 1, viewMode: 2, dragMode: 'move', autoCropArea: 1,
+                        restore: false, guides: true, center: true, highlight: false,
+                        minContainerHeight: 300, minContainerWidth: 100,
+                    });
+                });
             },
-            logoName: null
+            confirmCrop() {
+                if (!this.cropper) return;
+                this.cropper.getCroppedCanvas({ width: 400, height: 400 }).toBlob((blob) => {
+                    const file = new File([blob], 'logo.png', { type: 'image/png' });
+                    const dt = new DataTransfer();
+                    dt.items.add(file);
+                    document.getElementById('logo-file-input').files = dt.files;
+                    this.logoPreview = URL.createObjectURL(blob);
+                    this.closeCropModal();
+                }, 'image/png');
+            },
+            cancelCrop() {
+                document.getElementById('logo-file-input').value = '';
+                this.closeCropModal();
+            },
+            closeCropModal() {
+                if (this.cropper) { this.cropper.destroy(); this.cropper = null; }
+                this.showCropModal = false;
+                this.logoCropSrc = null;
+            }
         }" class="py-10">
 
         {{-- Loading overlay --}}
@@ -32,8 +77,8 @@
              style="display:none"
              class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#f3f4f3]">
             <img src="{{ asset('images/kasiro-logo-black.png') }}" alt="Kasiro" class="mb-10 h-12 w-auto">
-            <div class="relative h-7 w-80 overflow-hidden rounded-full bg-[#e8efb0]">
-                <div class="progress-ball absolute top-1/2 -translate-y-1/2 h-7 w-7 rounded-full bg-[#1e3a8a] shadow-md"></div>
+            <div class="h-7 w-80 overflow-hidden rounded-full border-2 border-[#c0c6ef] bg-[#eaf3c9]">
+                <div class="progress-fill h-full rounded-full bg-[#2734bd]"></div>
             </div>
             <p class="mt-4 text-sm text-slate-500">Loading...</p>
         </div>
@@ -163,12 +208,22 @@
                     <div class="mt-5">
                         <label class="mb-1.5 block text-sm font-semibold text-slate-800">Logo</label>
                         <label class="flex cursor-pointer items-center justify-center gap-2 rounded-full border-2 border-blue-400 px-5 py-3 text-sm font-semibold text-blue-500 transition hover:bg-blue-50">
-                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
-                            </svg>
-                            <span x-text="logoName ? logoName : 'Upload File Logo'"></span>
-                            <input type="file" name="logo" accept="image/png,image/jpeg,image/webp"
-                                   class="sr-only" @change="handleLogo($event)">
+                            <template x-if="!logoPreview">
+                                <span class="flex items-center gap-2">
+                                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                                    </svg>
+                                    Upload File Logo
+                                </span>
+                            </template>
+                            <template x-if="logoPreview">
+                                <span class="flex items-center gap-2">
+                                    <img :src="logoPreview" class="h-6 w-6 rounded-full object-cover ring-1 ring-blue-300">
+                                    Ganti Logo
+                                </span>
+                            </template>
+                            <input id="logo-file-input" type="file" name="logo" accept="image/png,image/jpeg,image/webp"
+                                   class="sr-only" @change="onLogoSelect($event)">
                         </label>
                         <p class="mt-1.5 text-xs text-slate-400">PNG, JPG (maks. 2 MB)</p>
                         @error('logo')
@@ -191,17 +246,56 @@
                 </div>
             </form>
         </div>
+
+        {{-- Crop Modal --}}
+    <div x-show="showCropModal" x-cloak
+         x-transition:enter="transition ease-out duration-150"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         class="fixed inset-0 z-[60] flex items-center justify-center p-4"
+         style="background: rgba(0,0,0,0.75);"
+         x-on:click="cancelCrop()">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden" x-on:click.stop>
+            <div class="flex items-center justify-between px-6 py-4 border-b">
+                <div>
+                    <h3 class="font-semibold text-gray-800">Crop Logo</h3>
+                    <p class="text-xs text-gray-400 mt-0.5">Geser &amp; resize kotak untuk menyesuaikan area</p>
+                </div>
+                <button type="button" x-on:click="cancelCrop()"
+                        class="h-8 w-8 flex items-center justify-center rounded-full text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition">
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="bg-gray-900 overflow-hidden" style="height: 300px; position: relative;">
+                <img id="logo-crop-img" :src="logoCropSrc" alt="Crop"
+                     style="display: block; max-width: 100%; max-height: 300px;">
+            </div>
+            <div class="flex items-center gap-3 px-6 py-4 border-t justify-end">
+                <button type="button" x-on:click="cancelCrop()"
+                        class="px-4 py-2 rounded-xl border border-gray-200 text-sm text-gray-700 hover:bg-gray-50 transition">
+                    Batal
+                </button>
+                <button type="button" x-on:click="confirmCrop()"
+                        class="px-5 py-2 rounded-xl bg-blue-500 text-white text-sm font-medium hover:bg-blue-600 transition">
+                    Terapkan
+                </button>
+            </div>
+        </div>
+    </div>
     </div>
 
     <style>
-        .progress-ball {
+        .progress-fill {
+            width: 0%;
             animation: progress-move 3s ease-out forwards;
         }
         @keyframes progress-move {
-            0%   { left: 0px; }
-            50%  { left: calc(100% - 7rem); }
-            75%  { left: calc(100% - 4rem); }
-            100% { left: calc(100% - 2.5rem); }
+            0%   { width: 0%; }
+            50%  { width: 55%; }
+            75%  { width: 78%; }
+            100% { width: 100%; }
         }
     </style>
 </x-app-layout>
