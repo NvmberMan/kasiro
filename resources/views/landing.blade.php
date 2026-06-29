@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Kasiro — POS Bermerek untuk UMKM</title>
+    <title>Kasiro | POS Bermerek untuk UMKM</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('images/kasiro-logo.ico') }}">
     <link rel="apple-touch-icon" href="{{ asset('images/kasiro-logo.png') }}">
 
@@ -107,7 +107,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
         @forelse ($templates->take(3) as $i => $tpl)
             @php $thumb = $tpl->screenshotUrl() ?? asset('images/photo' . ($i + 1) . '.png'); @endphp
-            <a href="{{ auth()->check() ? route('tenants.create.template') : route('login') }}" class="group block">
+            <a href="{{ auth()->check() ? route('tenants.create.template', ['template' => $tpl->slug]) : route('login') }}" class="group block">
                 <div class="relative aspect-video w-full overflow-hidden rounded-xl ring-1 ring-slate-200 transition group-hover:ring-blue-400 group-hover:shadow-lg">
                     <img class="ph h-full w-full object-cover object-top transition duration-300 group-hover:scale-105"
                          src="{{ $thumb }}"
