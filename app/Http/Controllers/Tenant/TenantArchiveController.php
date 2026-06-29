@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Tenant;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class TenantArchiveController extends Controller
@@ -28,5 +29,18 @@ class TenantArchiveController extends Controller
         $action->handle($tenant);
 
         return redirect()->route('archive')->with('status', 'tenant-restored');
+    }
+
+    public function forceDelete(Request $request, Tenant $tenant): RedirectResponse
+    {
+        Gate::authorize('forceDelete', $tenant);
+
+        abort_unless($tenant->status === Tenant::STATUS_ARCHIVED, 403);
+
+        DB::transaction(function () use ($tenant) {
+            $tenant->delete();
+        });
+
+        return redirect()->route('archive')->with('status', 'tenant-deleted');
     }
 }

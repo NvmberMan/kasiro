@@ -14,6 +14,7 @@
         'settings-updated'     => ['Pengaturan Disimpan', 'Pengaturan toko berhasil diperbarui.'],
         'tenant-archived'      => ['Toko Diarsipkan', 'Toko berhasil diarsipkan.'],
         'tenant-restored'      => ['Toko Dipulihkan', 'Toko berhasil dipulihkan.'],
+        'tenant-deleted'       => ['Toko Dihapus', 'Toko berhasil dihapus secara permanen.'],
     ];
 
     $flash = $messages[session('status')] ?? null;

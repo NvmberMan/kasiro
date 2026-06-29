@@ -55,7 +55,7 @@
                         $brandColor = \App\Support\ThemeConfig::cssVariables($tenant->theme_config ?? [])['--brand-primary'] ?? '#6366f1';
                     @endphp
                     <a href="{{ $storeUrl }}" class="group block">
-                        <div class="relative h-44 w-full rounded-xl ring-1 ring-slate-200 transition group-hover:ring-blue-400 overflow-hidden bg-slate-100">
+                        <div class="relative aspect-video w-full rounded-xl ring-1 ring-slate-200 transition group-hover:ring-blue-400 overflow-hidden bg-slate-100">
                             @if ($screenshot)
                                 <img src="{{ $screenshot }}" alt="{{ $tenant->name }}"
                                      class="h-full w-full object-cover object-top transition-transform duration-300 group-hover:scale-105">

@@ -83,7 +83,7 @@ class MyStoresTest extends TestCase
         $this->actingAs($this->user)
             ->get('http://kasiro.com/my-stores')
             ->assertOk()
-            ->assertSee('Cashier');
+            ->assertSee('Kasir');
     }
 
     public function test_my_stores_shows_empty_state_when_no_tenants(): void
