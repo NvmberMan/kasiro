@@ -18,27 +18,27 @@
         $navUser = auth()->user();
         $navRole = $navUser?->roleFor($tenant);
         $sub     = $tenant->subdomain;
-        $item    = 'flex flex-col items-center justify-center gap-0.5 flex-1 min-w-[64px] px-2 py-2 brand-muted transition';
-        $active  = '!text-[color:var(--brand-primary)]';
+        $item    = 'flex flex-col items-center justify-center gap-0.5 flex-1 min-w-[64px] px-2 py-2 brand-nav-item transition';
+        $active  = 'brand-nav-active';
     @endphp
 
     {{-- Header --}}
-    <header class="brand-surface border-b brand-border flex-shrink-0">
+    <header class="brand-primary flex-shrink-0">
         <div class="mx-auto max-w-7xl px-4 py-3 flex items-center gap-3">
             <a href="{{ route('tenant.home', ['subdomain' => $sub]) }}"
                class="flex items-center gap-3 transition hover:opacity-80" aria-label="Beranda {{ $tenant->name }}">
                 @if (!empty($tenant->logo_path))
                     <img src="{{ asset('storage/'.$tenant->logo_path) }}" alt="{{ $tenant->name }}" class="h-9 w-9 rounded-lg object-cover brand-rounded">
                 @else
-                    <div class="h-9 w-9 brand-rounded flex items-center justify-center text-white font-bold text-sm brand-primary">
+                    <div class="h-9 w-9 brand-rounded flex items-center justify-center text-white font-bold text-sm bg-white/20">
                         {{ mb_strtoupper(mb_substr($tenant->name, 0, 1)) }}
                     </div>
                 @endif
-                <span class="font-bold text-lg tracking-tight brand-text">{{ $tenant->name }}</span>
+                <span class="font-bold text-lg tracking-tight text-white">{{ $tenant->name }}</span>
             </a>
             <div class="ml-auto flex items-center gap-2 text-sm">
-                <span class="hidden sm:block brand-muted">{{ $navUser?->name }}</span>
-                <span class="rounded-full brand-soft brand-text px-2.5 py-0.5 text-xs font-medium capitalize">{{ $navRole?->value ?? '—' }}</span>
+                <span class="hidden sm:block text-white/70">{{ $navUser?->name }}</span>
+                <span class="rounded-full bg-white/20 text-white px-2.5 py-0.5 text-xs font-medium capitalize">{{ $navRole?->value ?? '—' }}</span>
             </div>
         </div>
     </header>
@@ -49,7 +49,7 @@
     </main>
 
     {{-- Bottom navigation --}}
-    <nav class="brand-surface border-t brand-border flex-shrink-0">
+    <nav class="brand-primary border-t border-white/15 flex-shrink-0">
         <div class="mx-auto max-w-3xl flex items-stretch justify-around overflow-x-auto">
             <a href="{{ route('tenant.pos', ['subdomain' => $sub]) }}" class="{{ $item }} {{ request()->routeIs('tenant.pos') ? $active : '' }}">
                 <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>

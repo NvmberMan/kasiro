@@ -25,15 +25,15 @@
     @endphp
 
     {{-- Mobile top bar --}}
-    <header class="lg:hidden brand-surface border-b brand-border flex items-center gap-3 px-4 py-3 flex-shrink-0">
-        <button @click="mobileOpen = true" class="brand-text -ml-1 p-1" aria-label="Buka menu">
+    <header class="lg:hidden brand-primary flex items-center gap-3 px-4 py-3 flex-shrink-0">
+        <button @click="mobileOpen = true" class="text-white -ml-1 p-1" aria-label="Buka menu">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
         <a href="{{ route('tenant.home', ['subdomain' => $sub]) }}" class="flex items-center gap-2 min-w-0">
             @if (!empty($tenant->logo_path))
                 <img src="{{ asset('storage/'.$tenant->logo_path) }}" alt="{{ $tenant->name }}" class="h-8 w-8 rounded-lg object-cover flex-shrink-0">
             @endif
-            <span class="font-bold tracking-tight brand-text truncate">{{ $tenant->name }}</span>
+            <span class="font-bold tracking-tight text-white truncate">{{ $tenant->name }}</span>
         </a>
     </header>
 
