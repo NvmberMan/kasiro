@@ -82,7 +82,7 @@
                  const img = document.getElementById('logo-crop-img');
                  if (this.cropper) this.cropper.destroy();
                  this.cropper = new Cropper(img, {
-                     aspectRatio: 1, viewMode: 2, dragMode: 'move', autoCropArea: 0.8,
+                     aspectRatio: 1, viewMode: 2, dragMode: 'move', autoCropArea: 1,
                      restore: false, guides: true, center: true, highlight: false,
                      minContainerHeight: 300, minContainerWidth: 100,
                  });

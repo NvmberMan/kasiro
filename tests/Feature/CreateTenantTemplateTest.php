@@ -19,11 +19,11 @@ class CreateTenantTemplateTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user     = User::factory()->create();
+        $this->user = User::factory()->create();
         $this->template = Template::factory()->published()->create([
             'default_config' => [
-                'layout'        => 'sidebar',
-                'theme'         => 'classic',
+                'layout' => 'sidebar',
+                'theme' => 'classic',
                 'color_palette' => 'slate',
             ],
         ]);
@@ -32,8 +32,8 @@ class CreateTenantTemplateTest extends TestCase
     private function validPayload(array $overrides = []): array
     {
         return array_merge([
-            'name'        => 'Toko Mawar',
-            'subdomain'   => 'tokomawar',
+            'name' => 'Toko Mawar',
+            'subdomain' => 'tokomawar',
             'template_id' => $this->template->id,
         ], $overrides);
     }
@@ -69,8 +69,8 @@ class CreateTenantTemplateTest extends TestCase
         // Mutate the template after tenant creation.
         $this->template->update([
             'default_config' => [
-                'layout'        => 'topbar',
-                'theme'         => 'retro',
+                'layout' => 'topbar',
+                'theme' => 'retro',
                 'color_palette' => 'amber',
             ],
         ]);
@@ -91,18 +91,19 @@ class CreateTenantTemplateTest extends TestCase
 
         $this->assertDatabaseHas('tenant_user', [
             'tenant_id' => $tenant->id,
-            'user_id'   => $this->user->id,
-            'role'      => 'owner',
-            'status'    => 'active',
+            'user_id' => $this->user->id,
+            'role' => 'owner',
+            'status' => 'active',
         ]);
     }
 
-    public function test_template_flow_redirects_to_tenant_subdomain(): void
+    public function test_template_flow_redirects_to_created_page(): void
     {
         $response = $this->actingAs($this->user)
             ->post('http://kasiro.com/tenants/create/template', $this->validPayload());
 
-        $response->assertRedirect('http://tokomawar.kasiro.com/');
+        $tenant = Tenant::where('subdomain', 'tokomawar')->firstOrFail();
+        $response->assertRedirect(route('tenants.created', $tenant));
     }
 
     public function test_unpublished_template_cannot_be_used(): void
@@ -111,8 +112,8 @@ class CreateTenantTemplateTest extends TestCase
 
         $this->actingAs($this->user)
             ->post('http://kasiro.com/tenants/create/template', [
-                'name'        => 'Test',
-                'subdomain'   => 'testshop',
+                'name' => 'Test',
+                'subdomain' => 'testshop',
                 'template_id' => $unpublished->id,
             ])
             ->assertStatus(404);

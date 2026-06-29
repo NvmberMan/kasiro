@@ -48,6 +48,7 @@ Route::domain($central)->group(function () {
         Route::get('/archive', [DashboardController::class, 'archive'])->name('archive');
         Route::post('/tenants/{tenant}/archive', [TenantArchiveController::class, 'store'])->name('tenants.archive');
         Route::delete('/tenants/{tenant}/archive', [TenantArchiveController::class, 'destroy'])->name('tenants.restore');
+        Route::delete('/tenants/{tenant}', [TenantArchiveController::class, 'forceDelete'])->name('tenants.destroy');
 
         Route::get('/tenants/create', [CreateTenantController::class, 'chooseFlow'])->name('tenants.choose');
         Route::get('/tenants/create/custom', [CreateTenantController::class, 'createCustom'])->name('tenants.create.custom');
@@ -55,8 +56,6 @@ Route::domain($central)->group(function () {
         Route::get('/tenants/create/template', [CreateTenantController::class, 'createFromTemplate'])->name('tenants.create.template');
         Route::post('/tenants/create/template', [CreateTenantController::class, 'storeFromTemplate'])->name('tenants.store.template');
         Route::get('/tenants/{tenant}/created', [CreateTenantController::class, 'created'])->name('tenants.created');
-        Route::get('/tenants/showcase', [CreateTenantController::class, 'showcase'])->name('tenants.showcase');
-        Route::post('/tenants/showcase', [CreateTenantController::class, 'storeFromShowcase'])->name('tenants.store.showcase');
     });
 
     Route::middleware('auth')->group(function () {
@@ -78,6 +77,7 @@ Route::domain('{subdomain}.'.$central)
     ->middleware(['tenant', 'tenant.context'])
     ->group(function () {
         Route::get('/__preview', [PreviewController::class, 'index'])->name('tenant.preview');
+        Route::get('/__template-preview/{template}', [PreviewController::class, 'template'])->name('tenant.template-preview');
     });
 
 Route::domain('{subdomain}.'.$central)
