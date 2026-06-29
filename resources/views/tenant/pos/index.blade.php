@@ -57,32 +57,41 @@
                 @click="{{ $product->stock }} > 0 && addToCart({{ $product->id }}, '{{ addslashes($product->name) }}', {{ $product->price }}, {{ $product->stock }})"
                 :class="cart[{{ $product->id }}] ? 'border-indigo-500 ring-2 ring-indigo-200' : 'border-transparent hover:border-indigo-400'"
                 class="relative text-left bg-white rounded-xl border-2 transition shadow-sm overflow-hidden select-none
-                       {{ $product->stock === 0 ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer' }}">
+                       {{ $product->stock === 0 ? 'cursor-not-allowed' : 'cursor-pointer' }}">
 
-                {{-- In-grid quantity stepper (shown once added) --}}
-                <div x-show="cart[{{ $product->id }}]" @click.stop style="display:none"
-                     class="absolute top-2 right-2 z-10 flex items-center gap-1 rounded-full bg-white/95 backdrop-blur border border-gray-200 shadow px-1 py-0.5">
-                    <button type="button" @click.stop="decrement({{ $product->id }})"
-                            class="w-6 h-6 rounded-full bg-gray-100 text-gray-700 hover:bg-red-100 hover:text-red-600 text-sm font-bold leading-none flex items-center justify-center">−</button>
-                    <span class="min-w-[18px] text-center text-xs font-bold text-gray-800" x-text="cart[{{ $product->id }}]?.qty || 0"></span>
-                    <button type="button" @click.stop="increment({{ $product->id }})"
-                            class="w-6 h-6 rounded-full bg-indigo-600 text-white hover:bg-indigo-700 text-sm font-bold leading-none flex items-center justify-center">+</button>
+                {{-- Inner wrapper gets opacity when out of stock --}}
+                <div class="{{ $product->stock === 0 ? 'opacity-40' : '' }}">
+                    {{-- In-grid quantity stepper (shown once added) --}}
+                    <div x-show="cart[{{ $product->id }}]" @click.stop style="display:none"
+                         class="absolute top-2 right-2 z-10 flex items-center gap-1 rounded-full bg-white/95 backdrop-blur border border-gray-200 shadow px-1 py-0.5">
+                        <button type="button" @click.stop="decrement({{ $product->id }})"
+                                class="w-6 h-6 rounded-full bg-gray-100 text-gray-700 hover:bg-red-100 hover:text-red-600 text-sm font-bold leading-none flex items-center justify-center">−</button>
+                        <span class="min-w-[18px] text-center text-xs font-bold text-gray-800" x-text="cart[{{ $product->id }}]?.qty || 0"></span>
+                        <button type="button" @click.stop="increment({{ $product->id }})"
+                                class="w-6 h-6 rounded-full bg-indigo-600 text-white hover:bg-indigo-700 text-sm font-bold leading-none flex items-center justify-center">+</button>
+                    </div>
+
+                    @if ($product->image_path)
+                        <img src="{{ asset('storage/'.$product->image_path) }}" alt="{{ $product->name }}"
+                             class="w-full h-24 object-cover">
+                    @else
+                        <div class="w-full h-24 bg-gray-100 flex items-center justify-center text-gray-300 text-xs">Foto</div>
+                    @endif
+                    <div class="p-3">
+                        <p class="font-medium text-sm text-gray-800 leading-tight mb-1 line-clamp-2">{{ $product->name }}</p>
+                        <p class="text-xs text-gray-500 mb-2">{{ $product->category?->name ?? '' }}</p>
+                        <p class="font-bold text-indigo-600 text-sm">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+                        <p class="text-xs mt-1 {{ $product->stock === 0 ? 'text-red-500' : 'text-gray-400' }}">
+                            Stok: {{ $product->stock }}
+                        </p>
+                    </div>
                 </div>
 
-                @if ($product->image_path)
-                    <img src="{{ asset('storage/'.$product->image_path) }}" alt="{{ $product->name }}"
-                         class="w-full h-24 object-cover">
-                @else
-                    <div class="w-full h-24 bg-gray-100 flex items-center justify-center text-gray-300 text-xs">Foto</div>
+                @if ($product->stock === 0)
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <span class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-md tracking-wide shadow">Stok Habis</span>
+                    </div>
                 @endif
-                <div class="p-3">
-                <p class="font-medium text-sm text-gray-800 leading-tight mb-1 line-clamp-2">{{ $product->name }}</p>
-                <p class="text-xs text-gray-500 mb-2">{{ $product->category?->name ?? '' }}</p>
-                <p class="font-bold text-indigo-600 text-sm">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
-                <p class="text-xs mt-1 {{ $product->stock === 0 ? 'text-red-500' : 'text-gray-400' }}">
-                    Stok: {{ $product->stock }}
-                </p>
-                </div>
             </div>
             @endforeach
         </div>
