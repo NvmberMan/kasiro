@@ -80,9 +80,8 @@
                                     @endif
                                 </div>
                                 <p class="mt-2 font-semibold text-slate-900">{{ $template->name }}</p>
-                                @if ($template->description)
-                                    <p class="text-xs text-slate-400">{{ $template->description }}</p>
-                                @endif
+                                {{-- Always reserve 2 lines so cards align regardless of description length --}}
+                                <p class="text-xs text-slate-400 line-clamp-2 min-h-[2rem]">{{ $template->description }}</p>
                             </button>
                         @endforeach
                     </div>
