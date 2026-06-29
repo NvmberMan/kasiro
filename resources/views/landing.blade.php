@@ -105,22 +105,24 @@
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        @for ($i = 0; $i < 3; $i++)
-            @php $tpl = $templates[$i] ?? null; @endphp
+        @forelse ($templates->take(3) as $i => $tpl)
+            @php $thumb = $tpl->screenshotUrl() ?? asset('images/photo' . ($i + 1) . '.png'); @endphp
             <a href="{{ auth()->check() ? route('tenants.create.template') : route('login') }}" class="group block">
                 <div class="relative aspect-video w-full overflow-hidden rounded-xl ring-1 ring-slate-200 transition group-hover:ring-blue-400 group-hover:shadow-lg">
-                    <img class="ph h-full w-full object-cover transition duration-300 group-hover:scale-105"
-                         src="{{ asset('images/photo' . ($i + 1) . '.png') }}"
-                         alt="{{ $tpl?->name ?? 'Template' }}">
+                    <img class="ph h-full w-full object-cover object-top transition duration-300 group-hover:scale-105"
+                         src="{{ $thumb }}"
+                         alt="{{ $tpl->name }}">
                     <div class="absolute inset-0 flex items-center justify-center bg-blue-600/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                         <span class="rounded-full bg-white px-5 py-2 text-sm font-semibold text-blue-600 shadow">
                             Pakai Template
                         </span>
                     </div>
                 </div>
-                <p class="mt-3 text-sm font-medium text-slate-700 transition group-hover:text-blue-600">{{ $tpl?->name ?? 'Nama Template' }}</p>
+                <p class="mt-3 text-sm font-medium text-slate-700 transition group-hover:text-blue-600">{{ $tpl->name }}</p>
             </a>
-        @endfor
+        @empty
+            <p class="col-span-full text-center text-slate-400 py-8">Belum ada template tersedia.</p>
+        @endforelse
     </div>
 </section>
 
