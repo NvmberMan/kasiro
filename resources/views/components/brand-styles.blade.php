@@ -43,4 +43,9 @@
     /* Tinted "soft" surface using the brand hue at low alpha (active nav, chips). */
     .brand-soft     { background-color: color-mix(in srgb, var(--brand-primary) 12%, transparent); }
     .brand-ring-focus:focus { outline: none; box-shadow: 0 0 0 2px var(--brand-surface,#fff), 0 0 0 4px var(--brand-primary); }
+
+    /* Navbar / bottombar helpers — used when nav background is brand-primary */
+    .brand-nav-item       { color: rgba(255,255,255,0.65); transition: color .15s ease; }
+    .brand-nav-item:hover { color: rgba(255,255,255,0.9); }
+    .brand-nav-active     { color: #fff !important; background-color: rgba(255,255,255,0.18); }
 </style>
