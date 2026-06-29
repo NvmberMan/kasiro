@@ -1,9 +1,11 @@
 <x-app-layout>
     @php
-        $selectedTemplateId = old('template_id');
-        $selectedTemplate   = $selectedTemplateId
-            ? $templates->firstWhere('id', (int) $selectedTemplateId)
-            : null;
+        // Preselect from a validation redisplay (old) or a ?template=slug deep link
+        // (e.g. clicking a template card on the landing page).
+        $selectedTemplate = old('template_id')
+            ? $templates->firstWhere('id', (int) old('template_id'))
+            : $templates->firstWhere('slug', request('template'));
+        $selectedTemplateId = $selectedTemplate?->id;
     @endphp
 
     <div x-data="{
