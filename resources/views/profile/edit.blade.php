@@ -51,7 +51,7 @@
                                       aspectRatio: 1,
                                       viewMode: 2,
                                       dragMode: 'move',
-                                      autoCropArea: 0.85,
+                                      autoCropArea: 1,
                                       restore: false,
                                       guides: true,
                                       center: true,
