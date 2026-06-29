@@ -11,9 +11,11 @@
             pickerOpen: false,
             selectedId: @js($selectedTemplateId ? (int) $selectedTemplateId : null),
             selectedName: @js($selectedTemplate?->name ?? null),
-            selectTemplate(id, name) {
+            selectedThumb: @js($selectedTemplate?->screenshotUrl()),
+            selectTemplate(id, name, thumb) {
                 this.selectedId = id;
                 this.selectedName = name;
+                this.selectedThumb = thumb || null;
                 this.pickerOpen = false;
             },
             handleLogo(e) {
@@ -62,17 +64,17 @@
                     <div class="grid grid-cols-2 gap-5">
                         @foreach ($templates as $template)
                             <button type="button"
-                                    @click="selectTemplate({{ $template->id }}, '{{ addslashes($template->name) }}')"
+                                    @click="selectTemplate({{ $template->id }}, '{{ addslashes($template->name) }}', '{{ $template->screenshotUrl() }}')"
                                     class="group text-left">
                                 <div class="overflow-hidden rounded-2xl border-2 transition"
                                      :class="selectedId === {{ $template->id }} ? 'border-blue-500' : 'border-slate-200 hover:border-blue-300'">
                                     {{-- Thumbnail: real screenshot or checkerboard --}}
-                                    @if ($template->screenshot_path ?? null)
-                                        <img src="{{ asset('storage/'.$template->screenshot_path) }}"
+                                    @if ($template->screenshotUrl())
+                                        <img src="{{ $template->screenshotUrl() }}"
                                              alt="{{ $template->name }}"
-                                             class="aspect-[4/3] w-full object-cover object-top">
+                                             class="aspect-video w-full object-cover object-top">
                                     @else
-                                        <div class="aspect-[4/3] w-full"
+                                        <div class="aspect-video w-full"
                                              style="background-image: repeating-conic-gradient(#e5e7eb 0% 25%, #f3f4f6 0% 50%); background-size: 24px 24px;">
                                         </div>
                                     @endif
@@ -103,9 +105,25 @@
                     <div class="mb-5">
                         <label class="mb-1.5 block text-sm font-semibold text-slate-800">Sistem Template</label>
                         <input type="hidden" name="template_id" :value="selectedId">
-                        <button type="button" @click="pickerOpen = true"
+
+                        {{-- Empty state: pill prompt --}}
+                        <button type="button" @click="pickerOpen = true" x-show="!selectedId"
                                 class="w-full rounded-full border-2 border-blue-400 px-5 py-3 text-sm font-semibold text-blue-500 transition hover:bg-blue-50">
-                            <span x-text="selectedName ? selectedName : 'Pilih template'"></span>
+                            Pilih template
+                        </button>
+
+                        {{-- Selected state: screenshot + name --}}
+                        <button type="button" @click="pickerOpen = true" x-show="selectedId" x-cloak
+                                class="w-full overflow-hidden rounded-2xl border-2 border-blue-400 text-left transition hover:border-blue-500">
+                            <div class="aspect-video w-full overflow-hidden bg-slate-100"
+                                 style="background-image: repeating-conic-gradient(#e5e7eb 0% 25%, #f3f4f6 0% 50%); background-size: 24px 24px;">
+                                <img :src="selectedThumb" x-show="selectedThumb" alt=""
+                                     class="h-full w-full object-cover object-top">
+                            </div>
+                            <div class="flex items-center justify-between px-4 py-3">
+                                <span class="text-sm font-semibold text-blue-600" x-text="selectedName"></span>
+                                <span class="text-xs font-medium text-slate-400">Ganti</span>
+                            </div>
                         </button>
                         @error('template_id')
                             <p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>

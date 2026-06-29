@@ -77,6 +77,7 @@ Route::domain('{subdomain}.'.$central)
     ->middleware(['tenant', 'tenant.context'])
     ->group(function () {
         Route::get('/__preview', [PreviewController::class, 'index'])->name('tenant.preview');
+        Route::get('/__template-preview/{template}', [PreviewController::class, 'template'])->name('tenant.template-preview');
     });
 
 Route::domain('{subdomain}.'.$central)
