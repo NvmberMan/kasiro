@@ -18,19 +18,8 @@
     @endphp
 
     {{-- Page header --}}
-    <div class="flex items-center justify-between mb-8">
+    <div class="mb-8">
         <h1 class="text-2xl font-bold text-slate-900">Profil Anda</h1>
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button type="submit"
-                    class="flex items-center gap-2 rounded-full border border-slate-300 px-5 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition">
-                Logout
-                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                          d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
-                </svg>
-            </button>
-        </form>
     </div>
 
     <div class="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_360px]">
@@ -95,7 +84,7 @@
                       class="mb-6">
                     @csrf
                     <div class="flex items-center gap-4">
-                        <div class="relative shrink-0">
+                        <label for="avatar-input" class="relative shrink-0 group cursor-pointer">
                             {{-- Avatar circle --}}
                             <div class="h-16 w-16 rounded-full overflow-hidden ring-2 transition-all duration-300"
                                  :class="changed ? 'ring-[#a4c400] ring-offset-2' : 'ring-slate-200'">
@@ -111,20 +100,21 @@
                                 </template>
                             </div>
 
-                            {{-- Tombol pensil --}}
-                            <label for="avatar-input"
-                                   class="absolute -bottom-0.5 -right-0.5 flex h-5 w-5 cursor-pointer items-center justify-center rounded-full bg-slate-700 text-white hover:bg-slate-900 transition">
-                                <svg class="h-2.5 w-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536M9 13l6.586-6.586a2 2 0 112.828 2.828L11.828 15.828a4 4 0 01-1.414.94l-3.414.94.94-3.414A4 4 0 019 13z"/>
+                            {{-- Overlay ganti foto --}}
+                            <div class="absolute inset-0 rounded-full bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                <svg class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
                                 </svg>
-                            </label>
+                            </div>
+
                             <input id="avatar-input" name="avatar" type="file" accept="image/*" class="hidden"
                                    x-on:change="pick($event)">
-                        </div>
+                        </label>
 
                         <div>
                             <p class="text-sm font-medium text-slate-700">Foto Profil</p>
-                            <p class="text-xs text-slate-400" x-show="!changed">JPG, PNG · maks 2 MB · klik pensil untuk ganti &amp; crop</p>
+                            <p class="text-xs text-slate-400" x-show="!changed">JPG, PNG · maks 2 MB · klik foto untuk ganti &amp; crop</p>
                             <p class="text-xs text-[#a4c400] font-medium" x-show="changed" x-cloak>Foto baru dipilih — klik Simpan</p>
                             <button type="submit" x-show="changed" x-cloak
                                     class="mt-2 rounded-full bg-[#a4c400] px-5 py-1.5 text-xs font-semibold text-white hover:bg-[#8fad00] transition">

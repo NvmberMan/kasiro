@@ -7,9 +7,7 @@
             {{-- Custom --}}
             <a href="{{ route('tenants.create.custom') }}"
                class="group flex flex-col items-center rounded-2xl border-2 border-slate-200 bg-white px-8 py-10 text-center shadow-sm transition hover:border-blue-500 hover:shadow-md">
-                <div class="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-3xl transition group-hover:bg-blue-100">
-                    🎨
-                </div>
+                <div class="mb-4 text-5xl">🎨</div>
                 <h3 class="text-lg font-bold text-slate-900">Custom</h3>
                 <p class="mt-2 text-sm text-slate-500">Pilih layout, tema, dan warna sendiri dari awal.</p>
             </a>
@@ -17,9 +15,7 @@
             {{-- Template --}}
             <a href="{{ route('tenants.create.template') }}"
                class="group flex flex-col items-center rounded-2xl border-2 border-slate-200 bg-white px-8 py-10 text-center shadow-sm transition hover:border-blue-500 hover:shadow-md">
-                <div class="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-50 text-3xl transition group-hover:bg-indigo-100">
-                    📋
-                </div>
+                <div class="mb-4 text-5xl">📋</div>
                 <h3 class="text-lg font-bold text-slate-900">Pakai Template</h3>
                 <p class="mt-2 text-sm text-slate-500">Pilih preset siap pakai, lalu sesuaikan nama & subdomain.</p>
             </a>

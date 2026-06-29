@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -56,6 +56,10 @@
                    class="rounded-full border border-blue-600 px-5 py-1.5 text-sm font-semibold text-blue-600 hover:bg-blue-50 transition">
                     Login
                 </a>
+                <a href="{{ route('register') }}"
+                   class="rounded-full bg-blue-600 px-5 py-1.5 text-sm font-semibold text-white hover:bg-blue-700 transition">
+                    Daftar
+                </a>
             @endauth
         </div>
     </div>
@@ -90,10 +94,10 @@
 </section>
 
 {{-- ===== Template Kasir ===== --}}
-<section id="tentang" class="mx-auto max-w-6xl px-4 sm:px-6 py-14">
+<section id="tentang" class="mx-auto max-w-6xl px-4 sm:px-6 py-14 scroll-mt-16">
     <div class="flex items-center justify-between mb-8">
         <h2 class="text-xl sm:text-2xl font-bold text-slate-900">Template Kasir</h2>
-        <a href="{{ route('tenants.showcase') }}"
+        <a href="{{ auth()->check() ? route('tenants.create.template') : route('login') }}"
            class="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-4 py-1.5 text-xs font-semibold text-white hover:bg-blue-700 transition">
             Lainnya
             <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></svg>
@@ -103,11 +107,19 @@
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
         @for ($i = 0; $i < 3; $i++)
             @php $tpl = $templates[$i] ?? null; @endphp
-            <div>
-                {{-- <div class="ph h-44 w-full rounded-xl ring-1 ring-slate-200"></div> --}}
-                <img class="ph h-44 w-full rounded-xl ring-1" src="{{ asset('images/photo' . ($i + 1) . '.png') }}"
-                <p class="mt-3 text-sm font-medium text-slate-700">{{ $tpl?->name ?? 'Nama Template' }}</p>
-            </div>
+            <a href="{{ auth()->check() ? route('tenants.create.template') : route('login') }}" class="group block">
+                <div class="relative aspect-video w-full overflow-hidden rounded-xl ring-1 ring-slate-200 transition group-hover:ring-blue-400 group-hover:shadow-lg">
+                    <img class="ph h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                         src="{{ asset('images/photo' . ($i + 1) . '.png') }}"
+                         alt="{{ $tpl?->name ?? 'Template' }}">
+                    <div class="absolute inset-0 flex items-center justify-center bg-blue-600/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                        <span class="rounded-full bg-white px-5 py-2 text-sm font-semibold text-blue-600 shadow">
+                            Pakai Template
+                        </span>
+                    </div>
+                </div>
+                <p class="mt-3 text-sm font-medium text-slate-700 transition group-hover:text-blue-600">{{ $tpl?->name ?? 'Nama Template' }}</p>
+            </a>
         @endfor
     </div>
 </section>
@@ -205,7 +217,7 @@
 </section>
 
 {{-- ===== Pertanyaan Umum (FAQ) ===== --}}
-<section id="bantuan" class="bg-blue-50 py-16">
+<section id="bantuan" class="bg-blue-50 py-16 scroll-mt-16">
     <div class="mx-auto max-w-5xl px-4 sm:px-6">
         <div class="flex items-center justify-center gap-2 mb-10">
             <span class="flex h-7 w-7 items-center justify-center rounded-full bg-slate-900 text-white text-sm font-bold">?</span>
@@ -250,7 +262,10 @@
             Punya masukan atau pertanyaan seputar sistem kasir Kasiro? Sampaikan kepada kami.
         </p>
         <a href="{{ auth()->check() ? route('tenants.choose') : route('register') }}"
-           class="mt-6 inline-block rounded-full bg-lime-400 px-8 py-2.5 text-sm font-semibold text-slate-900 hover:bg-lime-500 transition">
+           class="mt-6 inline-flex items-center gap-2 rounded-full bg-lime-400 px-8 py-2.5 text-sm font-semibold text-slate-900 hover:bg-lime-500 transition">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h2.3a1 1 0 01.95.68l1 3a1 1 0 01-.27 1.05L8.2 9.2a12 12 0 006.6 6.6l1.47-1.48a1 1 0 011.05-.27l3 1a1 1 0 01.68.95V19a2 2 0 01-2 2A16 16 0 013 5z"/>
+            </svg>
             Hubungin kami!
         </a>
     </div>
