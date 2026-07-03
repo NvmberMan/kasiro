@@ -8,13 +8,13 @@ return [
     |--------------------------------------------------------------------------
     |
     | The root domain that serves the platform itself (landing, auth, dashboard).
-    | Tenants live on subdomains of this domain, e.g. "warungbudi.kasiro.com".
+    | Tenants live on subdomains of this domain, e.g. "warungbudi.kasiro.my.id".
     | Resolution strips this suffix from the request host to derive the
     | tenant subdomain. Override per-environment via TENANCY_CENTRAL_DOMAIN.
     |
     */
 
-    'central_domain' => env('TENANCY_CENTRAL_DOMAIN', 'kasiro.com'),
+    'central_domain' => env('TENANCY_CENTRAL_DOMAIN', 'kasiro.my.id'),
 
     /*
     |--------------------------------------------------------------------------

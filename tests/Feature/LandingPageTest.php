@@ -13,14 +13,14 @@ class LandingPageTest extends TestCase
 
     public function test_guest_can_access_landing_page(): void
     {
-        $this->get('http://kasiro.com/')
+        $this->get('http://kasiro.my.id/')
             ->assertOk()
             ->assertSee('Kasiro');
     }
 
     public function test_landing_shows_hero_text(): void
     {
-        $this->get('http://kasiro.com/')
+        $this->get('http://kasiro.my.id/')
             ->assertOk()
             ->assertSee('Transaksi Mudah')
             ->assertSee('Usaha Terarah')
@@ -29,7 +29,7 @@ class LandingPageTest extends TestCase
 
     public function test_landing_shows_login_link_for_guests(): void
     {
-        $this->get('http://kasiro.com/')
+        $this->get('http://kasiro.my.id/')
             ->assertOk()
             ->assertSee('Login');
     }
@@ -39,7 +39,7 @@ class LandingPageTest extends TestCase
         $user = User::factory()->create();
 
         $this->actingAs($user)
-            ->get('http://kasiro.com/')
+            ->get('http://kasiro.my.id/')
             ->assertOk()
             ->assertSee('Dashboard');
     }
@@ -51,7 +51,7 @@ class LandingPageTest extends TestCase
             'is_published' => true,
         ]);
 
-        $this->get('http://kasiro.com/')
+        $this->get('http://kasiro.my.id/')
             ->assertOk()
             ->assertSee('Kopi Hits');
     }
@@ -63,14 +63,14 @@ class LandingPageTest extends TestCase
             'is_published' => false,
         ]);
 
-        $this->get('http://kasiro.com/')
+        $this->get('http://kasiro.my.id/')
             ->assertOk()
             ->assertDontSee('Draft Template');
     }
 
     public function test_landing_shows_main_sections(): void
     {
-        $this->get('http://kasiro.com/')
+        $this->get('http://kasiro.my.id/')
             ->assertOk()
             ->assertSee('Template Kasir')
             ->assertSee('3 Hal yang membuat KASIRO berbeda')

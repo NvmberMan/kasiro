@@ -181,7 +181,7 @@
                                 <input type="text" name="subdomain" value="{{ old('subdomain', $tenant->subdomain) }}" required
                                     placeholder="nama-toko"
                                     class="flex-1 rounded-xl border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition min-w-0">
-                                <span class="text-sm text-gray-400 shrink-0">.kasiro.com</span>
+                                <span class="text-sm text-gray-400 shrink-0">.kasiro.my.id</span>
                             </div>
                             <p class="mt-1.5 text-xs text-amber-600">Mengubah subdomain akan mengubah URL toko kamu.</p>
                         </div>
