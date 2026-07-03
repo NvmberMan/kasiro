@@ -12,24 +12,24 @@ class DashboardAuthTest extends TestCase
 
     public function test_guest_is_redirected_from_beranda(): void
     {
-        $this->get('http://kasiro.com/dashboard')->assertRedirect();
+        $this->get('http://kasiro.my.id/dashboard')->assertRedirect();
     }
 
     public function test_guest_is_redirected_from_my_stores(): void
     {
-        $this->get('http://kasiro.com/my-stores')->assertRedirect();
+        $this->get('http://kasiro.my.id/my-stores')->assertRedirect();
     }
 
     public function test_guest_is_redirected_from_archive_page(): void
     {
-        $this->get('http://kasiro.com/archive')->assertRedirect();
+        $this->get('http://kasiro.my.id/archive')->assertRedirect();
     }
 
     public function test_guest_cannot_archive_tenant(): void
     {
         $tenant = Tenant::factory()->create();
 
-        $this->post("http://kasiro.com/tenants/{$tenant->id}/archive")
+        $this->post("http://kasiro.my.id/tenants/{$tenant->id}/archive")
             ->assertRedirect();
     }
 
@@ -37,7 +37,7 @@ class DashboardAuthTest extends TestCase
     {
         $tenant = Tenant::factory()->archived()->create();
 
-        $this->delete("http://kasiro.com/tenants/{$tenant->id}/archive")
+        $this->delete("http://kasiro.my.id/tenants/{$tenant->id}/archive")
             ->assertRedirect();
     }
 }

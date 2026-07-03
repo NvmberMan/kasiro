@@ -28,7 +28,7 @@ class TenantArchiveTest extends TestCase
     public function test_owner_can_archive_active_tenant(): void
     {
         $this->actingAs($this->owner)
-            ->post("http://kasiro.com/tenants/{$this->tenant->id}/archive")
+            ->post("http://kasiro.my.id/tenants/{$this->tenant->id}/archive")
             ->assertRedirect(route('my-stores'));
 
         $this->tenant->refresh();
@@ -42,7 +42,7 @@ class TenantArchiveTest extends TestCase
         $this->tenant->users()->attach($member, ['role' => 'cashier', 'status' => 'active']);
 
         $this->actingAs($this->owner)
-            ->post("http://kasiro.com/tenants/{$this->tenant->id}/archive");
+            ->post("http://kasiro.my.id/tenants/{$this->tenant->id}/archive");
 
         $this->assertDatabaseHas('tenant_user', [
             'tenant_id' => $this->tenant->id,
@@ -57,7 +57,7 @@ class TenantArchiveTest extends TestCase
         $this->tenant->users()->attach($manager, ['role' => 'manager', 'status' => 'active']);
 
         $this->actingAs($manager)
-            ->post("http://kasiro.com/tenants/{$this->tenant->id}/archive")
+            ->post("http://kasiro.my.id/tenants/{$this->tenant->id}/archive")
             ->assertForbidden();
 
         $this->tenant->refresh();
@@ -70,7 +70,7 @@ class TenantArchiveTest extends TestCase
         $this->tenant->users()->attach($cashier, ['role' => 'cashier', 'status' => 'active']);
 
         $this->actingAs($cashier)
-            ->post("http://kasiro.com/tenants/{$this->tenant->id}/archive")
+            ->post("http://kasiro.my.id/tenants/{$this->tenant->id}/archive")
             ->assertForbidden();
     }
 
@@ -79,7 +79,7 @@ class TenantArchiveTest extends TestCase
         $outsider = User::factory()->create();
 
         $this->actingAs($outsider)
-            ->post("http://kasiro.com/tenants/{$this->tenant->id}/archive")
+            ->post("http://kasiro.my.id/tenants/{$this->tenant->id}/archive")
             ->assertForbidden();
     }
 
@@ -91,7 +91,7 @@ class TenantArchiveTest extends TestCase
         $archived->users()->attach($this->owner, ['role' => 'owner', 'status' => 'active']);
 
         $this->actingAs($this->owner)
-            ->delete("http://kasiro.com/tenants/{$archived->id}/archive")
+            ->delete("http://kasiro.my.id/tenants/{$archived->id}/archive")
             ->assertRedirect(route('archive'));
 
         $archived->refresh();
@@ -106,7 +106,7 @@ class TenantArchiveTest extends TestCase
         $archived->users()->attach($manager, ['role' => 'manager', 'status' => 'active']);
 
         $this->actingAs($manager)
-            ->delete("http://kasiro.com/tenants/{$archived->id}/archive")
+            ->delete("http://kasiro.my.id/tenants/{$archived->id}/archive")
             ->assertForbidden();
     }
 
@@ -116,7 +116,7 @@ class TenantArchiveTest extends TestCase
         $archived->users()->attach($this->owner, ['role' => 'owner', 'status' => 'active']);
 
         $this->actingAs($this->owner)
-            ->delete("http://kasiro.com/tenants/{$archived->id}/archive");
+            ->delete("http://kasiro.my.id/tenants/{$archived->id}/archive");
 
         $this->assertDatabaseHas('tenants', [
             'id'          => $archived->id,

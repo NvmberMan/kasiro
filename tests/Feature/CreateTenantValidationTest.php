@@ -24,19 +24,19 @@ class CreateTenantValidationTest extends TestCase
 
     public function test_guest_is_redirected_from_choose_flow(): void
     {
-        $this->get('http://kasiro.com/tenants/create')
+        $this->get('http://kasiro.my.id/tenants/create')
             ->assertRedirect();
     }
 
     public function test_guest_is_redirected_from_custom_create(): void
     {
-        $this->get('http://kasiro.com/tenants/create/custom')
+        $this->get('http://kasiro.my.id/tenants/create/custom')
             ->assertRedirect();
     }
 
     public function test_guest_post_to_custom_store_redirects_to_login(): void
     {
-        $this->post('http://kasiro.com/tenants/create/custom', [
+        $this->post('http://kasiro.my.id/tenants/create/custom', [
             'name'          => 'X',
             'subdomain'     => 'x',
             'layout'        => 'topbar',
@@ -50,7 +50,7 @@ class CreateTenantValidationTest extends TestCase
     public function test_reserved_subdomain_is_rejected(): void
     {
         $this->actingAs($this->user)
-            ->post('http://kasiro.com/tenants/create/custom', [
+            ->post('http://kasiro.my.id/tenants/create/custom', [
                 'name'          => 'Admin Shop',
                 'subdomain'     => 'admin',
                 'layout'        => 'topbar',
@@ -65,7 +65,7 @@ class CreateTenantValidationTest extends TestCase
         Tenant::factory()->subdomain('taken')->create();
 
         $this->actingAs($this->user)
-            ->post('http://kasiro.com/tenants/create/custom', [
+            ->post('http://kasiro.my.id/tenants/create/custom', [
                 'name'          => 'Another',
                 'subdomain'     => 'taken',
                 'layout'        => 'topbar',
@@ -78,7 +78,7 @@ class CreateTenantValidationTest extends TestCase
     public function test_subdomain_with_uppercase_is_rejected(): void
     {
         $this->actingAs($this->user)
-            ->post('http://kasiro.com/tenants/create/custom', [
+            ->post('http://kasiro.my.id/tenants/create/custom', [
                 'name'          => 'Bad',
                 'subdomain'     => 'MyShop',
                 'layout'        => 'topbar',
@@ -91,7 +91,7 @@ class CreateTenantValidationTest extends TestCase
     public function test_subdomain_starting_with_hyphen_is_rejected(): void
     {
         $this->actingAs($this->user)
-            ->post('http://kasiro.com/tenants/create/custom', [
+            ->post('http://kasiro.my.id/tenants/create/custom', [
                 'name'          => 'Bad',
                 'subdomain'     => '-badstart',
                 'layout'        => 'topbar',
@@ -106,7 +106,7 @@ class CreateTenantValidationTest extends TestCase
     public function test_invalid_layout_is_rejected(): void
     {
         $this->actingAs($this->user)
-            ->post('http://kasiro.com/tenants/create/custom', [
+            ->post('http://kasiro.my.id/tenants/create/custom', [
                 'name'          => 'Shop',
                 'subdomain'     => 'myshop',
                 'layout'        => 'hacker-layout',
@@ -119,7 +119,7 @@ class CreateTenantValidationTest extends TestCase
     public function test_invalid_palette_is_rejected(): void
     {
         $this->actingAs($this->user)
-            ->post('http://kasiro.com/tenants/create/custom', [
+            ->post('http://kasiro.my.id/tenants/create/custom', [
                 'name'          => 'Shop',
                 'subdomain'     => 'myshop',
                 'layout'        => 'topbar',
@@ -132,7 +132,7 @@ class CreateTenantValidationTest extends TestCase
     public function test_missing_template_id_is_rejected_on_template_flow(): void
     {
         $this->actingAs($this->user)
-            ->post('http://kasiro.com/tenants/create/template', [
+            ->post('http://kasiro.my.id/tenants/create/template', [
                 'name'      => 'Shop',
                 'subdomain' => 'myshop',
             ])
@@ -142,7 +142,7 @@ class CreateTenantValidationTest extends TestCase
     public function test_nonexistent_template_id_is_rejected(): void
     {
         $this->actingAs($this->user)
-            ->post('http://kasiro.com/tenants/create/template', [
+            ->post('http://kasiro.my.id/tenants/create/template', [
                 'name'        => 'Shop',
                 'subdomain'   => 'myshop',
                 'template_id' => 99999,
@@ -155,7 +155,7 @@ class CreateTenantValidationTest extends TestCase
         $template = Template::factory()->published()->create();
 
         $this->actingAs($this->user)
-            ->post('http://kasiro.com/tenants/create/template', [
+            ->post('http://kasiro.my.id/tenants/create/template', [
                 'subdomain'   => 'myshop',
                 'template_id' => $template->id,
             ])

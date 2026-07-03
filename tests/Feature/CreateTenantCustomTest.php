@@ -33,7 +33,7 @@ class CreateTenantCustomTest extends TestCase
     public function test_authenticated_user_can_access_custom_create_form(): void
     {
         $this->actingAs($this->user)
-            ->get('http://kasiro.com/tenants/create/custom')
+            ->get('http://kasiro.my.id/tenants/create/custom')
             ->assertOk()
             ->assertSee('layout')
             ->assertSee('color_palette');
@@ -42,7 +42,7 @@ class CreateTenantCustomTest extends TestCase
     public function test_custom_flow_creates_tenant_with_correct_theme_config(): void
     {
         $this->actingAs($this->user)
-            ->post('http://kasiro.com/tenants/create/custom', $this->validPayload());
+            ->post('http://kasiro.my.id/tenants/create/custom', $this->validPayload());
 
         $tenant = Tenant::where('subdomain', 'warungbudi')->firstOrFail();
 
@@ -56,7 +56,7 @@ class CreateTenantCustomTest extends TestCase
     public function test_custom_flow_sets_owner_id(): void
     {
         $this->actingAs($this->user)
-            ->post('http://kasiro.com/tenants/create/custom', $this->validPayload());
+            ->post('http://kasiro.my.id/tenants/create/custom', $this->validPayload());
 
         $tenant = Tenant::where('subdomain', 'warungbudi')->firstOrFail();
 
@@ -66,7 +66,7 @@ class CreateTenantCustomTest extends TestCase
     public function test_custom_flow_creates_owner_membership(): void
     {
         $this->actingAs($this->user)
-            ->post('http://kasiro.com/tenants/create/custom', $this->validPayload());
+            ->post('http://kasiro.my.id/tenants/create/custom', $this->validPayload());
 
         $tenant = Tenant::where('subdomain', 'warungbudi')->firstOrFail();
 
@@ -81,7 +81,7 @@ class CreateTenantCustomTest extends TestCase
     public function test_custom_flow_redirects_to_created_page(): void
     {
         $response = $this->actingAs($this->user)
-            ->post('http://kasiro.com/tenants/create/custom', $this->validPayload());
+            ->post('http://kasiro.my.id/tenants/create/custom', $this->validPayload());
 
         $tenant = Tenant::where('subdomain', 'warungbudi')->firstOrFail();
         $response->assertRedirect(route('tenants.created', $tenant));
@@ -90,7 +90,7 @@ class CreateTenantCustomTest extends TestCase
     public function test_tenant_status_is_active_after_create(): void
     {
         $this->actingAs($this->user)
-            ->post('http://kasiro.com/tenants/create/custom', $this->validPayload());
+            ->post('http://kasiro.my.id/tenants/create/custom', $this->validPayload());
 
         $this->assertDatabaseHas('tenants', [
             'subdomain' => 'warungbudi',

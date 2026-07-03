@@ -43,7 +43,7 @@ class TemplateScreenshotTest extends TestCase
         $donor = $this->donorTenant();
         $template = Template::factory()->published()->create();
 
-        $this->get("http://{$donor->subdomain}.kasiro.com/__template-preview/{$template->id}")
+        $this->get("http://{$donor->subdomain}.kasiro.my.id/__template-preview/{$template->id}")
             ->assertForbidden();
     }
 
@@ -62,7 +62,7 @@ class TemplateScreenshotTest extends TestCase
         $token = 'valid-token';
         Cache::put(PreviewController::templateCacheKey($template->id), $token, now()->addMinutes(10));
 
-        $this->get("http://{$donor->subdomain}.kasiro.com/__template-preview/{$template->id}?token={$token}")
+        $this->get("http://{$donor->subdomain}.kasiro.my.id/__template-preview/{$template->id}?token={$token}")
             ->assertOk()
             // The donor's branding is overlaid with the template's name.
             ->assertSee('Tema Restoran');

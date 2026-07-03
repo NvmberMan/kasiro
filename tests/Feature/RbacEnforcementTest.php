@@ -115,7 +115,7 @@ class RbacEnforcementTest extends TestCase
     public function test_smoke_route_renders_tenant_layout_for_owner(): void
     {
         $this->actingAs($this->owner)
-            ->get('http://warungbudi.kasiro.com/')
+            ->get('http://warungbudi.kasiro.my.id/')
             ->assertOk()
             ->assertSee($this->tenant->name)
             ->assertSee('owner')
@@ -125,7 +125,7 @@ class RbacEnforcementTest extends TestCase
     public function test_smoke_route_renders_tenant_layout_for_cashier(): void
     {
         $this->actingAs($this->cashier)
-            ->get('http://warungbudi.kasiro.com/')
+            ->get('http://warungbudi.kasiro.my.id/')
             ->assertOk()
             ->assertSee($this->tenant->name)
             ->assertSee('cashier')
@@ -141,7 +141,7 @@ class RbacEnforcementTest extends TestCase
         app(TenantContext::class)->set($tenant);
 
         $this->actingAs($this->owner)
-            ->get('http://bottomshop.kasiro.com/')
+            ->get('http://bottomshop.kasiro.my.id/')
             ->assertOk()
             ->assertSee($tenant->name)
             ->assertSee('owner')

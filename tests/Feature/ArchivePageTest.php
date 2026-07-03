@@ -28,7 +28,7 @@ class ArchivePageTest extends TestCase
         $tenant->users()->attach($this->user, ['role' => 'owner', 'status' => 'active']);
 
         $this->actingAs($this->user)
-            ->get('http://kasiro.com/archive')
+            ->get('http://kasiro.my.id/archive')
             ->assertOk()
             ->assertSee('Toko Lama');
     }
@@ -39,7 +39,7 @@ class ArchivePageTest extends TestCase
         $tenant->users()->attach($this->user, ['role' => 'owner', 'status' => 'active']);
 
         $this->actingAs($this->user)
-            ->get('http://kasiro.com/archive')
+            ->get('http://kasiro.my.id/archive')
             ->assertOk()
             ->assertDontSee('Toko Aktif');
     }
@@ -54,7 +54,7 @@ class ArchivePageTest extends TestCase
         $tenant->users()->attach($this->user, ['role' => 'manager', 'status' => 'active']);
 
         $this->actingAs($this->user)
-            ->get('http://kasiro.com/archive')
+            ->get('http://kasiro.my.id/archive')
             ->assertOk()
             ->assertDontSee('Toko Milik Orang Lain');
     }
@@ -67,7 +67,7 @@ class ArchivePageTest extends TestCase
         ]);
 
         $this->actingAs($this->user)
-            ->get('http://kasiro.com/archive')
+            ->get('http://kasiro.my.id/archive')
             ->assertOk()
             ->assertSee('Pulihkan');
     }
@@ -75,7 +75,7 @@ class ArchivePageTest extends TestCase
     public function test_archive_page_shows_empty_state_when_no_archived_tenants(): void
     {
         $this->actingAs($this->user)
-            ->get('http://kasiro.com/archive')
+            ->get('http://kasiro.my.id/archive')
             ->assertOk()
             ->assertSee('Tidak ada toko yang diarsipkan');
     }

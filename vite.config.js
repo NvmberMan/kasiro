@@ -24,7 +24,7 @@ export default defineConfig({
         host: "127.0.0.1",
 
         hmr: {
-            // App disajikan di https://kasiro.com, tetapi dev server Vite di
+            // App disajikan di https://kasiro.my.id, tetapi dev server Vite di
             // http://127.0.0.1:5173. Pin host + clientPort + protokol ws secara
             // eksplisit agar WebSocket HMR tidak putus-nyambung — reconnect yang
             // berulang memicu location.reload() yang ikut membatalkan navigasi.

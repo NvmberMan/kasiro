@@ -34,7 +34,7 @@ class PosTransactionTest extends TestCase
 
     private function url(string $path): string
     {
-        return "http://{$this->tenant->subdomain}.kasiro.com{$path}";
+        return "http://{$this->tenant->subdomain}.kasiro.my.id{$path}";
     }
 
     private function cart(int $qty = 1): string
