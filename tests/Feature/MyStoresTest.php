@@ -25,7 +25,7 @@ class MyStoresTest extends TestCase
         $tenant->users()->attach($this->user, ['role' => 'owner', 'status' => 'active']);
 
         $this->actingAs($this->user)
-            ->get('http://kasiro.com/my-stores')
+            ->get('http://kasiro.my.id/my-stores')
             ->assertOk()
             ->assertSee('Toko Aktif');
     }
@@ -36,7 +36,7 @@ class MyStoresTest extends TestCase
         $archived->users()->attach($this->user, ['role' => 'owner', 'status' => 'active']);
 
         $this->actingAs($this->user)
-            ->get('http://kasiro.com/my-stores')
+            ->get('http://kasiro.my.id/my-stores')
             ->assertOk()
             ->assertDontSee('Toko Arsip');
     }
@@ -48,7 +48,7 @@ class MyStoresTest extends TestCase
         $tenant->users()->attach($other, ['role' => 'owner', 'status' => 'active']);
 
         $this->actingAs($this->user)
-            ->get('http://kasiro.com/my-stores')
+            ->get('http://kasiro.my.id/my-stores')
             ->assertOk()
             ->assertDontSee('Toko Orang Lain');
     }
@@ -59,7 +59,7 @@ class MyStoresTest extends TestCase
         $tenant->users()->attach($this->user, ['role' => 'owner', 'status' => 'active']);
 
         $this->actingAs($this->user)
-            ->get('http://kasiro.com/my-stores')
+            ->get('http://kasiro.my.id/my-stores')
             ->assertOk()
             ->assertSee('Arsipkan');
     }
@@ -70,7 +70,7 @@ class MyStoresTest extends TestCase
         $tenant->users()->attach($this->user, ['role' => 'manager', 'status' => 'active']);
 
         $this->actingAs($this->user)
-            ->get('http://kasiro.com/my-stores')
+            ->get('http://kasiro.my.id/my-stores')
             ->assertOk()
             ->assertDontSee('Arsipkan');
     }
@@ -81,7 +81,7 @@ class MyStoresTest extends TestCase
         $tenant->users()->attach($this->user, ['role' => 'cashier', 'status' => 'active']);
 
         $this->actingAs($this->user)
-            ->get('http://kasiro.com/my-stores')
+            ->get('http://kasiro.my.id/my-stores')
             ->assertOk()
             ->assertSee('Kasir');
     }
@@ -89,7 +89,7 @@ class MyStoresTest extends TestCase
     public function test_my_stores_shows_empty_state_when_no_tenants(): void
     {
         $this->actingAs($this->user)
-            ->get('http://kasiro.com/my-stores')
+            ->get('http://kasiro.my.id/my-stores')
             ->assertOk()
             ->assertSee('Anda belum memiliki');
     }

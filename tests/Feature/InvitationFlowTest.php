@@ -27,12 +27,12 @@ class InvitationFlowTest extends TestCase
 
     private function tenantUrl(string $path): string
     {
-        return "http://{$this->tenant->subdomain}.kasiro.com{$path}";
+        return "http://{$this->tenant->subdomain}.kasiro.my.id{$path}";
     }
 
     private function platformUrl(string $path): string
     {
-        return "http://kasiro.com{$path}";
+        return "http://kasiro.my.id{$path}";
     }
 
     public function test_owner_can_create_invitation(): void

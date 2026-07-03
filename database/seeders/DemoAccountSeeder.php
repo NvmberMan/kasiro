@@ -39,7 +39,7 @@ class DemoAccountSeeder extends Seeder
         $this->callOnce(TemplateSeeder::class);
 
         $owner = User::firstOrCreate(
-            ['email' => 'owner@kasiro.com'],
+            ['email' => 'owner@kasiro.my.id'],
             ['name' => 'Budi Santoso', 'password' => 'password', 'email_verified_at' => now()],
         );
 
@@ -67,10 +67,10 @@ class DemoAccountSeeder extends Seeder
                 'template' => 'kedai-kopi',
                 'theme' => ['layout' => 'modern', 'theme' => 'warm', 'color_palette' => 'amber'],
                 'logo_keyword' => 'coffee,logo',
-                'manager' => ['name' => 'Sari Wulandari', 'email' => 'sari@kopisenja.com'],
+                'manager' => ['name' => 'Sari Wulandari', 'email' => 'sari@kopisenja.my.id'],
                 'cashiers' => [
-                    ['name' => 'Andi Pratama', 'email' => 'andi@kopisenja.com'],
-                    ['name' => 'Dewi Lestari', 'email' => 'dewi@kopisenja.com'],
+                    ['name' => 'Andi Pratama', 'email' => 'andi@kopisenja.my.id'],
+                    ['name' => 'Dewi Lestari', 'email' => 'dewi@kopisenja.my.id'],
                 ],
                 'catalog' => $this->coffeeCatalog(),
                 'transactions' => 60,
@@ -81,10 +81,10 @@ class DemoAccountSeeder extends Seeder
                 'template' => 'toko-retail',
                 'theme' => ['layout' => 'sidebar', 'theme' => 'light', 'color_palette' => 'indigo'],
                 'logo_keyword' => 'store,minimarket',
-                'manager' => ['name' => 'Rudi Hartono', 'email' => 'rudi@berkahmart.com'],
+                'manager' => ['name' => 'Rudi Hartono', 'email' => 'rudi@berkahmart.my.id'],
                 'cashiers' => [
-                    ['name' => 'Nina Marlina', 'email' => 'nina@berkahmart.com'],
-                    ['name' => 'Joko Susilo', 'email' => 'joko@berkahmart.com'],
+                    ['name' => 'Nina Marlina', 'email' => 'nina@berkahmart.my.id'],
+                    ['name' => 'Joko Susilo', 'email' => 'joko@berkahmart.my.id'],
                 ],
                 'catalog' => $this->retailCatalog(),
                 'transactions' => 80,
@@ -110,7 +110,7 @@ class DemoAccountSeeder extends Seeder
             ],
         );
 
-        $this->command->info("Toko: {$tenant->name} -> {$tenant->subdomain}.kasiro.com");
+        $this->command->info("Toko: {$tenant->name} -> {$tenant->subdomain}.kasiro.my.id");
 
         // Logo toko (diunduh dari internet).
         if (! $tenant->logo_path) {

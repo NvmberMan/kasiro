@@ -13,7 +13,7 @@ class CrossSubdomainSessionTest extends TestCase
 
     public function test_session_domain_covers_all_subdomains(): void
     {
-        $this->assertSame('.kasiro.com', config('session.domain'));
+        $this->assertSame('.kasiro.my.id', config('session.domain'));
     }
 
     public function test_session_same_site_is_lax(): void
@@ -25,7 +25,7 @@ class CrossSubdomainSessionTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->post('http://kasiro.com/login', [
+        $response = $this->post('http://kasiro.my.id/login', [
             'email' => $user->email,
             'password' => 'password',
         ]);
@@ -36,7 +36,7 @@ class CrossSubdomainSessionTest extends TestCase
             ->first(fn ($cookie) => str_ends_with($cookie->getName(), '_session'));
 
         $this->assertNotNull($sessionCookie, 'No session cookie found in login response');
-        $this->assertSame('.kasiro.com', $sessionCookie->getDomain());
+        $this->assertSame('.kasiro.my.id', $sessionCookie->getDomain());
     }
 
     public function test_session_from_apex_login_transfers_to_tenant_subdomain(): void
@@ -45,15 +45,15 @@ class CrossSubdomainSessionTest extends TestCase
         Tenant::factory()->subdomain('warungbudi')->create(['name' => 'Warung Budi']);
 
         // Login at apex platform
-        $this->post('http://kasiro.com/login', [
+        $this->post('http://kasiro.my.id/login', [
             'email' => $user->email,
             'password' => 'password',
         ]);
 
         $this->assertAuthenticated();
 
-        // The same session cookie (Domain=.kasiro.com) is carried to the subdomain
-        $this->get('http://warungbudi.kasiro.com/');
+        // The same session cookie (Domain=.kasiro.my.id) is carried to the subdomain
+        $this->get('http://warungbudi.kasiro.my.id/');
 
         $this->assertAuthenticatedAs($user);
     }

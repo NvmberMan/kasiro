@@ -25,7 +25,7 @@ class TenantMembershipTest extends TestCase
         $user = User::factory()->create();
 
         $this->actingAs($user)
-            ->get('http://warungbudi.kasiro.com/')
+            ->get('http://warungbudi.kasiro.my.id/')
             ->assertForbidden();
     }
 
@@ -35,7 +35,7 @@ class TenantMembershipTest extends TestCase
         $this->tenant->users()->attach($user, ['role' => 'cashier', 'status' => 'active']);
 
         $this->actingAs($user)
-            ->get('http://warungbudi.kasiro.com/')
+            ->get('http://warungbudi.kasiro.my.id/')
             ->assertOk();
     }
 
@@ -45,7 +45,7 @@ class TenantMembershipTest extends TestCase
         $this->tenant->users()->attach($user, ['role' => 'cashier', 'status' => 'revoked']);
 
         $this->actingAs($user)
-            ->get('http://warungbudi.kasiro.com/')
+            ->get('http://warungbudi.kasiro.my.id/')
             ->assertForbidden();
     }
 
@@ -56,7 +56,7 @@ class TenantMembershipTest extends TestCase
 
         // First request succeeds
         $this->actingAs($user)
-            ->get('http://warungbudi.kasiro.com/')
+            ->get('http://warungbudi.kasiro.my.id/')
             ->assertOk();
 
         // Revoke membership
@@ -66,13 +66,13 @@ class TenantMembershipTest extends TestCase
 
         // Next request is blocked without re-login (E4 — immediate effect)
         $this->actingAs($user)
-            ->get('http://warungbudi.kasiro.com/')
+            ->get('http://warungbudi.kasiro.my.id/')
             ->assertForbidden();
     }
 
     public function test_unauthenticated_user_is_redirected_to_apex_login(): void
     {
-        $this->get('http://warungbudi.kasiro.com/')
-            ->assertRedirect('http://kasiro.com/login');
+        $this->get('http://warungbudi.kasiro.my.id/')
+            ->assertRedirect('http://kasiro.my.id/login');
     }
 }

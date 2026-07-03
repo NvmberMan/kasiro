@@ -22,7 +22,7 @@ $central = config('tenancy.central_domain');
 
 /*
 |--------------------------------------------------------------------------
-| Platform routes (apex: kasiro.com)
+| Platform routes (apex: kasiro.my.id)
 |--------------------------------------------------------------------------
 | The platform itself — landing, centralized auth, dashboard. No tenant
 | context. Breeze auth routes (routes/auth.php) are scoped to the apex so
@@ -66,7 +66,7 @@ Route::domain($central)->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| Tenant routes (*.kasiro.com)
+| Tenant routes (*.kasiro.my.id)
 |--------------------------------------------------------------------------
 | Resolved at runtime from the host by ResolveTenant; EnsureTenantContext
 | guards against any tenant route running without an active tenant. Auth +
