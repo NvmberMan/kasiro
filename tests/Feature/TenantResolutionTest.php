@@ -13,7 +13,7 @@ class TenantResolutionTest extends TestCase
 
     public function test_apex_host_serves_the_platform(): void
     {
-        $this->get('http://kasiro.com/')
+        $this->get('http://kasiro.my.id/')
             ->assertOk()
             ->assertSee('Kasiro');
     }
@@ -25,20 +25,20 @@ class TenantResolutionTest extends TestCase
         $tenant->users()->attach($user, ['role' => 'owner', 'status' => 'active']);
 
         $this->actingAs($user)
-            ->get('http://warungbudi.kasiro.com/')
+            ->get('http://warungbudi.kasiro.my.id/')
             ->assertOk()
             ->assertSee('Warung Budi');
     }
 
     public function test_unknown_subdomain_returns_404(): void
     {
-        $this->get('http://nonexistent.kasiro.com/')
+        $this->get('http://nonexistent.kasiro.my.id/')
             ->assertNotFound();
     }
 
     public function test_reserved_subdomain_returns_404(): void
     {
-        $this->get('http://admin.kasiro.com/')
+        $this->get('http://admin.kasiro.my.id/')
             ->assertNotFound();
     }
 
@@ -46,7 +46,7 @@ class TenantResolutionTest extends TestCase
     {
         Tenant::factory()->archived()->subdomain('lawasstore')->create(['name' => 'Lawas Store']);
 
-        $response = $this->get('http://lawasstore.kasiro.com/');
+        $response = $this->get('http://lawasstore.kasiro.my.id/');
 
         $response->assertStatus(403);
         $response->assertSee('tidak aktif');

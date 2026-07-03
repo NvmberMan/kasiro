@@ -28,7 +28,7 @@ class LogoUploadTest extends TestCase
         $logo = UploadedFile::fake()->image('logo.png', 100, 100);
 
         $this->actingAs($this->user)
-            ->post('http://kasiro.com/tenants/create/custom', [
+            ->post('http://kasiro.my.id/tenants/create/custom', [
                 'name'          => 'Logo Shop',
                 'subdomain'     => 'logoshop',
                 'layout'        => 'topbar',
@@ -46,7 +46,7 @@ class LogoUploadTest extends TestCase
     public function test_tenant_without_logo_has_null_logo_path(): void
     {
         $this->actingAs($this->user)
-            ->post('http://kasiro.com/tenants/create/custom', [
+            ->post('http://kasiro.my.id/tenants/create/custom', [
                 'name'          => 'No Logo',
                 'subdomain'     => 'nologo',
                 'layout'        => 'topbar',
@@ -63,7 +63,7 @@ class LogoUploadTest extends TestCase
         $pdf = UploadedFile::fake()->create('document.pdf', 100, 'application/pdf');
 
         $this->actingAs($this->user)
-            ->post('http://kasiro.com/tenants/create/custom', [
+            ->post('http://kasiro.my.id/tenants/create/custom', [
                 'name'          => 'Bad Logo',
                 'subdomain'     => 'badlogo',
                 'layout'        => 'topbar',
@@ -82,7 +82,7 @@ class LogoUploadTest extends TestCase
         $logo     = UploadedFile::fake()->image('brand.jpg', 200, 200);
 
         $this->actingAs($this->user)
-            ->post('http://kasiro.com/tenants/create/template', [
+            ->post('http://kasiro.my.id/tenants/create/template', [
                 'name'        => 'Template Logo',
                 'subdomain'   => 'templatelogo',
                 'template_id' => $template->id,

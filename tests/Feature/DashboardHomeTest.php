@@ -22,7 +22,7 @@ class DashboardHomeTest extends TestCase
     public function test_beranda_is_accessible_to_authenticated_user(): void
     {
         $this->actingAs($this->user)
-            ->get('http://kasiro.com/dashboard')
+            ->get('http://kasiro.my.id/dashboard')
             ->assertOk()
             ->assertSee($this->user->name);
     }
@@ -33,7 +33,7 @@ class DashboardHomeTest extends TestCase
         $tenant->users()->attach($this->user, ['role' => 'owner', 'status' => 'active']);
 
         $this->actingAs($this->user)
-            ->get('http://kasiro.com/dashboard')
+            ->get('http://kasiro.my.id/dashboard')
             ->assertOk()
             ->assertSee('1');
     }
@@ -43,7 +43,7 @@ class DashboardHomeTest extends TestCase
         Tenant::factory()->archived()->create(['owner_id' => $this->user->id]);
 
         $this->actingAs($this->user)
-            ->get('http://kasiro.com/dashboard')
+            ->get('http://kasiro.my.id/dashboard')
             ->assertOk()
             ->assertSee('Diarsipkan');
     }
@@ -54,7 +54,7 @@ class DashboardHomeTest extends TestCase
         $tenant->users()->attach($this->user, ['role' => 'owner', 'status' => 'active']);
 
         $this->actingAs($this->user)
-            ->get('http://kasiro.com/dashboard')
+            ->get('http://kasiro.my.id/dashboard')
             ->assertOk()
             ->assertSee('Warung Spesial');
     }
@@ -65,7 +65,7 @@ class DashboardHomeTest extends TestCase
         $archived->users()->attach($this->user, ['role' => 'owner', 'status' => 'active']);
 
         $this->actingAs($this->user)
-            ->get('http://kasiro.com/dashboard')
+            ->get('http://kasiro.my.id/dashboard')
             ->assertOk()
             ->assertDontSee('Toko Lama');
     }
@@ -73,7 +73,7 @@ class DashboardHomeTest extends TestCase
     public function test_beranda_shows_empty_state_with_create_button_when_no_tenants(): void
     {
         $this->actingAs($this->user)
-            ->get('http://kasiro.com/dashboard')
+            ->get('http://kasiro.my.id/dashboard')
             ->assertOk()
             ->assertSee('Buat Toko Baru');
     }
@@ -86,7 +86,7 @@ class DashboardHomeTest extends TestCase
         }
 
         $response = $this->actingAs($this->user)
-            ->get('http://kasiro.com/dashboard')
+            ->get('http://kasiro.my.id/dashboard')
             ->assertOk();
 
         // At most 3 tenant cards in the recent section

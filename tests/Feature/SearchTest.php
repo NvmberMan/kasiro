@@ -47,7 +47,7 @@ class SearchTest extends TestCase
 
     private function url(string $path): string
     {
-        return "http://{$this->tenant->subdomain}.kasiro.com{$path}";
+        return "http://{$this->tenant->subdomain}.kasiro.my.id{$path}";
     }
 
     /* ---- Client-side search/filter/sort controls render with all rows present ---- */
@@ -80,7 +80,7 @@ class SearchTest extends TestCase
             ->users()->attach($this->owner, ['role' => 'owner', 'status' => 'active']);
 
         $this->actingAs($this->owner)
-            ->get('http://kasiro.com/my-stores')
+            ->get('http://kasiro.my.id/my-stores')
             ->assertOk()
             ->assertSee('Kopi Senja')
             ->assertSee('Berkah Mart')
@@ -93,7 +93,7 @@ class SearchTest extends TestCase
         Tenant::factory()->archived()->create(['owner_id' => $this->owner->id, 'name' => 'Toko Tutup']);
 
         $this->actingAs($this->owner)
-            ->get('http://kasiro.com/archive')
+            ->get('http://kasiro.my.id/archive')
             ->assertOk()
             ->assertSee('Toko Tutup')
             ->assertSee('listController');
@@ -120,7 +120,7 @@ class SearchTest extends TestCase
     public function test_dashboard_shows_user_stores(): void
     {
         $this->actingAs($this->owner)
-            ->get('http://kasiro.com/dashboard')
+            ->get('http://kasiro.my.id/dashboard')
             ->assertOk()
             ->assertSee('Toko Aktif')
             ->assertSee('Sistem Kasir Terbaru');
