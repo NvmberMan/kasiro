@@ -61,7 +61,7 @@ class ResolveTenant
     protected function extractSubdomain(string $host): ?string
     {
         $host = strtolower($host);
-        $central = strtolower((string) config('tenancy.central_domain', 'kasiro.com'));
+        $central = strtolower((string) config('tenancy.central_domain', 'kasiro.my.id'));
 
         if ($host === $central) {
             return null;
@@ -76,7 +76,7 @@ class ResolveTenant
         $label = substr($host, 0, -strlen($suffix));
 
         // Only a single-label subdomain identifies a tenant; deeper hosts
-        // (e.g. "a.b.kasiro.com") and "www" are platform/none.
+        // (e.g. "a.b.kasiro.my.id") and "www" are platform/none.
         if ($label === '' || $label === 'www' || str_contains($label, '.')) {
             return null;
         }

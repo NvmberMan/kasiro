@@ -57,7 +57,7 @@ class HomePageTest extends TestCase
 
     private function url(string $path = '/'): string
     {
-        return "http://{$this->tenant->subdomain}.kasiro.com{$path}";
+        return "http://{$this->tenant->subdomain}.kasiro.my.id{$path}";
     }
 
     public function test_home_page_renders_store_name_and_quick_actions(): void

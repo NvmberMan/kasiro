@@ -69,7 +69,7 @@ class GenerateTemplateScreenshot implements ShouldBeUnique, ShouldQueue
         // Map *.{central_domain} to localhost so Chrome reaches the local server
         // without wildcard DNS or hosts-file edits.
         if (app()->environment('local')) {
-            $central = config('tenancy.central_domain', 'kasiro.com');
+            $central = config('tenancy.central_domain', 'kasiro.my.id');
             $browsershot->addChromiumArguments([
                 'host-resolver-rules' => "MAP *.{$central} 127.0.0.1, MAP {$central} 127.0.0.1",
             ]);
@@ -99,7 +99,7 @@ class GenerateTemplateScreenshot implements ShouldBeUnique, ShouldQueue
 
     private function previewUrl(): string
     {
-        $central = config('tenancy.central_domain', 'kasiro.com');
+        $central = config('tenancy.central_domain', 'kasiro.my.id');
         $scheme = config('app.force_https') ? 'https' : 'http';
 
         // Ensure the donor subdomain resolves to fresh DB data.

@@ -64,11 +64,11 @@ class GenerateTenantScreenshot implements ShouldBeUnique, ShouldQueue
             ->waitUntilNetworkIdle()
             ->timeout(30);
 
-        // In local environments subdomains like demo.kasiro.com may not have
+        // In local environments subdomains like demo.kasiro.my.id may not have
         // wildcard DNS. Override Chrome's resolver so *.{central_domain}
         // maps to 127.0.0.1 without touching the system hosts file.
         if (app()->environment('local')) {
-            $central = config('tenancy.central_domain', 'kasiro.com');
+            $central = config('tenancy.central_domain', 'kasiro.my.id');
             $browsershot->addChromiumArguments([
                 'host-resolver-rules' => "MAP *.{$central} 127.0.0.1, MAP {$central} 127.0.0.1",
             ]);
@@ -102,7 +102,7 @@ class GenerateTenantScreenshot implements ShouldBeUnique, ShouldQueue
 
     private function tenantUrl(): string
     {
-        $central = config('tenancy.central_domain', 'kasiro.com');
+        $central = config('tenancy.central_domain', 'kasiro.my.id');
         $scheme = config('app.force_https') ? 'https' : 'http';
 
         // Bust the tenant subdomain cache so the preview request gets fresh
