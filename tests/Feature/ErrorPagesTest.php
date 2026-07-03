@@ -17,7 +17,7 @@ class ErrorPagesTest extends TestCase
 
     public function test_missing_page_returns_custom_404(): void
     {
-        $this->get('http://kasiro.com/halaman-yang-tidak-ada')
+        $this->get('http://kasiro.my.id/halaman-yang-tidak-ada')
             ->assertNotFound()
             ->assertSee('Halaman Tidak Ditemukan');
     }

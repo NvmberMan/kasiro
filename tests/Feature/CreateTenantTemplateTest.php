@@ -41,7 +41,7 @@ class CreateTenantTemplateTest extends TestCase
     public function test_authenticated_user_can_access_template_create_form(): void
     {
         $this->actingAs($this->user)
-            ->get('http://kasiro.com/tenants/create/template')
+            ->get('http://kasiro.my.id/tenants/create/template')
             ->assertOk()
             ->assertSee($this->template->name);
     }
@@ -49,7 +49,7 @@ class CreateTenantTemplateTest extends TestCase
     public function test_template_flow_snapshots_default_config_into_theme_config(): void
     {
         $this->actingAs($this->user)
-            ->post('http://kasiro.com/tenants/create/template', $this->validPayload());
+            ->post('http://kasiro.my.id/tenants/create/template', $this->validPayload());
 
         $tenant = Tenant::where('subdomain', 'tokomawar')->firstOrFail();
 
@@ -62,7 +62,7 @@ class CreateTenantTemplateTest extends TestCase
     public function test_snapshot_is_independent_from_template_changes(): void
     {
         $this->actingAs($this->user)
-            ->post('http://kasiro.com/tenants/create/template', $this->validPayload());
+            ->post('http://kasiro.my.id/tenants/create/template', $this->validPayload());
 
         $tenant = Tenant::where('subdomain', 'tokomawar')->firstOrFail();
 
@@ -85,7 +85,7 @@ class CreateTenantTemplateTest extends TestCase
     public function test_template_flow_creates_owner_membership(): void
     {
         $this->actingAs($this->user)
-            ->post('http://kasiro.com/tenants/create/template', $this->validPayload());
+            ->post('http://kasiro.my.id/tenants/create/template', $this->validPayload());
 
         $tenant = Tenant::where('subdomain', 'tokomawar')->firstOrFail();
 
@@ -100,7 +100,7 @@ class CreateTenantTemplateTest extends TestCase
     public function test_template_flow_redirects_to_created_page(): void
     {
         $response = $this->actingAs($this->user)
-            ->post('http://kasiro.com/tenants/create/template', $this->validPayload());
+            ->post('http://kasiro.my.id/tenants/create/template', $this->validPayload());
 
         $tenant = Tenant::where('subdomain', 'tokomawar')->firstOrFail();
         $response->assertRedirect(route('tenants.created', $tenant));
@@ -111,7 +111,7 @@ class CreateTenantTemplateTest extends TestCase
         $unpublished = Template::factory()->unpublished()->create();
 
         $this->actingAs($this->user)
-            ->post('http://kasiro.com/tenants/create/template', [
+            ->post('http://kasiro.my.id/tenants/create/template', [
                 'name' => 'Test',
                 'subdomain' => 'testshop',
                 'template_id' => $unpublished->id,

@@ -34,7 +34,7 @@ class AcceptInvitationController extends Controller
         $subdomain = $invitation->tenant->subdomain;
 
         return redirect()
-            ->away("http://{$subdomain}.kasiro.com/pos")
+            ->away("http://{$subdomain}.kasiro.my.id/pos")
             ->with('status', 'invitation-accepted');
     }
 }

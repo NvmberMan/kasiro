@@ -1,9 +1,9 @@
 # Kasiro — Local Development Setup
 
 Kasiro is a single-codebase, single-database multi-tenant app. Every tenant is
-served from a subdomain of the central domain `kasiro.com`, resolved at runtime
-from the request host. Local dev therefore needs **`kasiro.com` and any
-`*.kasiro.com` to point at your machine**.
+served from a subdomain of the central domain `kasiro.my.id`, resolved at runtime
+from the request host. Local dev therefore needs **`kasiro.my.id` and any
+`*.kasiro.my.id` to point at your machine**.
 
 ## 1. Database
 
@@ -17,11 +17,11 @@ CREATE DATABASE IF NOT EXISTS kasiro_remake
 `.env` is already configured:
 
 ```dotenv
-APP_URL=http://kasiro.com
+APP_URL=http://kasiro.my.id
 DB_CONNECTION=mysql
 DB_DATABASE=kasiro_remake
 SESSION_DRIVER=database
-SESSION_DOMAIN=.kasiro.com   # shares the auth cookie across subdomains (Milestone 2)
+SESSION_DOMAIN=.kasiro.my.id   # shares the auth cookie across subdomains (Milestone 2)
 ```
 
 Then:
@@ -38,8 +38,8 @@ Point both the apex and the wildcard at the project's `public/` directory.
 
 ```apache
 <VirtualHost *:80>
-    ServerName kasiro.com
-    ServerAlias *.kasiro.com
+    ServerName kasiro.my.id
+    ServerAlias *.kasiro.my.id
     DocumentRoot "T:/Programs/laragon/www/kasiro_remake/public"
     <Directory "T:/Programs/laragon/www/kasiro_remake/public">
         AllowOverride All
@@ -53,7 +53,7 @@ Point both the apex and the wildcard at the project's `public/` directory.
 ```nginx
 server {
     listen 80;
-    server_name kasiro.com *.kasiro.com;
+    server_name kasiro.my.id *.kasiro.my.id;
     root T:/Programs/laragon/www/kasiro_remake/public;
     index index.php;
     location / { try_files $uri $uri/ /index.php?$query_string; }
@@ -70,7 +70,7 @@ Restart Laragon after editing.
 
 ## 3. Wildcard DNS on Windows
 
-The Windows `hosts` file **does not support wildcards** (`*.kasiro.com`), so you
+The Windows `hosts` file **does not support wildcards** (`*.kasiro.my.id`), so you
 cannot map every future tenant subdomain there. Two options:
 
 ### Option A — Acrylic DNS Proxy (recommended)
@@ -79,14 +79,14 @@ cannot map every future tenant subdomain there. Two options:
 2. Edit `AcrylicHosts.txt`, add:
 
    ```
-   127.0.0.1  kasiro.com
-   127.0.0.1  *.kasiro.com
+   127.0.0.1  kasiro.my.id
+   127.0.0.1  *.kasiro.my.id
    ```
 
 3. Restart the Acrylic service ("Purge…" then "Restart Acrylic Service").
 4. Set your network adapter's **preferred DNS** to `127.0.0.1`.
 
-Now `kasiro.com` and any `<anything>.kasiro.com` resolve to localhost — new
+Now `kasiro.my.id` and any `<anything>.kasiro.my.id` resolve to localhost — new
 tenants work with no further config.
 
 ### Option B — manual hosts entries (quick, no wildcard)
@@ -95,10 +95,10 @@ Good enough for a few fixed dev tenants. Edit
 `C:\Windows\System32\drivers\etc\hosts` (as Administrator):
 
 ```
-127.0.0.1  kasiro.com
-127.0.0.1  www.kasiro.com
-127.0.0.1  warungbudi.kasiro.com
-127.0.0.1  lawasstore.kasiro.com
+127.0.0.1  kasiro.my.id
+127.0.0.1  www.kasiro.my.id
+127.0.0.1  warungbudi.kasiro.my.id
+127.0.0.1  lawasstore.kasiro.my.id
 ```
 
 Add one line per tenant subdomain you want to test.
@@ -111,10 +111,10 @@ The tenant resolver reads the HTTP `Host` header, so you can verify routing with
 ```bash
 php artisan serve --host=127.0.0.1 --port=8000
 
-curl -H "Host: kasiro.com"            http://127.0.0.1:8000/   # platform
-curl -H "Host: warungbudi.kasiro.com" http://127.0.0.1:8000/   # resolves tenant
-curl -H "Host: admin.kasiro.com"      http://127.0.0.1:8000/   # reserved -> 404
-curl -H "Host: ghost.kasiro.com"      http://127.0.0.1:8000/   # unknown  -> 404
+curl -H "Host: kasiro.my.id"            http://127.0.0.1:8000/   # platform
+curl -H "Host: warungbudi.kasiro.my.id" http://127.0.0.1:8000/   # resolves tenant
+curl -H "Host: admin.kasiro.my.id"      http://127.0.0.1:8000/   # reserved -> 404
+curl -H "Host: ghost.kasiro.my.id"      http://127.0.0.1:8000/   # unknown  -> 404
 ```
 
 ## 5. Tests
