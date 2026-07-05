@@ -193,7 +193,7 @@
                         <div class="flex items-center">
                             <input type="text" name="subdomain" value="{{ old('subdomain') }}" required
                                    placeholder="namatoko"
-                                   class="flex-1 rounded-l-full border border-r-0 border-slate-300 px-5 py-3 text-sm text-slate-900 placeholder-slate-400 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:z-10">
+                                   class="min-w-0 flex-1 rounded-l-full border border-r-0 border-slate-300 px-5 py-3 text-sm text-slate-900 placeholder-slate-400 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:z-10">
                             <span class="flex items-center rounded-r-full border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-500 whitespace-nowrap">
                                 .{{ config('tenancy.central_domain') }}
                             </span>
