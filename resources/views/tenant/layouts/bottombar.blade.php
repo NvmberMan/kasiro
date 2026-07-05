@@ -14,7 +14,7 @@
     <x-brand-styles :config="$tenant->theme_config ?? []" />
     @stack('head')
 </head>
-<body class="antialiased flex flex-col overflow-hidden" style="height:100vh;height:100dvh;height:var(--app-h,100dvh);">
+<body class="antialiased flex flex-col overflow-hidden" style="height:100vh;height:100svh;height:var(--app-h,100svh);">
     @php
         $navUser = auth()->user();
         $navRole = $navUser?->roleFor($tenant);
