@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    @include('tenant.partials.app-height')
     <title>{{ $tenant->name ?? config('app.name') }}</title>
     @if (!empty($tenant->logo_path))
         <link rel="icon" type="image/png" href="{{ asset('storage/'.$tenant->logo_path) }}">
@@ -13,7 +14,7 @@
     <x-brand-styles :config="$tenant->theme_config ?? []" />
     @stack('head')
 </head>
-<body class="antialiased flex flex-col overflow-hidden" style="height:100vh;height:100dvh;">
+<body class="antialiased flex flex-col overflow-hidden" style="height:100vh;height:100dvh;height:var(--app-h,100dvh);">
     @php
         $navUser = auth()->user();
         $navRole = $navUser?->roleFor($tenant);
