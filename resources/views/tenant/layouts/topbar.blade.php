@@ -13,7 +13,7 @@
     <x-brand-styles :config="$tenant->theme_config ?? []" />
     @stack('head')
 </head>
-<body class="antialiased h-screen flex flex-col">
+<body class="antialiased flex flex-col" style="height:100vh;height:100dvh;">
     @php $navUser = auth()->user(); $navRole = $navUser?->roleFor($tenant); @endphp
 
     <header class="brand-primary">

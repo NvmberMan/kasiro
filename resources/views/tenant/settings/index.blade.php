@@ -125,7 +125,7 @@
           action="{{ route('tenant.settings.update', ['subdomain' => $tenant->subdomain]) }}"
           enctype="multipart/form-data"
           x-on:change.capture="dirty = true"
-          class="space-y-6 pb-24">
+          class="space-y-6 pb-4">
         @csrf
         @method('PUT')
 
@@ -287,7 +287,7 @@
          x-transition:enter-start="opacity-0 translate-y-4"
          x-transition:enter-end="opacity-100 translate-y-0"
          :style="previewStyle()"
-         class="fixed bottom-0 inset-x-0 z-40 shadow-[0_-8px_40px_rgba(0,0,0,0.2)]">
+         class="sticky bottom-0 z-40 mt-4 rounded-2xl overflow-hidden shadow-2xl">
         <div style="background: var(--brand-primary, #4f46e5);">
             <div class="mx-auto max-w-6xl px-4 py-3.5 flex items-center justify-between gap-4">
                 <p class="text-sm text-white font-medium flex items-center gap-2.5">
