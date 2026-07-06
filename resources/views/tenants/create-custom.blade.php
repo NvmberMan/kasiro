@@ -66,37 +66,37 @@
             get radius()   { return (this.allThemes[this.activeTheme] ?? {})['--brand-radius'] ?? '0.875rem'; },
             get previewWrapStyle() {
                 if (this.activeTheme === 'retro')   return `border-radius:0; border:2px solid ${this.fg}50; box-shadow:4px 4px 0 ${this.fg}20;`;
-                if (this.activeTheme === 'classic') return `border-radius:8px; border:1px solid ${this.border}; box-shadow:0 2px 8px rgba(0,0,0,0.07);`;
+                if (this.activeTheme === 'classic') return `border-radius:0; box-shadow:inset -1px -1px #0a0a0a, inset 1px 1px #ffffff, inset -2px -2px #808080, inset 2px 2px #dfdfdf;`;
                 return `border-radius:16px; box-shadow:0 4px 20px ${this.primary}25;`;
             },
             get cardStyle() {
                 if (this.activeTheme === 'retro')   return `background-color:${this.surface}; border-radius:0; border:1.5px solid ${this.fg}60; box-shadow:2px 2px 0 ${this.fg}20;`;
-                if (this.activeTheme === 'classic') return `background-color:${this.surface}; border-radius:4px; border:1px solid ${this.border}; border-top:2px solid ${this.primary};`;
+                if (this.activeTheme === 'classic') return `background-color:${this.surface}; border-radius:0; box-shadow:inset -1px -1px #0a0a0a, inset 1px 1px #ffffff, inset -2px -2px #808080, inset 2px 2px #dfdfdf;`;
                 return `background-color:${this.surface}; border-radius:${this.radius}; border:none; box-shadow:0 1px 4px ${this.fg}12;`;
             },
             get bayarStyle() {
                 if (this.activeTheme === 'retro')   return `background-color:${this.primary}; color:white; border-radius:0; border:1.5px solid ${this.fg}60; box-shadow:2px 2px 0 ${this.fg}30;`;
-                if (this.activeTheme === 'classic') return `background-color:${this.primary}; color:white; border-radius:4px;`;
+                if (this.activeTheme === 'classic') return `background-color:${this.primary}; color:white; border-radius:0; box-shadow:inset -1px -1px #0a0a0a, inset 1px 1px #ffffff, inset -2px -2px #808080, inset 2px 2px #dfdfdf;`;
                 return `background-color:${this.primary}; color:white; border-radius:9999px;`;
             },
             get navItemStyle() {
                 if (this.activeTheme === 'retro')   return `background:rgba(255,255,255,0.10); border-radius:0; border:1px solid rgba(255,255,255,0.45);`;
-                if (this.activeTheme === 'classic') return `background:rgba(255,255,255,0.15); border-radius:2px;`;
+                if (this.activeTheme === 'classic') return `background:rgba(255,255,255,0.15); border-radius:0;`;
                 return `background:rgba(255,255,255,0.22); border-radius:9999px;`;
             },
             get activeNavStyle() {
                 if (this.activeTheme === 'retro')   return `background:rgba(255,255,255,0.30); border-radius:0; border:1px solid rgba(255,255,255,0.7);`;
-                if (this.activeTheme === 'classic') return `background:rgba(255,255,255,0.35); border-radius:2px; box-shadow:0 1px 0 rgba(255,255,255,0.5);`;
+                if (this.activeTheme === 'classic') return `background:rgba(0,0,0,0.14); border-radius:0; box-shadow:inset 1px 1px rgba(0,0,0,0.3), inset -1px -1px rgba(255,255,255,0.4);`;
                 return `background:rgba(255,255,255,0.35); border-radius:9999px;`;
             },
             get chipStyle() {
                 if (this.activeTheme === 'retro')   return `border-radius:0; border:1px solid ${this.fg}50; background:${this.surface};`;
-                if (this.activeTheme === 'classic') return `border-radius:2px; border-bottom:2px solid ${this.primary}; background:transparent;`;
+                if (this.activeTheme === 'classic') return `border-radius:0; background:${this.surface}; box-shadow:inset 1px 1px #808080, inset -1px -1px #ffffff;`;
                 return `border-radius:9999px; background:${this.primary}20;`;
             },
             get activeChipStyle() {
                 if (this.activeTheme === 'retro')   return `border-radius:0; border:1px solid ${this.primary}; background:${this.primary}; color:white;`;
-                if (this.activeTheme === 'classic') return `border-radius:2px; border-bottom:2px solid ${this.primary}; background:transparent; color:${this.primary}; font-weight:700;`;
+                if (this.activeTheme === 'classic') return `border-radius:0; background:${this.surface}; box-shadow:inset -1px -1px #808080, inset 1px 1px #ffffff; color:${this.primary}; font-weight:700;`;
                 return `border-radius:9999px; background:${this.primary}; color:white;`;
             },
             changeTheme(t) {

@@ -25,26 +25,41 @@ return [
     'themes' => [
         'modern' => [
             'label'    => 'Modern',
-            'palettes' => ['violet', 'sky', 'orange'],
+            'palettes' => ['violet', 'sky', 'cyan', 'green', 'orange', 'pink'],
             'vars'     => [
-                '--brand-font'   => '"Wix Madefor Text", system-ui, sans-serif',
-                '--brand-radius' => '0.875rem',
+                '--brand-font'         => '"Wix Madefor Text", system-ui, sans-serif',
+                '--brand-radius'       => '0.875rem',
+                // Soft, blurred elevation — light and airy.
+                '--brand-shadow'       => '0 1px 3px rgba(15,23,42,0.08), 0 1px 2px rgba(15,23,42,0.04)',
+                '--brand-shadow-hover' => '0 6px 16px rgba(15,23,42,0.12)',
+                '--brand-border-width' => '1px',
             ],
         ],
         'classic' => [
             'label'    => 'Classic',
-            'palettes' => ['slate', 'indigo', 'emerald'],
+            'palettes' => ['slate', 'graphite', 'silver', 'indigo', 'emerald', 'maroon', 'eggplant'],
             'vars'     => [
-                '--brand-font'   => 'Georgia, "Times New Roman", serif',
-                '--brand-radius' => '0.375rem',
+                // Classic Windows UI sans — Tahoma/Segoe, chiseled and utilitarian.
+                '--brand-font'         => 'Tahoma, "Segoe UI", Verdana, Geneva, sans-serif',
+                '--brand-radius'       => '0px',
+                // 3D "raised panel" bevel (classic Windows chrome): white top-left
+                // highlight + dark bottom-right shadow, layered, no blur.
+                '--brand-shadow'       => 'inset -1px -1px #0a0a0a, inset 1px 1px #ffffff, inset -2px -2px #808080, inset 2px 2px #dfdfdf',
+                '--brand-shadow-hover' => 'inset -1px -1px #0a0a0a, inset 1px 1px #ffffff, inset -2px -2px #808080, inset 2px 2px #dfdfdf',
+                '--brand-border-width' => '0px',
             ],
         ],
         'retro' => [
             'label'    => 'Retro',
-            'palettes' => ['amber', 'rose', 'teal', 'forest'],
+            'palettes' => ['amber', 'mustard', 'rust', 'rose', 'teal', 'forest', 'mocha'],
             'vars'     => [
-                '--brand-font'   => '"Courier New", Courier, monospace',
-                '--brand-radius' => '0px',
+                // Vintage terminal monospace — sharp, blocky, unmistakably retro.
+                '--brand-font'         => '"Space Mono", "Courier New", Courier, monospace',
+                '--brand-radius'       => '0px',
+                // Hard, offset "sticker" shadow — no blur, chunky borders.
+                '--brand-shadow'       => '3px 3px 0 rgba(0,0,0,0.20)',
+                '--brand-shadow-hover' => '5px 5px 0 rgba(0,0,0,0.24)',
+                '--brand-border-width' => '2px',
             ],
         ],
     ],
@@ -89,70 +104,163 @@ return [
             '--brand-fg'      => '#3a1e0e',
             '--brand-muted'   => '#8a6c5b',
         ],
-        // classic
-        'slate' => [
-            '--brand-primary' => '#475569',
-            '--brand-accent'  => '#334155',
-            '--brand-bg'      => '#f7f8fa',
+        'cyan' => [
+            '--brand-primary' => '#0891b2',
+            '--brand-accent'  => '#0e7490',
+            '--brand-bg'      => '#eef9fc',
             '--brand-surface' => '#ffffff',
-            '--brand-border'  => '#e2e8f0',
-            '--brand-fg'      => '#0f172a',
-            '--brand-muted'   => '#64748b',
+            '--brand-border'  => '#cfeef6',
+            '--brand-fg'      => '#0a3844',
+            '--brand-muted'   => '#4f8593',
         ],
-        'indigo' => [
-            '--brand-primary' => '#4f46e5',
-            '--brand-accent'  => '#4338ca',
-            '--brand-bg'      => '#f3f4fb',
-            '--brand-surface' => '#ffffff',
-            '--brand-border'  => '#e0e2f6',
-            '--brand-fg'      => '#1e1b4b',
-            '--brand-muted'   => '#6b6fa0',
-        ],
-        'emerald' => [
+        'green' => [
             '--brand-primary' => '#059669',
             '--brand-accent'  => '#047857',
-            '--brand-bg'      => '#f2faf6',
+            '--brand-bg'      => '#eefbf5',
             '--brand-surface' => '#ffffff',
-            '--brand-border'  => '#d4ece0',
-            '--brand-fg'      => '#073a2c',
-            '--brand-muted'   => '#5b8473',
+            '--brand-border'  => '#cceee0',
+            '--brand-fg'      => '#063d2c',
+            '--brand-muted'   => '#4f8c73',
         ],
-        // retro
+        'pink' => [
+            '--brand-primary' => '#db2777',
+            '--brand-accent'  => '#be185d',
+            '--brand-bg'      => '#fdf2f8',
+            '--brand-surface' => '#ffffff',
+            '--brand-border'  => '#f8d3e4',
+            '--brand-fg'      => '#4d0a2b',
+            '--brand-muted'   => '#9a5c77',
+        ],
+        // classic — Windows-style silver panels: neutral gray surfaces that let
+        // the 3D bevel read, with the palette's hue reserved for the title bar
+        // (header/buttons via --brand-primary). Sharp corners, chiseled edges.
+        'slate' => [
+            '--brand-primary' => '#3a6ea5', // classic Windows title-bar blue
+            '--brand-accent'  => '#2c5580',
+            '--brand-bg'      => '#d5d8dc', // silver desktop
+            '--brand-surface' => '#ececee', // beveled panel face
+            '--brand-border'  => '#9aa0a6',
+            '--brand-fg'      => '#1c1f22',
+            '--brand-muted'   => '#5b6169',
+        ],
+        'indigo' => [
+            '--brand-primary' => '#464b8a', // indigo title bar
+            '--brand-accent'  => '#363a6b',
+            '--brand-bg'      => '#d6d6dd',
+            '--brand-surface' => '#ececef',
+            '--brand-border'  => '#9c9caa',
+            '--brand-fg'      => '#1e1f2b',
+            '--brand-muted'   => '#5c5e70',
+        ],
+        'emerald' => [
+            '--brand-primary' => '#2f7d55', // green title bar
+            '--brand-accent'  => '#245f3f',
+            '--brand-bg'      => '#d3d9d4',
+            '--brand-surface' => '#eaeeeb',
+            '--brand-border'  => '#98a29a',
+            '--brand-fg'      => '#1a2620',
+            '--brand-muted'   => '#586a5f',
+        ],
+        'graphite' => [
+            '--brand-primary' => '#616a75', // neutral steel-gray title bar
+            '--brand-accent'  => '#474e57',
+            '--brand-bg'      => '#d7d7d7',
+            '--brand-surface' => '#ededed',
+            '--brand-border'  => '#9c9c9c',
+            '--brand-fg'      => '#1e1e1e',
+            '--brand-muted'   => '#5c5c5c',
+        ],
+        'silver' => [
+            '--brand-primary' => '#808080', // all-gray Win95 title bar (no hue)
+            '--brand-accent'  => '#606060',
+            '--brand-bg'      => '#cfcfcf', // classic silver desktop
+            '--brand-surface' => '#e4e4e4',
+            '--brand-border'  => '#949494',
+            '--brand-fg'      => '#1c1c1c',
+            '--brand-muted'   => '#565656',
+        ],
+        'maroon' => [
+            '--brand-primary' => '#8f3b48', // classic burgundy title bar
+            '--brand-accent'  => '#6f2c37',
+            '--brand-bg'      => '#dad6d6',
+            '--brand-surface' => '#eeeaea',
+            '--brand-border'  => '#a49b9b',
+            '--brand-fg'      => '#241a1b',
+            '--brand-muted'   => '#6b5a5c',
+        ],
+        'eggplant' => [
+            '--brand-primary' => '#6a4b78', // muted plum title bar
+            '--brand-accent'  => '#4f385a',
+            '--brand-bg'      => '#d8d6da',
+            '--brand-surface' => '#eeeaef',
+            '--brand-border'  => '#a29aa6',
+            '--brand-fg'      => '#211b25',
+            '--brand-muted'   => '#665d6c',
+        ],
+        // retro — warm, saturated 70s vintage tones: burnt mustard,
+        // dusty brick red, faded turquoise, avocado olive. On cream stock.
         'amber' => [
-            '--brand-primary' => '#d97706',
-            '--brand-accent'  => '#b45309',
-            '--brand-bg'      => '#fcf8ee',
-            '--brand-surface' => '#fffefb',
-            '--brand-border'  => '#f0e3c4',
-            '--brand-fg'      => '#3a2606',
-            '--brand-muted'   => '#8a7242',
+            '--brand-primary' => '#c2691c', // burnt mustard/orange
+            '--brand-accent'  => '#99500f',
+            '--brand-bg'      => '#fbf3e2', // warm cream
+            '--brand-surface' => '#fffdf5',
+            '--brand-border'  => '#ecd9b6',
+            '--brand-fg'      => '#3d2708',
+            '--brand-muted'   => '#8f6e3a',
         ],
         'rose' => [
-            '--brand-primary' => '#e11d48',
-            '--brand-accent'  => '#be123c',
-            '--brand-bg'      => '#fdf3f4',
-            '--brand-surface' => '#ffffff',
-            '--brand-border'  => '#f7d9de',
-            '--brand-fg'      => '#4c0519',
-            '--brand-muted'   => '#9a5563',
+            '--brand-primary' => '#b23b46', // dusty brick red
+            '--brand-accent'  => '#8c2b35',
+            '--brand-bg'      => '#faf0ec',
+            '--brand-surface' => '#fffbf9',
+            '--brand-border'  => '#eed2ca',
+            '--brand-fg'      => '#3f1418',
+            '--brand-muted'   => '#8f5a55',
         ],
         'teal' => [
-            '--brand-primary' => '#0d9488',
-            '--brand-accent'  => '#0f766e',
-            '--brand-bg'      => '#f1faf8',
-            '--brand-surface' => '#ffffff',
-            '--brand-border'  => '#cfeae5',
-            '--brand-fg'      => '#0f4a45',
-            '--brand-muted'   => '#5b8a84',
+            '--brand-primary' => '#2a8079', // faded turquoise
+            '--brand-accent'  => '#1e615b',
+            '--brand-bg'      => '#eef5f2',
+            '--brand-surface' => '#f9fdfb',
+            '--brand-border'  => '#cde2dc',
+            '--brand-fg'      => '#123531',
+            '--brand-muted'   => '#578079',
         ],
         'forest' => [
-            '--brand-primary' => '#16a34a',
-            '--brand-accent'  => '#15803d',
-            '--brand-bg'      => '#f2faf4',
-            '--brand-surface' => '#ffffff',
-            '--brand-border'  => '#d4ecd9',
-            '--brand-fg'      => '#14532d',
-            '--brand-muted'   => '#5b8468',
+            '--brand-primary' => '#6b7d2e', // avocado olive
+            '--brand-accent'  => '#526022',
+            '--brand-bg'      => '#f4f4e6',
+            '--brand-surface' => '#fbfcf3',
+            '--brand-border'  => '#dee2c2',
+            '--brand-fg'      => '#2d3512',
+            '--brand-muted'   => '#6f7a48',
+        ],
+        'mustard' => [
+            '--brand-primary' => '#b8931f', // golden mustard
+            '--brand-accent'  => '#927214',
+            '--brand-bg'      => '#faf5e3',
+            '--brand-surface' => '#fffdf4',
+            '--brand-border'  => '#e9ddb8',
+            '--brand-fg'      => '#3a2f08',
+            '--brand-muted'   => '#897a3c',
+        ],
+        'rust' => [
+            '--brand-primary' => '#a84d2b', // burnt terracotta
+            '--brand-accent'  => '#833a1f',
+            '--brand-bg'      => '#f8efe8',
+            '--brand-surface' => '#fffbf7',
+            '--brand-border'  => '#e8d3c5',
+            '--brand-fg'      => '#3a1c0e',
+            '--brand-muted'   => '#8a6553',
+        ],
+        'mocha' => [
+            '--brand-primary' => '#6f4a2f', // vintage coffee brown
+            '--brand-accent'  => '#543722',
+            '--brand-bg'      => '#f4eee6',
+            '--brand-surface' => '#fdfaf5',
+            '--brand-border'  => '#e0d3c2',
+            '--brand-fg'      => '#2e1e10',
+            '--brand-muted'   => '#7d6753',
         ],
     ],
 
