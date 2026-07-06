@@ -140,6 +140,25 @@
         </div>
     </nav>
 
+    {{-- Expose the bottom-nav height so page-level fixed bars (e.g. the settings
+         save bar) can sit above the nav instead of covering it. Only this layout
+         has a bottom nav, so other layouts leave --bottom-nav-h unset (0px). --}}
+    <script>
+        (function () {
+            var nav = document.querySelector('nav');
+            if (!nav) return;
+            function setNavHeight() {
+                document.documentElement.style.setProperty('--bottom-nav-h', nav.offsetHeight + 'px');
+            }
+            setNavHeight();
+            if (typeof ResizeObserver !== 'undefined') {
+                new ResizeObserver(setNavHeight).observe(nav);
+            } else {
+                window.addEventListener('resize', setNavHeight);
+            }
+        })();
+    </script>
+
     <script>
         (function () {
             const bar      = document.getElementById('bottomNavBar');
