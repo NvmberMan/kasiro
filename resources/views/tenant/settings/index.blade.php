@@ -66,6 +66,9 @@
              const pv = this.allPaletteVars[this.activePalette] ?? {};
              const vars = {...tv, ...pv};
              Object.entries(vars).forEach(([k, v]) => document.documentElement.style.setProperty(k, v));
+             // Drive the [data-brand-theme] scoped overrides so squared corners,
+             // panel surfaces and bevels/shadows switch live with the selection.
+             document.documentElement.setAttribute('data-brand-theme', this.activeTheme);
              return Object.entries(vars).map(([k,v]) => k+':'+v).join(';');
          },
          selStyle(active) {
