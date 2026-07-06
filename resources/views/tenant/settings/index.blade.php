@@ -27,7 +27,7 @@
 {{-- The whole settings page is themed live: choosing a theme/palette updates the
      brand CSS variables on this container, so fonts and accent colors below
      reflect the selection in real time (without saving until you click Simpan). --}}
-<div class="max-w-3xl mx-auto px-4 py-6"
+<div class="w-full"
      :style="previewStyle() + ';font-family: var(--brand-font, inherit)'"
      x-data="{
          activeTheme:   @js($currentTheme),
@@ -111,6 +111,8 @@
          }
      }">
 
+    {{-- Content column (kept narrow & centered); the save bar below is full-bleed. --}}
+    <div class="max-w-3xl mx-auto w-full px-4 py-6">
     <div class="mb-6">
         <h1 class="text-2xl font-bold text-gray-900">Pengaturan Toko</h1>
     </div>
@@ -210,7 +212,7 @@
             <div class="p-6">
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                     @foreach ($layouts as $key => $layout)
-                        <label class="cursor-pointer block">
+                        <label class="relative cursor-pointer block">
                             <input type="radio" name="layout" value="{{ $key }}" class="sr-only"
                                    x-on:change="activeLayout = '{{ $key }}'"
                                    @checked($currentLayout === $key)>
@@ -280,30 +282,30 @@
             </div>
         </div>
     </form>
+    </div>{{-- /content column --}}
 
-    {{-- Sticky save bar (brand-colored) --}}
+    {{-- Sticky save bar (brand-colored) — full-bleed, spans the whole screen width --}}
     <div x-show="dirty" x-cloak
          x-transition:enter="transition ease-out duration-200"
          x-transition:enter-start="opacity-0 translate-y-4"
          x-transition:enter-end="opacity-100 translate-y-0"
          :style="previewStyle()"
-         class="sticky bottom-0 z-40 mt-4 rounded-2xl overflow-hidden shadow-2xl">
+         class="sticky bottom-0 z-40 shadow-2xl">
         <div style="background: var(--brand-primary, #4f46e5);">
-            <div class="mx-auto max-w-6xl px-4 py-3.5 flex items-center justify-between gap-4">
-                <p class="text-sm text-white font-medium flex items-center gap-2.5">
-                    <span class="h-2 w-2 rounded-full bg-white/60 shrink-0 animate-pulse"></span>
+            <div class="mx-auto max-w-3xl px-4 py-3.5 flex items-center justify-between gap-3">
+                <p class="text-xs sm:text-sm text-white/90 font-medium min-w-0">
                     Ada perubahan yang belum disimpan
                 </p>
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2 shrink-0">
                     <button type="button"
                             x-on:click="cancelChanges()"
-                            class="px-5 py-2.5 bg-white/20 hover:bg-white/30 rounded-xl text-white text-sm font-medium transition active:scale-95">
+                            class="px-4 sm:px-5 py-2.5 bg-white/20 hover:bg-white/30 rounded-xl text-white text-sm font-medium transition active:scale-95">
                         Batal
                     </button>
                     <button type="submit" form="settings-form"
-                            class="px-7 py-2.5 bg-white rounded-xl font-semibold active:scale-95 transition text-sm shadow-md"
+                            class="px-5 sm:px-7 py-2.5 bg-white rounded-xl font-semibold active:scale-95 transition text-sm shadow-md whitespace-nowrap"
                             style="color: var(--brand-primary, #4f46e5);">
-                        Simpan Pengaturan
+                        Simpan
                     </button>
                 </div>
             </div>
