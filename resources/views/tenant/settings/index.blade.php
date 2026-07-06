@@ -127,7 +127,7 @@
           action="{{ route('tenant.settings.update', ['subdomain' => $tenant->subdomain]) }}"
           enctype="multipart/form-data"
           x-on:change.capture="dirty = true"
-          class="space-y-6 pb-4">
+          class="space-y-6 pb-28">
         @csrf
         @method('PUT')
 
@@ -210,19 +210,20 @@
                 <p class="text-xs text-gray-400 mt-0.5">Posisi navigasi toko · diterapkan setelah disimpan</p>
             </div>
             <div class="p-6">
+                {{-- Hidden field carries the value; the cards below are plain
+                     <div>s (not focusable radios) so tapping one on mobile does not
+                     trigger the browser's scroll-focused-control-into-view behaviour,
+                     which shoved the fixed shell up and left a gap below the nav. --}}
+                <input type="hidden" name="layout" :value="activeLayout">
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                     @foreach ($layouts as $key => $layout)
-                        <label class="relative cursor-pointer block">
-                            <input type="radio" name="layout" value="{{ $key }}" class="sr-only"
-                                   x-on:change="activeLayout = '{{ $key }}'"
-                                   @checked($currentLayout === $key)>
-                            <div class="border-2 rounded-xl p-3 transition-all duration-150 text-center"
-                                 :class="activeLayout === '{{ $key }}' ? 'border-transparent shadow-sm' : 'border-gray-200 hover:border-gray-300'"
-                                 :style="selStyle(activeLayout === '{{ $key }}')">
-                                <x-layout-wireframe :type="$key" />
-                                <p class="mt-2 text-xs font-medium text-gray-700">{{ $layout['label'] }}</p>
-                            </div>
-                        </label>
+                        <div class="cursor-pointer border-2 rounded-xl p-3 transition-all duration-150 text-center"
+                             :class="activeLayout === '{{ $key }}' ? 'border-transparent shadow-sm' : 'border-gray-200 hover:border-gray-300'"
+                             :style="selStyle(activeLayout === '{{ $key }}')"
+                             @click="activeLayout = '{{ $key }}'; dirty = true">
+                            <x-layout-wireframe :type="$key" />
+                            <p class="mt-2 text-xs font-medium text-gray-700">{{ $layout['label'] }}</p>
+                        </div>
                     @endforeach
                 </div>
             </div>
@@ -289,8 +290,8 @@
          x-transition:enter="transition ease-out duration-200"
          x-transition:enter-start="opacity-0 translate-y-4"
          x-transition:enter-end="opacity-100 translate-y-0"
-         :style="previewStyle()"
-         class="sticky bottom-0 z-40 shadow-2xl">
+         :style="previewStyle() + '; bottom: var(--bottom-nav-h, 0px)'"
+         class="fixed left-0 right-0 z-40 shadow-2xl">
         <div style="background: var(--brand-primary, #4f46e5);">
             <div class="mx-auto max-w-3xl px-4 py-3.5 flex items-center justify-between gap-3">
                 <p class="text-xs sm:text-sm text-white/90 font-medium min-w-0">
