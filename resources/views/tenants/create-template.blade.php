@@ -137,13 +137,16 @@
         </div>
 
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <button type="button" onclick="window.history.length > 1 ? window.history.back() : window.location.assign('{{ route('tenants.choose') }}')"
-                    aria-label="Kembali"
-                    class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-600 shadow-sm transition hover:border-slate-400 hover:bg-slate-50 hover:text-slate-900">
+            {{-- Always return to the flow chooser (/tenants/create), never the
+                 browser's previous page — this form is often deep-linked from the
+                 landing page, where history.back() would leave the create flow. --}}
+            <a href="{{ route('tenants.choose') }}"
+               aria-label="Kembali"
+               class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-600 shadow-sm transition hover:border-slate-400 hover:bg-slate-50 hover:text-slate-900">
                 <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
                 </svg>
-            </button>
+            </a>
         </div>
 
         {{-- Main form --}}
@@ -152,8 +155,28 @@
 
             <form method="POST" action="{{ route('tenants.store.template') }}"
                   enctype="multipart/form-data"
+                  data-no-progress
                   @submit="loading = true">
                 @csrf
+
+                {{-- Prominent validation summary — surfaces "domain sudah dipakai"
+                     and other failures the user would otherwise miss on redisplay. --}}
+                @if ($errors->any())
+                    <div role="alert"
+                         class="mb-5 flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 shadow-sm ring-1 ring-red-100">
+                        <svg class="mt-0.5 h-5 w-5 flex-shrink-0 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+                        </svg>
+                        <div class="min-w-0">
+                            <p class="text-sm font-bold text-red-700">Toko gagal dibuat</p>
+                            <ul class="mt-1 space-y-1 text-sm text-red-600 {{ $errors->count() > 1 ? 'list-disc pl-4' : '' }}">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                @endif
 
                 <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
 
@@ -191,7 +214,7 @@
                         <label class="mb-1.5 block text-sm font-semibold text-slate-800">Nama Toko</label>
                         <input type="text" name="name" value="{{ old('name') }}" required autofocus
                                placeholder="Contoh: Warung Budi"
-                               class="w-full rounded-full border border-slate-300 px-5 py-3 text-sm text-slate-900 placeholder-slate-400 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
+                               class="w-full rounded-full border px-5 py-3 text-sm text-slate-900 placeholder-slate-400 outline-none transition focus:ring-2 @error('name') border-red-400 focus:border-red-500 focus:ring-red-200 @else border-slate-300 focus:border-blue-500 focus:ring-blue-200 @enderror">
                         @error('name')
                             <p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>
                         @enderror
@@ -203,8 +226,8 @@
                         <div class="flex items-center">
                             <input type="text" name="subdomain" value="{{ old('subdomain') }}" required
                                    placeholder="namatoko"
-                                   class="min-w-0 flex-1 rounded-l-full border border-r-0 border-slate-300 px-5 py-3 text-sm text-slate-900 placeholder-slate-400 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:z-10">
-                            <span class="flex items-center rounded-r-full border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-500 whitespace-nowrap">
+                                   class="min-w-0 flex-1 rounded-l-full border border-r-0 px-5 py-3 text-sm text-slate-900 placeholder-slate-400 outline-none transition focus:z-10 focus:ring-2 @error('subdomain') border-red-400 focus:border-red-500 focus:ring-red-200 @else border-slate-300 focus:border-blue-500 focus:ring-blue-200 @enderror">
+                            <span class="flex items-center rounded-r-full border bg-slate-50 px-4 py-3 text-sm text-slate-500 whitespace-nowrap @error('subdomain') border-red-400 @else border-slate-300 @enderror">
                                 .{{ config('tenancy.central_domain') }}
                             </span>
                         </div>
