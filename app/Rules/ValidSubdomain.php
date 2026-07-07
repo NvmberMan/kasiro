@@ -27,7 +27,7 @@ class ValidSubdomain implements ValidationRule
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         if (! is_string($value)) {
-            $fail('The :attribute must be a string.');
+            $fail('Nama domain harus berupa teks.');
 
             return;
         }
@@ -37,13 +37,13 @@ class ValidSubdomain implements ValidationRule
 
         // Lowercase alphanumeric and hyphens; must start/end alphanumeric.
         if (! preg_match('/^[a-z0-9]([a-z0-9-]*[a-z0-9])?$/', $value)) {
-            $fail('The :attribute may only contain lowercase letters, numbers, and hyphens, and must start and end with a letter or number.');
+            $fail('Nama domain hanya boleh berisi huruf kecil, angka, dan tanda hubung, serta harus diawali dan diakhiri dengan huruf atau angka.');
 
             return;
         }
 
         if (strlen($value) < $min || strlen($value) > $max) {
-            $fail("The :attribute must be between {$min} and {$max} characters.");
+            $fail("Nama domain harus terdiri dari {$min} sampai {$max} karakter.");
 
             return;
         }
@@ -51,7 +51,7 @@ class ValidSubdomain implements ValidationRule
         $reserved = array_map('strtolower', (array) config('tenancy.reserved_subdomains', []));
 
         if (in_array($value, $reserved, true)) {
-            $fail('The :attribute "'.$value.'" is reserved and cannot be used.');
+            $fail('Nama domain "'.$value.'" sudah dipesan sistem dan tidak dapat digunakan. Silakan pilih yang lain.');
 
             return;
         }
@@ -62,7 +62,7 @@ class ValidSubdomain implements ValidationRule
             ->exists();
 
         if ($exists) {
-            $fail('The :attribute "'.$value.'" is already taken.');
+            $fail('Nama domain "'.$value.'" sudah dipakai toko lain. Silakan pilih nama domain yang lain.');
         }
     }
 }
