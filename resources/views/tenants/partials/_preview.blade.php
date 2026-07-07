@@ -1,5 +1,5 @@
 {{-- Live theme preview (16:9), shared between wizard steps --}}
-<p class="mb-4 text-center text-xs font-semibold uppercase tracking-widest text-slate-400">Pratinjau</p>
+<p class="mb-2 text-center text-xs font-semibold uppercase tracking-widest text-slate-400">Pratinjau</p>
 <div class="preview-16x9 mx-auto w-full max-w-xl overflow-hidden transition-all duration-300"
      :style="`background-color:${bg}; font-family:${font}; ${previewWrapStyle}`">
 

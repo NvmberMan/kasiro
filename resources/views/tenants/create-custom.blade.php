@@ -147,7 +147,7 @@
                 this.showCropModal = false;
                 this.logoCropSrc = null;
             }
-        }" class="py-10">
+        }" class="py-4">
 
         {{-- Loading overlay --}}
         <div x-show="loading" style="display:none"
@@ -172,31 +172,33 @@
 
                 <div class="mx-auto max-w-3xl">
                     {{-- Wizard header: back / title / next-or-finish --}}
-                    <div class="flex items-center justify-between">
+                    <div class="grid grid-cols-3 items-center">
                         <button type="button" @click="back()" aria-label="Kembali"
-                                class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full text-slate-500 transition hover:bg-slate-100">
+                                class="flex h-9 w-9 flex-shrink-0 items-center justify-center justify-self-start rounded-full text-slate-500 transition hover:bg-slate-100">
                             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
                             </svg>
                         </button>
 
-                        <h1 class="text-lg font-bold text-slate-900">Buat Kasir</h1>
+                        <h1 class="justify-self-center text-lg font-bold text-slate-900">Buat Kasir</h1>
 
-                        <button type="button" x-show="step < 2" @click="next()" style="display:none"
-                                class="rounded-full bg-slate-100 px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-200">
-                            Selanjutnya
-                        </button>
-                        <button type="submit" x-show="step === 2" style="display:none"
-                                class="inline-flex items-center gap-2 rounded-full bg-lime-400 px-5 py-2.5 text-sm font-bold text-slate-900 transition hover:bg-lime-500 active:scale-95">
-                            Selesai!
-                        </button>
+                        <div class="justify-self-end">
+                            <button type="button" x-show="step < 2" @click="next()" style="display:none"
+                                    class="rounded-full bg-slate-100 px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-200">
+                                Selanjutnya
+                            </button>
+                            <button type="submit" x-show="step === 2" style="display:none"
+                                    class="inline-flex items-center gap-2 rounded-full bg-lime-400 px-5 py-2.5 text-sm font-bold text-slate-900 transition hover:bg-lime-500 active:scale-95">
+                                Selesai!
+                            </button>
+                        </div>
                     </div>
 
                     {{-- Step indicator --}}
-                    <div class="mt-6 flex items-center justify-center">
+                    <div class="mt-3 flex items-center justify-center">
                         <template x-for="n in 2" :key="n">
                             <div class="flex items-center">
-                                <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-sm font-semibold transition"
+                                <div class="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full text-sm font-semibold transition"
                                      :class="step === n ? 'bg-blue-500 text-white' : (step > n ? 'bg-blue-100 text-blue-600' : 'border-2 border-slate-200 text-slate-400')"
                                      x-text="n"></div>
                                 <div x-show="n < 2" class="h-px w-10 border-t-2 border-dashed border-slate-200"></div>
@@ -204,25 +206,25 @@
                         </template>
                     </div>
 
-                    <h2 class="mt-6 text-center text-xl font-bold text-slate-900">
+                    <h2 class="mt-2 text-center text-lg font-bold text-slate-900">
                         <span x-text="`Step ${step}.`"></span>
                         <span x-text="stepTitles[step]"></span>
                     </h2>
                 </div>
 
-                <div class="mt-8 border-t border-slate-100 pt-8">
+                <div class="mt-4 border-t border-slate-100 pt-4">
 
                     {{-- Step 1: Personalisasi Kasir (layout + gaya + warna in one 3-column view) --}}
                     <div x-show="step === 1"
                          x-transition:enter="transition ease-out duration-200"
                          x-transition:enter-start="opacity-0"
                          x-transition:enter-end="opacity-100"
-                         class="grid grid-cols-1 gap-6 lg:grid-cols-3 lg:items-start">
+                         class="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:items-start">
 
                         {{-- Col 1: Layout --}}
-                        <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
-                            <p class="mb-3 text-sm font-semibold text-slate-800">Layout</p>
-                            <div class="flex flex-col gap-3">
+                        <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
+                            <p class="mb-2 text-sm font-semibold text-slate-800">Layout</p>
+                            <div class="flex flex-col gap-2">
                                 @foreach ($layouts as $key => $layout)
                                     <button type="button"
                                             @click="activeLayout = '{{ $key }}'"
@@ -249,9 +251,9 @@
                         </div>
 
                         {{-- Col 3: Gaya (Tema) + Warna (Palet) --}}
-                        <div class="flex flex-col gap-6">
-                            <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
-                                <p class="mb-3 text-sm font-semibold text-slate-800">Gaya</p>
+                        <div class="flex flex-col gap-4">
+                            <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
+                                <p class="mb-2 text-sm font-semibold text-slate-800">Gaya</p>
                                 <div class="flex flex-wrap gap-2">
                                     @foreach ($themes as $key => $theme)
                                         <button type="button"
@@ -267,8 +269,8 @@
                                 @error('theme')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
                             </div>
 
-                            <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
-                                <p class="mb-3 text-sm font-semibold text-slate-800">Warna</p>
+                            <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
+                                <p class="mb-2 text-sm font-semibold text-slate-800">Warna</p>
                                 @foreach ($themes as $themeKey => $theme)
                                     <div x-show="activeTheme === '{{ $themeKey }}'"
                                          style="{{ $currentTheme === $themeKey ? '' : 'display:none' }}"
