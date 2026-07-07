@@ -219,12 +219,12 @@
                          x-transition:enter="transition ease-out duration-200"
                          x-transition:enter-start="opacity-0"
                          x-transition:enter-end="opacity-100"
-                         class="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:items-start">
+                         class="grid grid-cols-1 gap-4 lg:grid-cols-3">
 
                         {{-- Col 1: Layout --}}
-                        <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
+                        <div class="flex h-full flex-col rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
                             <p class="mb-2 text-sm font-semibold text-slate-800">Layout</p>
-                            <div class="flex flex-col gap-2">
+                            <div class="flex flex-1 flex-col justify-between gap-2">
                                 @foreach ($layouts as $key => $layout)
                                     <button type="button"
                                             @click="activeLayout = '{{ $key }}'"
@@ -246,15 +246,15 @@
                         </div>
 
                         {{-- Col 2: Preview --}}
-                        <div>
+                        <div class="flex h-full flex-col justify-center rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
                             @include('tenants.partials._preview')
                         </div>
 
                         {{-- Col 3: Gaya (Tema) + Warna (Palet) --}}
-                        <div class="flex flex-col gap-4">
-                            <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
+                        <div class="flex h-full flex-col gap-4">
+                            <div class="flex flex-1 flex-col rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
                                 <p class="mb-2 text-sm font-semibold text-slate-800">Gaya</p>
-                                <div class="flex flex-wrap gap-2">
+                                <div class="flex flex-1 flex-wrap content-center gap-2">
                                     @foreach ($themes as $key => $theme)
                                         <button type="button"
                                                 @click="changeTheme('{{ $key }}')"
@@ -269,12 +269,12 @@
                                 @error('theme')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
                             </div>
 
-                            <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
+                            <div class="flex flex-1 flex-col rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
                                 <p class="mb-2 text-sm font-semibold text-slate-800">Warna</p>
                                 @foreach ($themes as $themeKey => $theme)
                                     <div x-show="activeTheme === '{{ $themeKey }}'"
                                          style="{{ $currentTheme === $themeKey ? '' : 'display:none' }}"
-                                         class="flex flex-wrap gap-3">
+                                         class="flex flex-1 flex-wrap content-center gap-3">
                                         @foreach ($theme['palettes'] as $paletteKey)
                                             @php $p = $palettes[$paletteKey] @endphp
                                             <button type="button"
