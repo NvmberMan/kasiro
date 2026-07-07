@@ -61,12 +61,12 @@
                                     </select>
                                 </form>
                                 <form method="POST" action="{{ route('tenant.employees.destroy', ['subdomain' => $tenant->subdomain, 'user' => $member->id]) }}"
-                                    data-confirm="Akses {{ $member->name }} ke toko ini akan dicabut."
-                                    data-confirm-title="Cabut Akses?"
-                                    data-confirm-action="Ya, Cabut"
+                                    data-confirm="Akses {{ $member->name }} ke toko ini akan dihapus."
+                                    data-confirm-title="Hapus Akses?"
+                                    data-confirm-action="Ya, Hapus"
                                     data-confirm-type="danger">
                                     @csrf @method('DELETE')
-                                    <button class="text-xs text-red-600 hover:underline">Cabut</button>
+                                    <button class="text-xs text-red-600 hover:underline">Hapus</button>
                                 </form>
                             @endif
                         </div>

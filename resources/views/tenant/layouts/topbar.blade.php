@@ -41,8 +41,10 @@
 
     @include('tenant.partials.nav', ['tenant' => $tenant])
 
-    <main class="flex-1 max-w-7xl mx-auto overflow-y-auto w-full">
-        {{ $slot }}
+    <main class="flex-1 overflow-y-auto w-full">
+        <div class="max-w-7xl mx-auto lg:h-full">
+            {{ $slot }}
+        </div>
     </main>
 
 
