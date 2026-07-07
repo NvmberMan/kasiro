@@ -171,7 +171,7 @@
 
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
-                <div class="mx-auto max-w-3xl">
+                <div>
                     {{-- Wizard header: back / title / next-or-finish --}}
                     <div class="grid grid-cols-3 items-center">
                         <button type="button" @click="back()" aria-label="Kembali"
