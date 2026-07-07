@@ -268,7 +268,7 @@
             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h2.3a1 1 0 01.95.68l1 3a1 1 0 01-.27 1.05L8.2 9.2a12 12 0 006.6 6.6l1.47-1.48a1 1 0 011.05-.27l3 1a1 1 0 01.68.95V19a2 2 0 01-2 2A16 16 0 013 5z"/>
             </svg>
-            Hubungin kami!
+            Hubungi kami!
         </a>
     </div>
 </section>

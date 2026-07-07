@@ -30,7 +30,6 @@
             next() { if (this.step < 2) this.step++; window.scrollTo({ top: 0, behavior: 'smooth' }); },
             back() {
                 if (this.step > 1) { this.step--; window.scrollTo({ top: 0, behavior: 'smooth' }); }
-                else if (window.history.length > 1) { window.history.back(); }
                 else { window.location = '{{ route('tenants.choose') }}'; }
             },
             validateName() {
@@ -174,29 +173,31 @@
 
                 <div>
                     {{-- Wizard header: back / title / next-or-finish --}}
-                    <div class="grid grid-cols-3 items-center">
-                        <button type="button" @click="back()" aria-label="Kembali"
-                                class="flex h-9 w-9 flex-shrink-0 items-center justify-center justify-self-start rounded-full border border-slate-300 bg-white text-slate-600 shadow-sm transition hover:border-slate-400 hover:bg-slate-50 hover:text-slate-900">
-                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
-                            </svg>
-                        </button>
-
-                        <h1 class="justify-self-center text-lg font-bold text-slate-900">Buat Kasir</h1>
-
-                        <div class="justify-self-end">
-                            <button type="button" x-show="step < 2" @click="next()" style="display:none"
-                                    class="inline-flex items-center gap-1.5 rounded-full bg-blue-500 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-600 active:scale-95">
-                                Selanjutnya
-                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                    <div class="flex flex-col gap-2 sm:grid sm:grid-cols-3 sm:items-center">
+                        <div class="flex items-center justify-between sm:contents">
+                            <button type="button" @click="back()" aria-label="Kembali"
+                                    class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-600 shadow-sm transition hover:border-slate-400 hover:bg-slate-50 hover:text-slate-900 sm:order-1 sm:justify-self-start">
+                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
                                 </svg>
                             </button>
-                            <button type="submit" x-show="step === 2" style="display:none"
-                                    class="inline-flex items-center gap-2 rounded-full bg-lime-400 px-5 py-2.5 text-sm font-bold text-slate-900 transition hover:bg-lime-500 active:scale-95">
-                                Selesai!
-                            </button>
+
+                            <div class="sm:order-3 sm:justify-self-end">
+                                <button type="button" x-show="step < 2" @click="next()" style="display:none"
+                                        class="inline-flex items-center gap-1.5 rounded-full bg-blue-500 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-600 active:scale-95">
+                                    Selanjutnya
+                                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                                    </svg>
+                                </button>
+                                <button type="submit" x-show="step === 2" style="display:none"
+                                        class="inline-flex items-center gap-2 rounded-full bg-lime-400 px-5 py-2.5 text-sm font-bold text-slate-900 transition hover:bg-lime-500 active:scale-95">
+                                    Selesai!
+                                </button>
+                            </div>
                         </div>
+
+                        <h1 class="text-center text-lg font-bold text-slate-900 sm:order-2 sm:justify-self-center">Buat Kasir</h1>
                     </div>
 
                     {{-- Step indicator --}}
@@ -227,7 +228,7 @@
                          class="grid grid-cols-1 gap-4 lg:grid-cols-3">
 
                         {{-- Col 1: Layout --}}
-                        <div class="flex h-full flex-col rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
+                        <div class="order-2 flex h-full flex-col rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100 lg:order-1">
                             <p class="mb-2 text-sm font-semibold text-slate-800">Layout</p>
                             <div class="flex flex-1 flex-col justify-between gap-2">
                                 @foreach ($layouts as $key => $layout)
@@ -251,12 +252,12 @@
                         </div>
 
                         {{-- Col 2: Preview --}}
-                        <div class="flex h-full flex-col justify-center rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
+                        <div class="order-1 flex h-full flex-col justify-center rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100 lg:order-2">
                             @include('tenants.partials._preview')
                         </div>
 
                         {{-- Col 3: Gaya (Tema) + Warna (Palet) --}}
-                        <div class="flex h-full flex-col gap-4">
+                        <div class="order-3 flex h-full flex-col gap-4">
                             <div class="flex flex-1 flex-col rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
                                 <p class="mb-2 text-sm font-semibold text-slate-800">Gaya</p>
                                 <div class="flex flex-1 flex-wrap content-center gap-2">
