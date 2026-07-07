@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout :full-width="true">
     <div class="flex min-h-[60vh] flex-col items-center justify-center py-16">
         <h1 class="mb-2 text-3xl font-bold tracking-tight text-slate-900">Buat Sistem Kasir</h1>
         <p class="mb-10 text-slate-500">Pilih cara membuat aplikasi kasir kamu:</p>
