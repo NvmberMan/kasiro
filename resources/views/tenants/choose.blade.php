@@ -1,4 +1,14 @@
-<x-app-layout>
+<x-app-layout :full-width="true">
+    <div class="mx-auto max-w-7xl px-4 pt-4 sm:px-6 lg:px-8">
+        <button type="button" onclick="window.history.length > 1 ? window.history.back() : window.location.assign('{{ route('dashboard') }}')"
+                aria-label="Kembali"
+                class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-600 shadow-sm transition hover:border-slate-400 hover:bg-slate-50 hover:text-slate-900">
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+            </svg>
+        </button>
+    </div>
+
     <div class="flex min-h-[60vh] flex-col items-center justify-center py-16">
         <h1 class="mb-2 text-3xl font-bold tracking-tight text-slate-900">Buat Sistem Kasir</h1>
         <p class="mb-10 text-slate-500">Pilih cara membuat aplikasi kasir kamu:</p>
