@@ -41,7 +41,7 @@
 
             <div class="mt-6 flex gap-3">
                 <button type="button" @click="cancel()"
-                        class="flex-1 rounded-xl border border-gray-200 px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50">
+                        class="flex-1 rounded-xl border border-gray-300 px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50">
                     Batal
                 </button>
                 <button type="button" @click="confirm()" x-text="confirmText"

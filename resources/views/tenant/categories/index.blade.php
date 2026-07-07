@@ -32,7 +32,7 @@
                         <div class="flex items-center justify-between px-5 py-3 gap-4"
                             data-name="{{ mb_strtolower($category->name) }}">
                             <span class="font-medium text-gray-800">{{ $category->name }}</span>
-                            <div class="flex gap-3">
+                            <div class="flex items-center gap-3">
                                 @can('update', $category)
                                     <a href="{{ route('tenant.categories.edit', ['subdomain' => $tenant->subdomain, 'category' => $category]) }}"
                                         class="text-sm text-indigo-600 hover:underline">Edit</a>

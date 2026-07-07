@@ -46,6 +46,30 @@
     }
     .brand-btn:hover { background-color: var(--brand-accent); box-shadow: var(--brand-shadow-hover, var(--brand-shadow)); }
 
+    /* Themed scrollbar — replaces the flat OS-default bar so it matches
+       each theme's palette and corner treatment (rounded for modern,
+       square for classic/retro, via --brand-radius). */
+    html {
+        scrollbar-width: thin;
+        scrollbar-color: var(--brand-muted, #94a3b8) transparent;
+    }
+    *::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+    *::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    *::-webkit-scrollbar-thumb {
+        background-color: var(--brand-muted, #94a3b8);
+        border-radius: var(--brand-radius, 0px);
+        border: 2px solid transparent;
+        background-clip: padding-box;
+    }
+    *::-webkit-scrollbar-thumb:hover {
+        background-color: var(--brand-primary);
+    }
+
     /* Tinted "soft" surface using the brand hue at low alpha (active nav, chips). */
     .brand-soft     { background-color: color-mix(in srgb, var(--brand-primary) 12%, transparent); }
     .brand-ring-focus:focus { outline: none; box-shadow: 0 0 0 2px var(--brand-surface,#fff), 0 0 0 4px var(--brand-primary); }
@@ -135,6 +159,20 @@
         box-shadow: inset -2px -2px #808080, inset -1px -1px #0a0a0a !important;
     }
 
+    /* Pagination (vendor tailwind.blade.php): text-gray-500/700 and the
+       active page's bg-gray-200 pill sit too close to classic's silver
+       surface to read clearly — darken the numbers and make the active
+       page an unmistakable filled pill. */
+    [data-brand-theme="classic"] nav[role="navigation"] a.text-gray-700,
+    [data-brand-theme="classic"] nav[role="navigation"] span.text-gray-700 {
+        color: var(--brand-fg) !important;
+    }
+    [data-brand-theme="classic"] nav[role="navigation"] .bg-gray-200 {
+        background-color: var(--brand-primary) !important;
+        border-color: var(--brand-primary) !important;
+        color: #fff !important;
+    }
+
     /* --- RETRO: squared, chunky-bordered cards with a hard offset shadow --- */
     [data-brand-theme="retro"] .rounded,
     [data-brand-theme="retro"] .rounded-md,
@@ -163,5 +201,17 @@
     [data-brand-theme="retro"] .border-gray-200 {
         border-width: 2px !important;
         border-color: var(--brand-fg) !important;
+    }
+
+    /* Pagination: same low-contrast issue as classic — darken the digits
+       and give the active page a solid, unmistakable fill. */
+    [data-brand-theme="retro"] nav[role="navigation"] a.text-gray-700,
+    [data-brand-theme="retro"] nav[role="navigation"] span.text-gray-700 {
+        color: var(--brand-fg) !important;
+    }
+    [data-brand-theme="retro"] nav[role="navigation"] .bg-gray-200 {
+        background-color: var(--brand-primary) !important;
+        border-color: var(--brand-primary) !important;
+        color: #fff !important;
     }
 </style>
