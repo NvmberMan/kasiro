@@ -37,7 +37,7 @@ return [
         ],
         'classic' => [
             'label'    => 'Classic',
-            'palettes' => ['slate', 'graphite', 'silver', 'indigo', 'emerald', 'maroon', 'eggplant'],
+            'palettes' => ['slate', 'graphite', 'silver', 'indigo', 'emerald', 'maroon'],
             'vars'     => [
                 // Classic Windows UI sans — Tahoma/Segoe, chiseled and utilitarian.
                 '--brand-font'         => 'Tahoma, "Segoe UI", Verdana, Geneva, sans-serif',
@@ -51,7 +51,7 @@ return [
         ],
         'retro' => [
             'label'    => 'Retro',
-            'palettes' => ['amber', 'mustard', 'rust', 'rose', 'teal', 'forest', 'mocha'],
+            'palettes' => ['amber', 'mustard', 'rose', 'teal', 'forest', 'mocha'],
             'vars'     => [
                 // Vintage terminal monospace — sharp, blocky, unmistakably retro.
                 '--brand-font'         => '"Space Mono", "Courier New", Courier, monospace',
@@ -188,15 +188,6 @@ return [
             '--brand-fg'      => '#241a1b',
             '--brand-muted'   => '#6b5a5c',
         ],
-        'eggplant' => [
-            '--brand-primary' => '#6a4b78', // muted plum title bar
-            '--brand-accent'  => '#4f385a',
-            '--brand-bg'      => '#d8d6da',
-            '--brand-surface' => '#eeeaef',
-            '--brand-border'  => '#a29aa6',
-            '--brand-fg'      => '#211b25',
-            '--brand-muted'   => '#665d6c',
-        ],
         // retro — warm, saturated 70s vintage tones: burnt mustard,
         // dusty brick red, faded turquoise, avocado olive. On cream stock.
         'amber' => [
@@ -243,15 +234,6 @@ return [
             '--brand-border'  => '#e9ddb8',
             '--brand-fg'      => '#3a2f08',
             '--brand-muted'   => '#897a3c',
-        ],
-        'rust' => [
-            '--brand-primary' => '#a84d2b', // burnt terracotta
-            '--brand-accent'  => '#833a1f',
-            '--brand-bg'      => '#f8efe8',
-            '--brand-surface' => '#fffbf7',
-            '--brand-border'  => '#e8d3c5',
-            '--brand-fg'      => '#3a1c0e',
-            '--brand-muted'   => '#8a6553',
         ],
         'mocha' => [
             '--brand-primary' => '#6f4a2f', // vintage coffee brown
