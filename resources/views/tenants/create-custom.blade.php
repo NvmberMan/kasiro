@@ -174,7 +174,7 @@
                     {{-- Wizard header: back / title / next-or-finish --}}
                     <div class="grid grid-cols-3 items-center">
                         <button type="button" @click="back()" aria-label="Kembali"
-                                class="flex h-9 w-9 flex-shrink-0 items-center justify-center justify-self-start rounded-full text-slate-500 transition hover:bg-slate-100">
+                                class="flex h-9 w-9 flex-shrink-0 items-center justify-center justify-self-start rounded-full border border-slate-300 bg-white text-slate-600 shadow-sm transition hover:border-slate-400 hover:bg-slate-50 hover:text-slate-900">
                             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
                             </svg>
@@ -184,8 +184,11 @@
 
                         <div class="justify-self-end">
                             <button type="button" x-show="step < 2" @click="next()" style="display:none"
-                                    class="rounded-full bg-slate-100 px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-200">
+                                    class="inline-flex items-center gap-1.5 rounded-full bg-blue-500 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-600 active:scale-95">
                                 Selanjutnya
+                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                                </svg>
                             </button>
                             <button type="submit" x-show="step === 2" style="display:none"
                                     class="inline-flex items-center gap-2 rounded-full bg-lime-400 px-5 py-2.5 text-sm font-bold text-slate-900 transition hover:bg-lime-500 active:scale-95">
