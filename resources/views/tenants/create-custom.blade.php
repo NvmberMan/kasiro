@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout :full-width="true">
     @push('head')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
     <style>
@@ -24,10 +24,10 @@
     <div x-data="{
             loading: false,
             step: 1,
-            stepTitles: { 1: 'Pilih Layout', 2: 'Personalisasi Kasir', 3: 'Rincian Kasir' },
+            stepTitles: { 1: 'Personalisasi Kasir', 2: 'Rincian Kasir' },
             fields: { name: @js(old('name', '')), subdomain: @js(old('subdomain', '')) },
             errors: { name: '', subdomain: '' },
-            next() { if (this.step < 3) this.step++; window.scrollTo({ top: 0, behavior: 'smooth' }); },
+            next() { if (this.step < 2) this.step++; window.scrollTo({ top: 0, behavior: 'smooth' }); },
             back() {
                 if (this.step > 1) { this.step--; window.scrollTo({ top: 0, behavior: 'smooth' }); }
                 else { window.location = '{{ route('tenants.choose') }}'; }
@@ -48,7 +48,7 @@
                 this.errors.subdomain = this.validateSubdomain();
                 if (this.errors.name || this.errors.subdomain) {
                     e.preventDefault();
-                    this.step = 3;
+                    this.step = 2;
                     return;
                 }
                 this.loading = true;
@@ -168,70 +168,73 @@
             <input type="hidden" name="theme" :value="activeTheme">
             <input type="hidden" name="color_palette" :value="activePalette">
 
-            <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
-                {{-- Wizard header: back / title / next-or-finish --}}
-                <div class="flex items-center justify-between">
-                    <button type="button" @click="back()" aria-label="Kembali"
-                            class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full text-slate-500 transition hover:bg-slate-100">
-                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
-                        </svg>
-                    </button>
+                <div class="mx-auto max-w-3xl">
+                    {{-- Wizard header: back / title / next-or-finish --}}
+                    <div class="flex items-center justify-between">
+                        <button type="button" @click="back()" aria-label="Kembali"
+                                class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full text-slate-500 transition hover:bg-slate-100">
+                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+                            </svg>
+                        </button>
 
-                    <h1 class="text-lg font-bold text-slate-900">Buat Kasir</h1>
+                        <h1 class="text-lg font-bold text-slate-900">Buat Kasir</h1>
 
-                    <button type="button" x-show="step < 3" @click="next()" style="display:none"
-                            class="rounded-full bg-slate-100 px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-200">
-                        Selanjutnya
-                    </button>
-                    <button type="submit" x-show="step === 3" style="display:none"
-                            class="inline-flex items-center gap-2 rounded-full bg-lime-400 px-5 py-2.5 text-sm font-bold text-slate-900 transition hover:bg-lime-500 active:scale-95">
-                        Selesai!
-                    </button>
+                        <button type="button" x-show="step < 2" @click="next()" style="display:none"
+                                class="rounded-full bg-slate-100 px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-200">
+                            Selanjutnya
+                        </button>
+                        <button type="submit" x-show="step === 2" style="display:none"
+                                class="inline-flex items-center gap-2 rounded-full bg-lime-400 px-5 py-2.5 text-sm font-bold text-slate-900 transition hover:bg-lime-500 active:scale-95">
+                            Selesai!
+                        </button>
+                    </div>
+
+                    {{-- Step indicator --}}
+                    <div class="mt-6 flex items-center justify-center">
+                        <template x-for="n in 2" :key="n">
+                            <div class="flex items-center">
+                                <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-sm font-semibold transition"
+                                     :class="step === n ? 'bg-blue-500 text-white' : (step > n ? 'bg-blue-100 text-blue-600' : 'border-2 border-slate-200 text-slate-400')"
+                                     x-text="n"></div>
+                                <div x-show="n < 2" class="h-px w-10 border-t-2 border-dashed border-slate-200"></div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <h2 class="mt-6 text-center text-xl font-bold text-slate-900">
+                        <span x-text="`Step ${step}.`"></span>
+                        <span x-text="stepTitles[step]"></span>
+                    </h2>
                 </div>
-
-                {{-- Step indicator --}}
-                <div class="mt-6 flex items-center justify-center">
-                    <template x-for="n in 3" :key="n">
-                        <div class="flex items-center">
-                            <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-sm font-semibold transition"
-                                 :class="step === n ? 'bg-blue-500 text-white' : (step > n ? 'bg-blue-100 text-blue-600' : 'border-2 border-slate-200 text-slate-400')"
-                                 x-text="n"></div>
-                            <div x-show="n < 3" class="h-px w-10 border-t-2 border-dashed border-slate-200"></div>
-                        </div>
-                    </template>
-                </div>
-
-                <h2 class="mt-6 text-center text-xl font-bold text-slate-900">
-                    <span x-text="`Step ${step}.`"></span>
-                    <span x-text="stepTitles[step]"></span>
-                </h2>
 
                 <div class="mt-8 border-t border-slate-100 pt-8">
 
-                    {{-- Step 1: Layout --}}
+                    {{-- Step 1: Personalisasi Kasir (layout + gaya + warna in one 3-column view) --}}
                     <div x-show="step === 1"
                          x-transition:enter="transition ease-out duration-200"
                          x-transition:enter-start="opacity-0"
-                         x-transition:enter-end="opacity-100">
-                        @include('tenants.partials._preview')
+                         x-transition:enter-end="opacity-100"
+                         class="grid grid-cols-1 gap-6 lg:grid-cols-3 lg:items-start">
 
-                        <div class="mt-8 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
+                        {{-- Col 1: Layout --}}
+                        <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
                             <p class="mb-3 text-sm font-semibold text-slate-800">Layout</p>
-                            <div class="grid grid-cols-3 gap-3">
+                            <div class="flex flex-col gap-3">
                                 @foreach ($layouts as $key => $layout)
                                     <button type="button"
                                             @click="activeLayout = '{{ $key }}'"
                                             :class="activeLayout === '{{ $key }}'
                                                 ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-300'
                                                 : 'border-slate-200 bg-white hover:border-blue-300'"
-                                            class="flex flex-col items-center gap-2 rounded-xl border-2 p-3 transition">
-                                        <div class="w-full">
+                                            class="flex items-center gap-3 rounded-xl border-2 p-3 transition">
+                                        <div class="w-16 flex-shrink-0">
                                             <x-layout-wireframe :type="$key" />
                                         </div>
                                         <span :class="activeLayout === '{{ $key }}' ? 'text-blue-600 font-semibold' : 'text-slate-600 font-medium'"
-                                              class="text-xs text-center leading-tight">
+                                              class="text-sm">
                                             {{ $layout['label'] }}
                                         </span>
                                     </button>
@@ -239,27 +242,24 @@
                             </div>
                             @error('layout')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
                         </div>
-                    </div>
 
-                    {{-- Step 2: Personalisasi Kasir --}}
-                    <div x-show="step === 2"
-                         x-transition:enter="transition ease-out duration-200"
-                         x-transition:enter-start="opacity-0"
-                         x-transition:enter-end="opacity-100">
-                        @include('tenants.partials._preview')
+                        {{-- Col 2: Preview --}}
+                        <div>
+                            @include('tenants.partials._preview')
+                        </div>
 
-                        <div class="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2">
-                            {{-- Gaya (Tema) --}}
+                        {{-- Col 3: Gaya (Tema) + Warna (Palet) --}}
+                        <div class="flex flex-col gap-6">
                             <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
                                 <p class="mb-3 text-sm font-semibold text-slate-800">Gaya</p>
-                                <div class="flex flex-col gap-2">
+                                <div class="flex flex-wrap gap-2">
                                     @foreach ($themes as $key => $theme)
                                         <button type="button"
                                                 @click="changeTheme('{{ $key }}')"
                                                 :class="activeTheme === '{{ $key }}'
                                                     ? 'bg-blue-500 text-white border-blue-500'
                                                     : 'bg-white text-slate-700 border-slate-300 hover:border-blue-300'"
-                                                class="rounded-full border-2 px-5 py-2.5 text-sm font-medium transition">
+                                                class="rounded-full border-2 px-5 py-2 text-sm font-medium transition">
                                             {{ $theme['label'] }}
                                         </button>
                                     @endforeach
@@ -267,26 +267,28 @@
                                 @error('theme')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
                             </div>
 
-                            {{-- Warna (Palet) --}}
                             <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
                                 <p class="mb-3 text-sm font-semibold text-slate-800">Warna</p>
                                 @foreach ($themes as $themeKey => $theme)
                                     <div x-show="activeTheme === '{{ $themeKey }}'"
                                          style="{{ $currentTheme === $themeKey ? '' : 'display:none' }}"
-                                         class="flex flex-col gap-2">
+                                         class="flex flex-wrap gap-3">
                                         @foreach ($theme['palettes'] as $paletteKey)
                                             @php $p = $palettes[$paletteKey] @endphp
                                             <button type="button"
                                                     @click="activePalette = '{{ $paletteKey }}'"
-                                                    :class="activePalette === '{{ $paletteKey }}' ? 'border-blue-500 ring-2 ring-blue-200' : 'border-slate-200 hover:border-blue-300'"
-                                                    class="flex items-center gap-3 rounded-full border-2 px-4 py-2 transition">
-                                                <span class="h-6 w-6 flex-shrink-0 rounded-full ring-1 ring-black/5"
-                                                      style="background-color: {{ $p['--brand-primary'] }}"></span>
-                                                <span class="text-sm font-medium text-slate-700">{{ ucfirst($paletteKey) }}</span>
-                                                <svg x-show="activePalette === '{{ $paletteKey }}'" style="display:none"
-                                                     class="ml-auto h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-                                                </svg>
+                                                    class="group flex flex-col items-center gap-1">
+                                                <span class="relative flex h-11 w-11 items-center justify-center rounded-xl transition"
+                                                      :class="activePalette === '{{ $paletteKey }}' ? 'ring-2 ring-blue-500 ring-offset-2' : 'ring-1 ring-slate-200 hover:ring-blue-300'"
+                                                      style="background-color: {{ $p['--brand-primary'] }}">
+                                                    <span x-show="activePalette === '{{ $paletteKey }}'"
+                                                          class="absolute inset-0 flex items-center justify-center">
+                                                        <svg class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                                                        </svg>
+                                                    </span>
+                                                </span>
+                                                <span class="text-[10px] text-slate-500">{{ ucfirst($paletteKey) }}</span>
                                             </button>
                                         @endforeach
                                     </div>
@@ -296,8 +298,8 @@
                         </div>
                     </div>
 
-                    {{-- Step 3: Rincian Kasir --}}
-                    <div x-show="step === 3"
+                    {{-- Step 2: Rincian Kasir --}}
+                    <div x-show="step === 2"
                          x-transition:enter="transition ease-out duration-200"
                          x-transition:enter-start="opacity-0"
                          x-transition:enter-end="opacity-100">
@@ -407,6 +409,9 @@
             50%  { width: 55%; }
             75%  { width: 78%; }
             100% { width: 100%; }
+        }
+        .preview-16x9 {
+            aspect-ratio: 16 / 9 !important;
         }
     </style>
 </x-app-layout>
