@@ -30,6 +30,7 @@
             next() { if (this.step < 2) this.step++; window.scrollTo({ top: 0, behavior: 'smooth' }); },
             back() {
                 if (this.step > 1) { this.step--; window.scrollTo({ top: 0, behavior: 'smooth' }); }
+                else if (window.history.length > 1) { window.history.back(); }
                 else { window.location = '{{ route('tenants.choose') }}'; }
             },
             validateName() {
