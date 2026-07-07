@@ -45,9 +45,11 @@
             {{-- Topbar --}}
             <header class="fixed inset-x-0 top-0 z-40 flex h-16 items-center justify-between border-b border-slate-100 bg-white px-4 sm:px-6">
                 <div class="flex items-center gap-3">
-                    <button type="button" class="lg:hidden text-slate-500" x-on:click="sidebar = ! sidebar" aria-label="Menu">
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
-                    </button>
+                    @unless ($fullWidth)
+                        <button type="button" class="lg:hidden text-slate-500" x-on:click="sidebar = ! sidebar" aria-label="Menu">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                        </button>
+                    @endunless
                     <a href="{{ route('dashboard') }}" class="flex items-center gap-2">
                         <img src="{{ asset('images/kasiro-logo-black.png') }}" alt="Kasiro" class="h-5 w-auto">
                         <span class="text-sm font-semibold tracking-wide text-blue-500">STUDIO</span>
@@ -121,37 +123,39 @@
                 </div>
             </header>
 
-            {{-- Sidebar --}}
-            <aside class="fixed bottom-0 left-0 top-16 z-30 w-60 transform bg-[#0c2461] transition-transform duration-200 lg:translate-x-0 flex flex-col"
-                   x-bind:class="sidebar ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'">
-                <nav class="flex flex-col flex-1">
-                    @foreach ($nav as $item)
-                        @php $active = request()->routeIs($item['route']); @endphp
-                        <a href="{{ route($item['route']) }}"
-                           class="flex items-center gap-3 px-6 py-3.5 text-sm font-medium transition
-                                  {{ $active ? 'bg-blue-700 text-white' : 'text-blue-100/70 hover:bg-white/5 hover:text-white' }}">
-                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="{{ $item['icon'] }}"/></svg>
-                            {{ __($item['label']) }}
+            @unless ($fullWidth)
+                {{-- Sidebar --}}
+                <aside class="fixed bottom-0 left-0 top-16 z-30 w-60 transform bg-[#0c2461] transition-transform duration-200 lg:translate-x-0 flex flex-col"
+                       x-bind:class="sidebar ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'">
+                    <nav class="flex flex-col flex-1">
+                        @foreach ($nav as $item)
+                            @php $active = request()->routeIs($item['route']); @endphp
+                            <a href="{{ route($item['route']) }}"
+                               class="flex items-center gap-3 px-6 py-3.5 text-sm font-medium transition
+                                      {{ $active ? 'bg-blue-700 text-white' : 'text-blue-100/70 hover:bg-white/5 hover:text-white' }}">
+                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="{{ $item['icon'] }}"/></svg>
+                                {{ __($item['label']) }}
+                            </a>
+                        @endforeach
+                    </nav>
+                    <div class="p-4 border-t border-white/10">
+                        <a href="{{ route('platform.home') }}"
+                           class="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-blue-100/70 hover:bg-white/5 hover:text-white transition">
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                            </svg>
+                            Ke Landing Page
                         </a>
-                    @endforeach
-                </nav>
-                <div class="p-4 border-t border-white/10">
-                    <a href="{{ route('platform.home') }}"
-                       class="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-blue-100/70 hover:bg-white/5 hover:text-white transition">
-                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-                        </svg>
-                        Ke Landing Page
-                    </a>
-                </div>
-            </aside>
+                    </div>
+                </aside>
 
-            {{-- Overlay (mobile) --}}
-            <div x-show="sidebar" x-cloak x-on:click="sidebar = false"
-                 class="fixed inset-0 z-20 bg-black/30 lg:hidden"></div>
+                {{-- Overlay (mobile) --}}
+                <div x-show="sidebar" x-cloak x-on:click="sidebar = false"
+                     class="fixed inset-0 z-20 bg-black/30 lg:hidden"></div>
+            @endunless
 
             {{-- Main --}}
-            <main class="min-h-screen pt-16 lg:pl-60">
+            <main class="min-h-screen pt-16 {{ $fullWidth ? '' : 'lg:pl-60' }}">
                 @isset($header)
                     <div class="px-6 pt-6 sm:px-8">{{ $header }}</div>
                 @endisset
