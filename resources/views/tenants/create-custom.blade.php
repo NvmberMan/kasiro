@@ -162,6 +162,7 @@
 
         <form method="POST" action="{{ route('tenants.store.custom') }}"
               enctype="multipart/form-data"
+              data-no-progress
               @submit="submitForm($event)">
             @csrf
 

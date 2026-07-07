@@ -39,6 +39,19 @@ import Alpine from 'alpinejs';
         bar.style.width = '100%';
     }
 
+    // Snap the bar back to hidden. start() intentionally never completes (the
+    // page unloads first), so the bar is left visible at ~full width; on a
+    // back/forward bfcache restore that stale bar would otherwise reappear.
+    function reset() {
+        bar.style.transition = 'none';
+        bar.style.opacity = '0';
+        bar.style.width = '0%';
+    }
+
+    // Fires on every show, including bfcache restores (event.persisted) that skip
+    // DOMContentLoaded — so returning to a page never shows the previous nav's bar.
+    window.addEventListener('pageshow', reset);
+
     // Links that cause a real navigation
     document.addEventListener('click', (e) => {
         const a = e.target.closest('a[href]');
@@ -50,9 +63,13 @@ import Alpine from 'alpinejs';
         start();
     }, true);
 
-    // Native form submissions (Alpine's @submit.prevent sets defaultPrevented before bubbling)
+    // Native form submissions (Alpine's @submit.prevent sets defaultPrevented before bubbling).
+    // Forms that render their own progress UI opt out with data-no-progress, so the
+    // top bar doesn't stack on top of a full-screen loading overlay (e.g. "Buat Toko").
     document.addEventListener('submit', (e) => {
-        if (!e.defaultPrevented) start();
+        if (e.defaultPrevented) return;
+        if (e.target instanceof HTMLElement && e.target.hasAttribute('data-no-progress')) return;
+        start();
     });
 })();
 import Chart from 'chart.js/auto';
