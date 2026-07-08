@@ -40,8 +40,8 @@
             </a>
             
             <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
-                <a href="#tentang" class="hover:text-slate-900 transition">{{ __('Tentang') }}</a>
-                <a href="#bantuan" class="hover:text-slate-900 transition">{{ __('Bantuan') }}</a>
+                <a href="#tentang" class="scroll-nav-link hover:text-slate-900 transition">{{ __('Tentang') }}</a>
+                <a href="#bantuan" class="scroll-nav-link hover:text-slate-900 transition">{{ __('Bantuan') }}</a>
             </nav>
         </div>
 
@@ -94,7 +94,7 @@
 </section>
 
 {{-- ===== Template Kasir ===== --}}
-<section id="tentang" class="mx-auto max-w-6xl px-4 sm:px-6 py-14 scroll-mt-16">
+<section id="template-kasir" class="mx-auto max-w-6xl px-4 sm:px-6 py-14 scroll-mt-16">
     <div class="flex items-center justify-between mb-8">
         <h2 class="text-xl sm:text-2xl font-bold text-slate-900">{{ __('Template Kasir') }}</h2>
         <a href="{{ auth()->check() ? route('tenants.create.template') : route('login') }}"
@@ -127,7 +127,7 @@
 </section>
 
 {{-- ===== 3 Hal yang membuat KASIRO berbeda ===== --}}
-<section class="bg-[#0c2461] py-16">
+<section id="tentang" class="bg-[#0c2461] py-16 scroll-mt-16">
     <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <h2 class="text-center text-2xl sm:text-3xl font-bold text-white mb-12">{{ __('3 Hal yang membuat KASIRO berbeda') }}</h2>
 
@@ -189,8 +189,12 @@
 
         <div class="relative">
             {{-- Tombol navigasi --}}
-            <button class="feature-prev absolute left-0 top-1/2 -translate-y-1/2 -translate-x-10 z-20 flex items-center justify-center h-9 w-9 rounded-full bg-white shadow text-slate-600 hover:text-slate-900 transition text-lg">&#8249;</button>
-            <button class="feature-next absolute right-0 top-1/2 -translate-y-1/2 translate-x-10 z-20 flex items-center justify-center h-9 w-9 rounded-full bg-white shadow text-slate-600 hover:text-slate-900 transition text-lg">&#8250;</button>
+            <button class="feature-prev absolute left-0 top-1/2 -translate-y-1/2 -translate-x-5 sm:-translate-x-10 z-20 flex h-11 w-11 items-center justify-center text-slate-500 transition hover:text-slate-900">
+                <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+            </button>
+            <button class="feature-next absolute right-0 top-1/2 -translate-y-1/2 translate-x-5 sm:translate-x-10 z-20 flex h-11 w-11 items-center justify-center text-slate-500 transition hover:text-slate-900">
+                <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+            </button>
 
             <div class="swiper feature-swiper">
                 <div class="swiper-wrapper items-stretch">
@@ -294,6 +298,11 @@
         loop: true,
         grabCursor: true,
         speed: 500,
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+        },
         navigation: {
             nextEl: '.feature-next',
             prevEl: '.feature-prev',
@@ -305,6 +314,15 @@
                 return `<button class="${className}"></button>`;
             },
         },
+    });
+
+    document.querySelectorAll('.scroll-nav-link').forEach((link) => {
+        link.addEventListener('click', (e) => {
+            const target = document.querySelector(link.getAttribute('href'));
+            if (!target) return;
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
     });
 </script>
 <style>
