@@ -11,7 +11,7 @@ class ChangeEmployeeRole
     public function handle(Tenant $tenant, User $employee, string $newRole): void
     {
         if ($employee->id === $tenant->owner_id) {
-            throw new RuntimeException('Role owner tidak dapat diubah.');
+            throw new RuntimeException(__('Role owner tidak dapat diubah.'));
         }
 
         $tenant->users()->updateExistingPivot($employee->id, ['role' => $newRole]);

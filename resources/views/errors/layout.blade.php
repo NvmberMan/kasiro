@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -60,8 +60,8 @@
         <div class="code">@yield('code')</div>
         <h1>@yield('title')</h1>
         <p>@yield('message')</p>
-        <a href="{{ url('/') }}" class="btn">Kembali ke Beranda</a>
-        <a href="javascript:history.back()" class="home-link">&larr; Kembali ke halaman sebelumnya</a>
+        <a href="{{ url('/') }}" class="btn">{{ __('Kembali ke Beranda') }}</a>
+        <a href="javascript:history.back()" class="home-link">&larr; {{ __('Kembali ke halaman sebelumnya') }}</a>
     </div>
 </body>
 </html>

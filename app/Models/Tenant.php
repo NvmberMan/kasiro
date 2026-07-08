@@ -24,6 +24,7 @@ class Tenant extends Model
     protected $fillable = [
         'owner_id',
         'name',
+        'locale',
         'subdomain',
         'logo_path',
         'screenshot_path',
@@ -102,6 +103,24 @@ class Tenant extends Model
     public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class, 'owner_id');
+    }
+
+    /**
+     * Whether this tenant follows the owner's studio language rather than
+     * pinning its own.
+     */
+    public function followsStudioLocale(): bool
+    {
+        return $this->locale === null;
+    }
+
+    /**
+     * The locale actually applied to this tenant. A null `locale` means the
+     * tenant follows the owner's studio language dynamically.
+     */
+    public function resolvedLocale(): string
+    {
+        return \App\Support\Locale::normalize($this->locale ?? $this->owner?->locale);
     }
 
     public function template(): BelongsTo

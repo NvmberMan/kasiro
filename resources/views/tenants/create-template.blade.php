@@ -22,6 +22,10 @@
     <div x-data="{
             loading: false,
             pickerOpen: false,
+            localeMode: @js(old('locale') ? 'custom' : 'inherit'),
+            locale: @js(old('locale', app()->getLocale())),
+            localeOpen: false,
+            localeLabels: @js(\App\Support\Locale::supported()),
             selectedId: @js($selectedTemplateId ? (int) $selectedTemplateId : null),
             selectedName: @js($selectedTemplate?->name ?? null),
             selectedThumb: @js($selectedTemplate?->screenshotUrl()),
@@ -80,7 +84,7 @@
             <div class="h-7 w-80 overflow-hidden rounded-full border-2 border-[#c0c6ef] bg-[#eaf3c9]">
                 <div class="progress-fill h-full rounded-full bg-[#2734bd]"></div>
             </div>
-            <p class="mt-4 text-sm text-slate-500">Loading...</p>
+            <p class="mt-4 text-sm text-slate-500">{{ __('Loading...') }}</p>
         </div>
 
         {{-- Template Picker Modal --}}
@@ -102,11 +106,11 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
                         </svg>
                     </button>
-                    <h2 class="text-2xl font-bold text-slate-900">Template Kasir</h2>
+                    <h2 class="text-2xl font-bold text-slate-900">{{ __('Template Kasir') }}</h2>
                 </div>
 
                 @if ($templates->isEmpty())
-                    <p class="text-center text-slate-400 py-16">Belum ada template tersedia.</p>
+                    <p class="text-center text-slate-400 py-16">{{ __('Belum ada template tersedia.') }}</p>
                 @else
                     <div class="grid grid-cols-2 gap-5">
                         @foreach ($templates as $template)
@@ -141,7 +145,7 @@
                  browser's previous page — this form is often deep-linked from the
                  landing page, where history.back() would leave the create flow. --}}
             <a href="{{ route('tenants.choose') }}"
-               aria-label="Kembali"
+               aria-label="{{ __('Kembali') }}"
                class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-600 shadow-sm transition hover:border-slate-400 hover:bg-slate-50 hover:text-slate-900">
                 <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
@@ -151,7 +155,7 @@
 
         {{-- Main form --}}
         <div class="mx-auto max-w-lg px-4 pt-5 sm:px-6">
-            <h2 class="mb-5 text-2xl font-bold tracking-tight text-slate-900">Rincian Kasir</h2>
+            <h2 class="mb-5 text-2xl font-bold tracking-tight text-slate-900">{{ __('Rincian Kasir') }}</h2>
 
             <form method="POST" action="{{ route('tenants.store.template') }}"
                   enctype="multipart/form-data"
@@ -168,7 +172,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
                         </svg>
                         <div class="min-w-0">
-                            <p class="text-sm font-bold text-red-700">Toko gagal dibuat</p>
+                            <p class="text-sm font-bold text-red-700">{{ __('Toko gagal dibuat') }}</p>
                             <ul class="mt-1 space-y-1 text-sm text-red-600 {{ $errors->count() > 1 ? 'list-disc pl-4' : '' }}">
                                 @foreach ($errors->all() as $error)
                                     <li>{{ $error }}</li>
@@ -182,13 +186,13 @@
 
                     {{-- Template selection --}}
                     <div class="mb-5">
-                        <label class="mb-1.5 block text-sm font-semibold text-slate-800">Sistem Template</label>
+                        <label class="mb-1.5 block text-sm font-semibold text-slate-800">{{ __('Sistem Template') }}</label>
                         <input type="hidden" name="template_id" :value="selectedId">
 
                         {{-- Empty state: pill prompt --}}
                         <button type="button" @click="pickerOpen = true" x-show="!selectedId"
                                 class="w-full rounded-full border-2 border-blue-400 px-5 py-3 text-sm font-semibold text-blue-500 transition hover:bg-blue-50">
-                            Pilih template
+                            {{ __('Pilih template') }}
                         </button>
 
                         {{-- Selected state: screenshot + name --}}
@@ -201,7 +205,7 @@
                             </div>
                             <div class="flex items-center justify-between px-4 py-3">
                                 <span class="text-sm font-semibold text-blue-600" x-text="selectedName"></span>
-                                <span class="text-xs font-medium text-slate-400">Ganti</span>
+                                <span class="text-xs font-medium text-slate-400">{{ __('Ganti') }}</span>
                             </div>
                         </button>
                         @error('template_id')
@@ -211,9 +215,9 @@
 
                     {{-- Nama Toko --}}
                     <div>
-                        <label class="mb-1.5 block text-sm font-semibold text-slate-800">Nama Toko</label>
+                        <label class="mb-1.5 block text-sm font-semibold text-slate-800">{{ __('Nama Toko') }}</label>
                         <input type="text" name="name" value="{{ old('name') }}" required autofocus
-                               placeholder="Contoh: Warung Budi"
+                               placeholder="{{ __('Contoh: Warung Budi') }}"
                                class="w-full rounded-full border px-5 py-3 text-sm text-slate-900 placeholder-slate-400 outline-none transition focus:ring-2 @error('name') border-red-400 focus:border-red-500 focus:ring-red-200 @else border-slate-300 focus:border-blue-500 focus:ring-blue-200 @enderror">
                         @error('name')
                             <p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>
@@ -222,43 +226,87 @@
 
                     {{-- Nama Domain --}}
                     <div class="mt-5">
-                        <label class="mb-1.5 block text-sm font-semibold text-slate-800">Nama Domain</label>
+                        <label class="mb-1.5 block text-sm font-semibold text-slate-800">{{ __('Nama Domain') }}</label>
                         <div class="flex items-center">
                             <input type="text" name="subdomain" value="{{ old('subdomain') }}" required
-                                   placeholder="namatoko"
+                                   placeholder="{{ __('namatoko') }}"
                                    class="min-w-0 flex-1 rounded-l-full border border-r-0 px-5 py-3 text-sm text-slate-900 placeholder-slate-400 outline-none transition focus:z-10 focus:ring-2 @error('subdomain') border-red-400 focus:border-red-500 focus:ring-red-200 @else border-slate-300 focus:border-blue-500 focus:ring-blue-200 @enderror">
                             <span class="flex items-center rounded-r-full border bg-slate-50 px-4 py-3 text-sm text-slate-500 whitespace-nowrap @error('subdomain') border-red-400 @else border-slate-300 @enderror">
                                 .{{ config('tenancy.central_domain') }}
                             </span>
                         </div>
-                        <p class="mt-1.5 text-xs text-slate-400">Huruf kecil, angka, dan tanda penghubung</p>
+                        <p class="mt-1.5 text-xs text-slate-400">{{ __('Huruf kecil, angka, dan tanda penghubung') }}</p>
                         @error('subdomain')
                             <p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 
+                    {{-- Bahasa Kasir --}}
+                    <div class="mt-5">
+                        <label class="mb-1.5 block text-sm font-semibold text-slate-800">{{ __('Bahasa Kasir') }}</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button type="button" @click="localeMode = 'inherit'"
+                                    :class="localeMode === 'inherit' ? 'border-blue-500 bg-blue-50 text-blue-600 font-semibold' : 'border-slate-200 bg-white text-slate-600 hover:border-blue-300'"
+                                    class="rounded-xl border-2 px-4 py-3 text-sm transition">
+                                {{ __('Ikut bahasa studio') }}
+                            </button>
+                            <button type="button" @click="localeMode = 'custom'"
+                                    :class="localeMode === 'custom' ? 'border-blue-500 bg-blue-50 text-blue-600 font-semibold' : 'border-slate-200 bg-white text-slate-600 hover:border-blue-300'"
+                                    class="rounded-xl border-2 px-4 py-3 text-sm transition">
+                                {{ __('Bahasa khusus') }}
+                            </button>
+                        </div>
+                        <div class="relative mt-2" x-show="localeMode === 'custom'" style="display:none" @click.outside="localeOpen = false">
+                            <input type="hidden" name="locale" :value="locale" :disabled="localeMode !== 'custom'">
+                            <button type="button" @click="localeOpen = ! localeOpen"
+                                    class="flex w-full items-center justify-between rounded-full border border-slate-300 bg-white px-5 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
+                                <span x-text="localeLabels[locale]"></span>
+                                <svg class="h-4 w-4 text-slate-400 transition-transform" :class="localeOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+                            <div x-show="localeOpen" x-transition style="display:none"
+                                 class="absolute z-20 mt-2 w-full overflow-hidden rounded-2xl border border-slate-200 bg-white py-1 shadow-lg">
+                                @foreach (\App\Support\Locale::supported() as $code => $label)
+                                    <button type="button" @click="locale = '{{ $code }}'; localeOpen = false"
+                                            class="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm transition hover:bg-blue-50"
+                                            :class="locale === '{{ $code }}' ? 'text-blue-600 font-semibold bg-blue-50' : 'text-slate-700'">
+                                        {{ $label }}
+                                        <svg x-show="locale === '{{ $code }}'" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                    </button>
+                                @endforeach
+                            </div>
+                        </div>
+                        <p x-show="localeMode === 'inherit'" class="mt-1.5 text-xs text-slate-400">
+                            {{ __('Kasir memakai bahasa yang sama dengan studio Anda dan ikut berubah bila bahasa studio diganti.') }}
+                        </p>
+                        @error('locale')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
+                    </div>
+
                     {{-- Logo --}}
                     <div class="mt-5">
-                        <label class="mb-1.5 block text-sm font-semibold text-slate-800">Logo</label>
+                        <label class="mb-1.5 block text-sm font-semibold text-slate-800">{{ __('Logo') }}</label>
                         <label class="flex cursor-pointer items-center justify-center gap-2 rounded-full border-2 border-blue-400 px-5 py-3 text-sm font-semibold text-blue-500 transition hover:bg-blue-50">
                             <template x-if="!logoPreview">
                                 <span class="flex items-center gap-2">
                                     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
                                     </svg>
-                                    Upload File Logo
+                                    {{ __('Upload File Logo') }}
                                 </span>
                             </template>
                             <template x-if="logoPreview">
                                 <span class="flex items-center gap-2">
                                     <img :src="logoPreview" class="h-6 w-6 rounded-full object-cover ring-1 ring-blue-300">
-                                    Ganti Logo
+                                    {{ __('Ganti Logo') }}
                                 </span>
                             </template>
                             <input id="logo-file-input" type="file" name="logo" accept="image/png,image/jpeg,image/webp"
                                    class="sr-only" @change="onLogoSelect($event)">
                         </label>
-                        <p class="mt-1.5 text-xs text-slate-400">PNG, JPG (maks. 2 MB)</p>
+                        <p class="mt-1.5 text-xs text-slate-400">{{ __('PNG, JPG (maks. 2 MB)') }}</p>
                         @error('logo')
                             <p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>
                         @enderror
@@ -269,7 +317,7 @@
                 <div class="mt-8 flex justify-center">
                     <button type="submit"
                             class="inline-flex items-center gap-2 rounded-full bg-lime-400 px-8 py-3.5 text-base font-bold text-slate-900 shadow-sm transition hover:bg-lime-500 active:scale-95">
-                        Buat Toko
+                        {{ __('Buat Toko') }}
                         <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M12 1.5L14.09 8.26L21 9.27L16 14.14L17.18 21.02L12 17.77L6.82 21.02L8 14.14L3 9.27L9.91 8.26L12 1.5Z"/>
                             <path d="M5 3.5L5.74 5.76L8 6.5L5.74 7.24L5 9.5L4.26 7.24L2 6.5L4.26 5.76L5 3.5Z" opacity=".7"/>
@@ -291,8 +339,8 @@
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden" x-on:click.stop>
             <div class="flex items-center justify-between px-6 py-4 border-b">
                 <div>
-                    <h3 class="font-semibold text-gray-800">Crop Logo</h3>
-                    <p class="text-xs text-gray-400 mt-0.5">Geser &amp; resize kotak untuk menyesuaikan area</p>
+                    <h3 class="font-semibold text-gray-800">{{ __('Crop Logo') }}</h3>
+                    <p class="text-xs text-gray-400 mt-0.5">{{ __('Geser & resize kotak untuk menyesuaikan area') }}</p>
                 </div>
                 <button type="button" x-on:click="cancelCrop()"
                         class="h-8 w-8 flex items-center justify-center rounded-full text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition">
@@ -308,11 +356,11 @@
             <div class="flex items-center gap-3 px-6 py-4 border-t justify-end">
                 <button type="button" x-on:click="cancelCrop()"
                         class="px-4 py-2 rounded-xl border border-gray-200 text-sm text-gray-700 hover:bg-gray-50 transition">
-                    Batal
+                    {{ __('Batal') }}
                 </button>
                 <button type="button" x-on:click="confirmCrop()"
                         class="px-5 py-2 rounded-xl bg-blue-500 text-white text-sm font-medium hover:bg-blue-600 transition">
-                    Terapkan
+                    {{ __('Terapkan') }}
                 </button>
             </div>
         </div>

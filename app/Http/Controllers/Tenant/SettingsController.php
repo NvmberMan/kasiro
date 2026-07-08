@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Tenant;
 use App\Actions\UpdateTenantSettings;
 use App\Http\Controllers\Controller;
 use App\Rules\ValidSubdomain;
+use App\Support\Locale;
 use App\Support\TenantContext;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -36,10 +38,14 @@ class SettingsController extends Controller
             'subdomain'     => ['required', new ValidSubdomain($tenant->id)],
             'logo'          => ['nullable', 'image', 'max:2048'],
             'tax_percent'   => ['nullable', 'numeric', 'min:0', 'max:100'],
+            // 'inherit' means follow the studio language (stored as null).
+            'locale'        => ['required', Rule::in([...Locale::codes(), 'inherit'])],
             'layout'        => ['required', 'in:' . implode(',', array_keys(config('branding.layouts')))],
             'theme'         => ['required', 'in:' . implode(',', array_keys(config('branding.themes')))],
             'color_palette' => ['required', 'in:' . implode(',', array_keys(config('branding.palettes')))],
         ]);
+
+        $data['locale'] = $data['locale'] === 'inherit' ? null : $data['locale'];
 
         if ($request->hasFile('logo')) {
             $data['logo'] = $request->file('logo');

@@ -20,6 +20,12 @@ class UpdateTenantSettings
             'tax_percent' => $data['tax_percent'] ?? 0,
         ];
 
+        // Only touch locale when the caller provided the key (null is a valid
+        // value meaning "follow the studio language").
+        if (array_key_exists('locale', $data)) {
+            $updates['locale'] = $data['locale'];
+        }
+
         // Logo: replace old file only if a new one is uploaded
         if (isset($data['logo']) && $data['logo'] instanceof UploadedFile) {
             if ($tenant->logo_path) {

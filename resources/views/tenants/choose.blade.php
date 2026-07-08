@@ -1,7 +1,7 @@
 <x-app-layout :full-width="true">
     <div class="mx-auto max-w-7xl px-4 pt-4 sm:px-6 lg:px-8">
         <button type="button" onclick="window.location.assign('{{ route('dashboard') }}')"
-                aria-label="Kembali"
+                aria-label="{{ __('Kembali') }}"
                 class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-600 shadow-sm transition hover:border-slate-400 hover:bg-slate-50 hover:text-slate-900">
             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
@@ -10,8 +10,8 @@
     </div>
 
     <div class="flex min-h-[60vh] flex-col items-center justify-center py-16">
-        <h1 class="mb-2 text-3xl font-bold tracking-tight text-slate-900">Buat Sistem Kasir</h1>
-        <p class="mb-10 text-slate-500">Pilih cara membuat aplikasi kasir kamu:</p>
+        <h1 class="mb-2 text-3xl font-bold tracking-tight text-slate-900">{{ __('Buat Sistem Kasir') }}</h1>
+        <p class="mb-10 text-slate-500">{{ __('Pilih cara membuat aplikasi kasir kamu:') }}</p>
 
         <div class="grid w-full max-w-2xl grid-cols-1 gap-5 px-4 sm:grid-cols-2">
             {{-- Custom --}}
@@ -21,8 +21,8 @@
                     <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712Zm-2.218 5.93-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
                     <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
                 </svg>
-                <h3 class="text-lg font-bold text-slate-900">Custom</h3>
-                <p class="mt-2 text-sm text-slate-500">Pilih layout, tema, dan warna sendiri dari awal.</p>
+                <h3 class="text-lg font-bold text-slate-900">{{ __('Custom') }}</h3>
+                <p class="mt-2 text-sm text-slate-500">{{ __('Pilih layout, tema, dan warna sendiri dari awal.') }}</p>
             </a>
 
             {{-- Template --}}
@@ -33,8 +33,8 @@
                     <rect x="13" y="3" width="8" height="8" rx="1.5" />
                     <rect x="3" y="13" width="18" height="8" rx="1.5" />
                 </svg>
-                <h3 class="text-lg font-bold text-slate-900">Pakai Template</h3>
-                <p class="mt-2 text-sm text-slate-500">Pilih preset siap pakai, lalu sesuaikan nama & subdomain.</p>
+                <h3 class="text-lg font-bold text-slate-900">{{ __('Pakai Template') }}</h3>
+                <p class="mt-2 text-sm text-slate-500">{{ __('Pilih preset siap pakai, lalu sesuaikan nama & subdomain.') }}</p>
             </a>
         </div>
     </div>
