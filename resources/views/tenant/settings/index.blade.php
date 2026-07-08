@@ -144,7 +144,11 @@
         @method('PUT')
 
         {{-- Identitas Toko --}}
-        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        {{-- No overflow-hidden here (unlike the other cards below): the Bahasa
+             Kasir dropdown's option panel is absolutely positioned inside this
+             card, and overflow-hidden would clip it instead of letting it float
+             over the content beneath. --}}
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm">
             <div class="px-6 py-4 border-b border-gray-50">
                 <h2 class="font-semibold text-gray-800">{{ __('Identitas Toko') }}</h2>
             </div>
@@ -215,14 +219,14 @@
                             <div class="relative" @click.outside="localeOpen = false">
                                 <input type="hidden" name="locale" :value="locale">
                                 <button type="button" @click="localeOpen = ! localeOpen"
-                                        class="flex w-full items-center justify-between rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm outline-none transition focus:border-transparent focus:ring-2 focus:ring-indigo-500">
+                                        class="locale-select-trigger flex w-full items-center justify-between rounded-xl border border-gray-300 bg-white px-4 py-2.5 text-sm outline-none transition focus:border-transparent focus:ring-2 focus:ring-indigo-500">
                                     <span class="truncate" x-text="localeLabels[locale]"></span>
                                     <svg class="h-4 w-4 flex-shrink-0 text-gray-400 transition-transform" :class="localeOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
                                     </svg>
                                 </button>
                                 <div x-show="localeOpen" x-transition style="display:none"
-                                     class="absolute z-20 mt-2 w-full overflow-hidden rounded-2xl border border-gray-200 bg-white py-1 shadow-lg">
+                                     class="absolute z-20 mt-2 w-full overflow-hidden rounded-2xl border border-gray-300 bg-white py-1 shadow-lg">
                                     @foreach ($localeOptions as $code => $label)
                                         <button type="button" @click="locale = '{{ $code }}'; localeOpen = false"
                                                 class="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm transition hover:bg-indigo-50"

@@ -36,7 +36,7 @@ class SettingsController extends Controller
         $data = $request->validate([
             'name'          => ['required', 'string', 'max:100'],
             'subdomain'     => ['required', new ValidSubdomain($tenant->id)],
-            'logo'          => ['nullable', 'image', 'max:2048'],
+            'logo'          => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:2048'],
             'tax_percent'   => ['nullable', 'numeric', 'min:0', 'max:100'],
             // 'inherit' means follow the studio language (stored as null).
             'locale'        => ['required', Rule::in([...Locale::codes(), 'inherit'])],
