@@ -115,10 +115,15 @@
     [data-brand-theme="classic"] .border-gray-100 {
         border-color: transparent !important;
     }
-    /* Inputs read as recessed fields (classic sunken bevel). */
+    /* Inputs read as recessed fields (classic sunken bevel). Custom Alpine
+       "fake select" triggers (.locale-select-trigger) get the same recessed
+       treatment as real <select> elements — otherwise they only pick up the
+       generic .bg-white → var(--brand-surface) swap above and their border
+       all but disappears against the silver panel. */
     [data-brand-theme="classic"] input:not([type="checkbox"]):not([type="radio"]),
     [data-brand-theme="classic"] select,
-    [data-brand-theme="classic"] textarea {
+    [data-brand-theme="classic"] textarea,
+    [data-brand-theme="classic"] .locale-select-trigger {
         background-color: #ffffff !important;
         box-shadow: inset 1px 1px #808080, inset -1px -1px #ffffff, inset 2px 2px #404040, inset -2px -2px #dfdfdf !important;
         border-color: transparent !important;
