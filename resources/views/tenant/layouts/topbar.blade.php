@@ -20,7 +20,7 @@
     <header class="brand-primary">
         <div class="mx-auto max-w-7xl px-4 py-3 flex items-center gap-3">
             <a href="{{ route('tenant.home', ['subdomain' => $tenant->subdomain]) }}"
-               class="flex items-center gap-3 transition hover:opacity-80" aria-label="Beranda {{ $tenant->name }}">
+               class="flex items-center gap-3 transition hover:opacity-80" aria-label="{{ __('Beranda') }} {{ $tenant->name }}">
                 @if (!empty($tenant->logo_path))
                     <img src="{{ asset('storage/'.$tenant->logo_path) }}" alt="{{ $tenant->name }}"
                          class="h-9 w-9 rounded-lg object-cover brand-rounded">

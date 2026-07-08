@@ -1,6 +1,6 @@
 <x-app-layout>
     @php
-        $roleLabels = ['owner' => 'Pemilik', 'manager' => 'Manajer', 'cashier' => 'Kasir'];
+        $roleLabels = ['owner' => __('Pemilik'), 'manager' => __('Manajer'), 'cashier' => __('Kasir')];
         $scheme = request()->isSecure() ? 'https' : 'http';
         $central = config('tenancy.central_domain');
     @endphp
@@ -8,18 +8,18 @@
     {{-- Header: greeting + stat cards --}}
     <div class="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
         <div>
-            <h1 class="text-3xl font-bold tracking-tight text-slate-900">Halo, {{ auth()->user()->name }}!</h1>
-            <p class="mt-1 text-sm text-slate-500">Kelola sistem kasir untuk toko Anda di sini.</p>
+            <h1 class="text-3xl font-bold tracking-tight text-slate-900">{{ __('Halo, :name!', ['name' => auth()->user()->name]) }}</h1>
+            <p class="mt-1 text-sm text-slate-500">{{ __('Kelola sistem kasir untuk toko Anda di sini.') }}</p>
         </div>
 
         <div class="flex gap-4">
             <a href="{{ route('my-stores') }}" class="min-w-[6rem] rounded-2xl bg-white px-6 py-4 text-center shadow-sm ring-1 ring-slate-100 transition hover:shadow">
                 <span class="block text-3xl font-extrabold text-blue-600">{{ $activeCount }}</span>
-                <span class="text-xs text-slate-500">Toko Aktif</span>
+                <span class="text-xs text-slate-500">{{ __('Toko Aktif') }}</span>
             </a>
             <a href="{{ route('archive') }}" class="min-w-[6rem] rounded-2xl bg-white px-6 py-4 text-center shadow-sm ring-1 ring-slate-100 transition hover:shadow">
                 <span class="block text-3xl font-extrabold text-slate-800">{{ $archivedCount }}</span>
-                <span class="text-xs text-slate-500">Diarsipkan</span>
+                <span class="text-xs text-slate-500">{{ __('Diarsipkan') }}</span>
             </a>
         </div>
     </div>
@@ -27,19 +27,19 @@
     {{-- Recent stores --}}
     <div class="mt-10">
         <div class="mb-6 flex items-center justify-between">
-            <h2 class="text-lg font-bold text-slate-900">Sistem Kasir Terbaru</h2>
+            <h2 class="text-lg font-bold text-slate-900">{{ __('Sistem Kasir Terbaru') }}</h2>
             <a href="{{ route('my-stores') }}"
                class="rounded-full border border-blue-600 px-4 py-1.5 text-sm font-semibold text-blue-600 transition hover:bg-blue-50">
-                Lihat Semua
+                {{ __('Lihat Semua') }}
             </a>
         </div>
 
         @if ($recent->isEmpty())
             <div class="rounded-2xl border-2 border-dashed border-slate-200 bg-white p-12 text-center">
-                <p class="mb-4 text-slate-400">Belum ada toko. Mulai buat toko pertama Anda!</p>
+                <p class="mb-4 text-slate-400">{{ __('Belum ada toko. Mulai buat toko pertama Anda!') }}</p>
                 <a href="{{ route('tenants.choose') }}"
                    class="inline-flex rounded-full bg-lime-400 px-6 py-2.5 text-sm font-semibold text-slate-900 transition hover:bg-lime-500">
-                    Buat Toko Baru
+                    {{ __('Buat Toko Baru') }}
                 </a>
             </div>
         @else
@@ -84,7 +84,7 @@
                             {{-- Hover overlay with "Lihat" button --}}
                             <div class="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                                 <span class="inline-flex items-center gap-1.5 rounded-full bg-lime-400 px-5 py-2 text-sm font-semibold text-slate-900 shadow-lg">
-                                    Lihat
+                                    {{ __('Lihat') }}
                                     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M9 7h8v8"/>
                                     </svg>
@@ -106,10 +106,10 @@
     {{-- CTA banner --}}
     <div class="mt-10 border-t border-slate-200 pt-10">
         <div class="flex flex-col items-center justify-between gap-4 rounded-3xl bg-gradient-to-r from-blue-300 via-blue-400 to-blue-600 px-8 py-6 sm:flex-row">
-            <h3 class="text-xl font-bold text-slate-900">Buat Sistem Kasir Impian Anda</h3>
+            <h3 class="text-xl font-bold text-slate-900">{{ __('Buat Sistem Kasir Impian Anda') }}</h3>
             <a href="{{ route('tenants.choose') }}"
                class="inline-flex items-center gap-2 rounded-full bg-lime-400 px-6 py-2.5 text-sm font-semibold text-slate-900 transition hover:bg-lime-500">
-                Buat Sekarang
+                {{ __('Buat Sekarang') }}
                 <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M9 7h8v8"/></svg>
             </a>
         </div>

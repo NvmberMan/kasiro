@@ -11,6 +11,12 @@
     if (! in_array($currentPalette, $themes[$currentTheme]['palettes'] ?? [], true)) {
         $currentPalette = $themes[$currentTheme]['palettes'][0] ?? 'violet';
     }
+
+    $localeOptions = [
+        'inherit' => __('Ikut bahasa studio') . ' (' . \App\Support\Locale::label($tenant->owner?->locale ?? \App\Support\Locale::DEFAULT) . ')',
+        ...\App\Support\Locale::supported(),
+    ];
+    $currentLocale = $tenant->locale ?? 'inherit';
 @endphp
 
 @push('head')
@@ -45,6 +51,9 @@
          logoCropSrc: null,
          showCropModal: false,
          cropper: null,
+         locale: @js($currentLocale),
+         localeOpen: false,
+         localeLabels: @js($localeOptions),
 
          cancelChanges() {
              this.activeTheme = this._initTheme;
@@ -117,7 +126,7 @@
     {{-- Content column (kept narrow & centered); the save bar below is full-bleed. --}}
     <div class="max-w-3xl mx-auto w-full px-4 py-6">
     <div class="mb-6">
-        <h1 class="text-2xl font-bold text-gray-900">Pengaturan Toko</h1>
+        <h1 class="text-2xl font-bold text-gray-900">{{ __('Pengaturan Toko') }}</h1>
     </div>
 
     @if ($errors->any())
@@ -137,7 +146,7 @@
         {{-- Identitas Toko --}}
         <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
             <div class="px-6 py-4 border-b border-gray-50">
-                <h2 class="font-semibold text-gray-800">Identitas Toko</h2>
+                <h2 class="font-semibold text-gray-800">{{ __('Identitas Toko') }}</h2>
             </div>
             <div class="p-6">
                 <div class="flex flex-col sm:flex-row gap-6">
@@ -164,34 +173,34 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
                                 </svg>
-                                <span class="text-white text-[10px] font-medium">Ganti</span>
+                                <span class="text-white text-[10px] font-medium">{{ __('Ganti') }}</span>
                             </div>
                         </label>
                         <input id="logo-file-input" name="logo" type="file" accept="image/*" class="hidden"
                                x-on:change.stop="onLogoSelect($event)">
-                        <span class="text-xs text-gray-400 text-center leading-tight">JPG, PNG<br>maks 2MB</span>
+                        <span class="text-xs text-gray-400 text-center leading-tight">{!! __('JPG, PNG<br>maks 2MB') !!}</span>
                     </div>
 
                     {{-- Fields --}}
                     <div class="flex-1 space-y-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1.5">Nama Toko</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ __('Nama Toko') }}</label>
                             <input type="text" name="name" value="{{ old('name', $tenant->name) }}" required
-                                placeholder="Nama toko kamu"
+                                placeholder="{{ __('Nama toko kamu') }}"
                                 class="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1.5">Subdomain</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ __('Subdomain') }}</label>
                             <div class="flex items-center gap-2">
                                 <input type="text" name="subdomain" value="{{ old('subdomain', $tenant->subdomain) }}" required
                                     placeholder="nama-toko"
                                     class="flex-1 rounded-xl border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition min-w-0">
                                 <span class="text-sm text-gray-400 shrink-0">.kasiro.my.id</span>
                             </div>
-                            <p class="mt-1.5 text-xs text-amber-600">Mengubah subdomain akan mengubah URL toko kamu.</p>
+                            <p class="mt-1.5 text-xs text-amber-600">{{ __('Mengubah subdomain akan mengubah URL toko kamu.') }}</p>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1.5">Pajak (%)</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ __('Pajak (%)') }}</label>
                             <div class="flex items-center gap-2">
                                 <input type="number" name="tax_percent" min="0" max="100" step="0.01"
                                     value="{{ old('tax_percent', rtrim(rtrim(number_format($tenant->taxPercent(), 2, '.', ''), '0'), '.')) }}"
@@ -199,7 +208,34 @@
                                     class="w-32 rounded-xl border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
                                 <span class="text-sm text-gray-400">%</span>
                             </div>
-                            <p class="mt-1.5 text-xs text-gray-400">Isi 0 untuk menonaktifkan pajak.</p>
+                            <p class="mt-1.5 text-xs text-gray-400">{{ __('Isi 0 untuk menonaktifkan pajak.') }}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ __('Bahasa Kasir') }}</label>
+                            <div class="relative" @click.outside="localeOpen = false">
+                                <input type="hidden" name="locale" :value="locale">
+                                <button type="button" @click="localeOpen = ! localeOpen"
+                                        class="flex w-full items-center justify-between rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm outline-none transition focus:border-transparent focus:ring-2 focus:ring-indigo-500">
+                                    <span class="truncate" x-text="localeLabels[locale]"></span>
+                                    <svg class="h-4 w-4 flex-shrink-0 text-gray-400 transition-transform" :class="localeOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </button>
+                                <div x-show="localeOpen" x-transition style="display:none"
+                                     class="absolute z-20 mt-2 w-full overflow-hidden rounded-2xl border border-gray-200 bg-white py-1 shadow-lg">
+                                    @foreach ($localeOptions as $code => $label)
+                                        <button type="button" @click="locale = '{{ $code }}'; localeOpen = false"
+                                                class="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm transition hover:bg-indigo-50"
+                                                :class="locale === '{{ $code }}' ? 'text-indigo-600 font-semibold bg-indigo-50' : 'text-gray-700'">
+                                            <span class="truncate">{{ $label }}</span>
+                                            <svg x-show="locale === '{{ $code }}'" class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                                            </svg>
+                                        </button>
+                                    @endforeach
+                                </div>
+                            </div>
+                            <p class="mt-1.5 text-xs text-gray-400">{{ __('Bahasa yang dipakai di halaman kasir ini.') }}</p>
                         </div>
                     </div>
                 </div>
@@ -209,8 +245,8 @@
         {{-- Layout --}}
         <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
             <div class="px-6 py-4 border-b border-gray-50">
-                <h2 class="font-semibold text-gray-800">Layout</h2>
-                <p class="text-xs text-gray-400 mt-0.5">Posisi navigasi toko · diterapkan setelah disimpan</p>
+                <h2 class="font-semibold text-gray-800">{{ __('Layout') }}</h2>
+                <p class="text-xs text-gray-400 mt-0.5">{{ __('Posisi navigasi toko · diterapkan setelah disimpan') }}</p>
             </div>
             <div class="p-6">
                 {{-- Hidden field carries the value; the cards below are plain
@@ -225,7 +261,7 @@
                              :style="selStyle(activeLayout === '{{ $key }}')"
                              @click="activeLayout = '{{ $key }}'; dirty = true">
                             <x-layout-wireframe :type="$key" />
-                            <p class="mt-2 text-xs font-medium text-gray-700">{{ $layout['label'] }}</p>
+                            <p class="mt-2 text-xs font-medium text-gray-700">{{ __($layout['label']) }}</p>
                         </div>
                     @endforeach
                 </div>
@@ -235,8 +271,8 @@
         {{-- Tema --}}
         <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
             <div class="px-6 py-4 border-b border-gray-50">
-                <h2 class="font-semibold text-gray-800">Tema</h2>
-                <p class="text-xs text-gray-400 mt-0.5">Gaya tipografi · langsung terlihat di halaman ini</p>
+                <h2 class="font-semibold text-gray-800">{{ __('Tema') }}</h2>
+                <p class="text-xs text-gray-400 mt-0.5">{{ __('Gaya tipografi · langsung terlihat di halaman ini') }}</p>
             </div>
             <div class="p-6">
                 <input type="hidden" name="theme" :value="activeTheme">
@@ -248,8 +284,8 @@
                              @click="changeTheme('{{ $key }}')">
                             <p class="text-2xl font-bold text-gray-800 leading-none mb-2"
                                style="font-family: {{ $theme['vars']['--brand-font'] }}">Aa</p>
-                            <p class="text-sm font-medium text-gray-700 leading-snug">{{ $theme['label'] }}</p>
-                            <p class="text-xs text-gray-400 mt-0.5">{{ count($theme['palettes']) }} warna</p>
+                            <p class="text-sm font-medium text-gray-700 leading-snug">{{ __($theme['label']) }}</p>
+                            <p class="text-xs text-gray-400 mt-0.5">{{ count($theme['palettes']) }} {{ __('warna') }}</p>
                         </div>
                     @endforeach
                 </div>
@@ -259,8 +295,8 @@
         {{-- Warna Brand --}}
         <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
             <div class="px-6 py-4 border-b border-gray-50">
-                <h2 class="font-semibold text-gray-800">Warna Brand</h2>
-                <p class="text-xs text-gray-400 mt-0.5">Warna aksen halaman ikut berubah saat dipilih</p>
+                <h2 class="font-semibold text-gray-800">{{ __('Warna Brand') }}</h2>
+                <p class="text-xs text-gray-400 mt-0.5">{{ __('Warna aksen halaman ikut berubah saat dipilih') }}</p>
             </div>
             <div class="p-6">
                 <input type="hidden" name="color_palette" :value="activePalette">
@@ -298,18 +334,18 @@
         <div style="background: var(--brand-primary, #4f46e5);">
             <div class="mx-auto max-w-3xl px-4 py-3.5 flex items-center justify-between gap-3">
                 <p class="text-xs sm:text-sm text-white/90 font-medium min-w-0">
-                    Ada perubahan yang belum disimpan
+                    {{ __('Ada perubahan yang belum disimpan') }}
                 </p>
                 <div class="flex items-center gap-2 shrink-0">
                     <button type="button"
                             x-on:click="cancelChanges()"
                             class="px-4 sm:px-5 py-2.5 bg-white/20 hover:bg-white/30 rounded-xl text-white text-sm font-medium transition active:scale-95">
-                        Batal
+                        {{ __('Batal') }}
                     </button>
                     <button type="submit" form="settings-form"
                             class="px-5 sm:px-7 py-2.5 bg-white rounded-xl font-semibold active:scale-95 transition text-sm shadow-md whitespace-nowrap"
                             style="color: var(--brand-primary, #4f46e5);">
-                        Simpan
+                        {{ __('Simpan') }}
                     </button>
                 </div>
             </div>
@@ -327,8 +363,8 @@
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden" x-on:click.stop>
             <div class="flex items-center justify-between px-6 py-4 border-b">
                 <div>
-                    <h3 class="font-semibold text-gray-800">Crop Logo</h3>
-                    <p class="text-xs text-gray-400 mt-0.5">Geser &amp; resize kotak untuk menyesuaikan area</p>
+                    <h3 class="font-semibold text-gray-800">{{ __('Crop Logo') }}</h3>
+                    <p class="text-xs text-gray-400 mt-0.5">{{ __('Geser & resize kotak untuk menyesuaikan area') }}</p>
                 </div>
                 <button type="button" x-on:click="cancelCrop()"
                         class="h-8 w-8 flex items-center justify-center rounded-full text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition">
@@ -344,12 +380,12 @@
             <div class="flex items-center gap-3 px-6 py-4 border-t justify-end">
                 <button type="button" x-on:click="cancelCrop()"
                         class="px-4 py-2 rounded-xl border border-gray-200 text-sm text-gray-700 hover:bg-gray-50 transition">
-                    Batal
+                    {{ __('Batal') }}
                 </button>
                 <button type="button" x-on:click="confirmCrop()"
                         class="px-5 py-2 rounded-xl text-white text-sm font-medium transition"
                         :style="'background: var(--brand-primary, #4f46e5)'">
-                    Terapkan
+                    {{ __('Terapkan') }}
                 </button>
             </div>
         </div>

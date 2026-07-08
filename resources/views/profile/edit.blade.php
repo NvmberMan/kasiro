@@ -19,7 +19,7 @@
 
     {{-- Page header --}}
     <div class="mb-8">
-        <h1 class="text-2xl font-bold text-slate-900">Profil Anda</h1>
+        <h1 class="text-2xl font-bold text-slate-900">{{ __('Profil Anda') }}</h1>
     </div>
 
     <div class="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_360px]">
@@ -29,7 +29,7 @@
 
             {{-- Personal info --}}
             <div class="rounded-2xl bg-white p-8">
-                <h2 class="mb-6 text-lg font-bold text-slate-900">Informasi personal</h2>
+                <h2 class="mb-6 text-lg font-bold text-slate-900">{{ __('Informasi personal') }}</h2>
 
                 {{-- Avatar upload --}}
                 <form method="POST" action="{{ route('profile.avatar') }}" enctype="multipart/form-data"
@@ -113,19 +113,19 @@
                         </label>
 
                         <div>
-                            <p class="text-sm font-medium text-slate-700">Foto Profil</p>
-                            <p class="text-xs text-slate-400" x-show="!changed">JPG, PNG · maks 2 MB · klik foto untuk ganti &amp; crop</p>
-                            <p class="text-xs text-[#a4c400] font-medium" x-show="changed" x-cloak>Foto baru dipilih — klik Simpan</p>
+                            <p class="text-sm font-medium text-slate-700">{{ __('Foto Profil') }}</p>
+                            <p class="text-xs text-slate-400" x-show="!changed">{{ __('JPG, PNG · maks 2 MB · klik foto untuk ganti & crop') }}</p>
+                            <p class="text-xs text-[#a4c400] font-medium" x-show="changed" x-cloak>{{ __('Foto baru dipilih — klik Simpan') }}</p>
                             <button type="submit" x-show="changed" x-cloak
                                     class="mt-2 rounded-full bg-[#a4c400] px-5 py-1.5 text-xs font-semibold text-white hover:bg-[#8fad00] transition">
-                                Simpan Foto
+                                {{ __('Simpan Foto') }}
                             </button>
                             @if ($errors->has('avatar'))
                                 <p class="mt-1 text-xs text-red-500">{{ $errors->first('avatar') }}</p>
                             @endif
                             @if (session('status') === 'avatar-updated')
                                 <p x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)"
-                                   class="mt-1 text-xs text-green-600 font-medium">✓ Foto berhasil diperbarui</p>
+                                   class="mt-1 text-xs text-green-600 font-medium">✓ {{ __('Foto berhasil diperbarui') }}</p>
                             @endif
                         </div>
                     </div>
@@ -142,8 +142,8 @@
                              x-on:click.stop>
                             <div class="flex items-center justify-between px-5 py-4 border-b">
                                 <div>
-                                    <h3 class="font-semibold text-slate-800">Crop Foto Profil</h3>
-                                    <p class="text-xs text-slate-400 mt-0.5">Geser &amp; resize untuk menyesuaikan</p>
+                                    <h3 class="font-semibold text-slate-800">{{ __('Crop Foto Profil') }}</h3>
+                                    <p class="text-xs text-slate-400 mt-0.5">{{ __('Geser & resize untuk menyesuaikan') }}</p>
                                 </div>
                                 <button type="button" x-on:click="cancelCrop()"
                                         class="h-8 w-8 flex items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition">
@@ -159,11 +159,11 @@
                             <div class="flex gap-3 px-5 py-4 border-t justify-end">
                                 <button type="button" x-on:click="cancelCrop()"
                                         class="px-4 py-2 rounded-full border border-slate-200 text-sm text-slate-700 hover:bg-slate-50 transition">
-                                    Batal
+                                    {{ __('Batal') }}
                                 </button>
                                 <button type="button" x-on:click="confirmCrop()"
                                         class="px-5 py-2 rounded-full bg-[#a4c400] text-white text-sm font-semibold hover:bg-[#8fad00] transition">
-                                    Terapkan
+                                    {{ __('Terapkan') }}
                                 </button>
                             </div>
                         </div>
@@ -175,9 +175,9 @@
                     @method('patch')
 
                     <div>
-                        <label class="mb-1.5 block text-sm text-slate-700">Username</label>
+                        <label class="mb-1.5 block text-sm text-slate-700">{{ __('Username') }}</label>
                         <input type="text" name="name" value="{{ old('name', $user->name) }}"
-                               placeholder="Nama lengkap"
+                               placeholder="{{ __('Nama lengkap') }}"
                                class="w-full rounded-full border border-slate-300 px-5 py-3 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition">
                         @error('name')
                             <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
@@ -185,7 +185,7 @@
                     </div>
 
                     <div>
-                        <label class="mb-1.5 block text-sm text-slate-700">Email</label>
+                        <label class="mb-1.5 block text-sm text-slate-700">{{ __('Email') }}</label>
                         <input type="email" name="email" value="{{ old('email', $user->email) }}"
                                placeholder="contoh@email.com"
                                class="w-full rounded-full border border-slate-300 px-5 py-3 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition">
@@ -197,12 +197,12 @@
                     <div class="pt-2 flex items-center gap-4">
                         <button type="submit"
                                 class="rounded-full bg-[#a4c400] px-7 py-2.5 text-sm font-semibold text-white hover:bg-[#8fad00] transition">
-                            Simpan
+                            {{ __('Simpan') }}
                         </button>
                         @if (session('status') === 'profile-updated')
                             <p x-data="{ show: true }" x-show="show" x-transition
                                x-init="setTimeout(() => show = false, 2000)"
-                               class="text-sm text-green-600">Tersimpan.</p>
+                               class="text-sm text-green-600">{{ __('Tersimpan.') }}</p>
                         @endif
                     </div>
                 </form>
@@ -210,7 +210,7 @@
 
             {{-- Password --}}
             <div class="rounded-2xl bg-white p-8">
-                <h2 class="mb-6 text-lg font-bold text-slate-900">Update Password Akun Anda</h2>
+                <h2 class="mb-6 text-lg font-bold text-slate-900">{{ __('Update Password Akun Anda') }}</h2>
 
                 <form method="POST" action="{{ route('password.update') }}" class="space-y-4">
                     @csrf
@@ -218,8 +218,8 @@
 
                     @if ($hasPassword)
                         <div>
-                            <label class="mb-1.5 block text-sm text-slate-700">Current Password</label>
-                            <input type="password" name="current_password" placeholder="Password saat ini"
+                            <label class="mb-1.5 block text-sm text-slate-700">{{ __('Current Password') }}</label>
+                            <input type="password" name="current_password" placeholder="{{ __('Password saat ini') }}"
                                    class="w-full rounded-full border border-slate-300 px-5 py-3 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition">
                             @if ($errors->updatePassword->has('current_password'))
                                 <p class="mt-1 text-xs text-red-500">{{ $errors->updatePassword->first('current_password') }}</p>
@@ -228,8 +228,8 @@
                     @endif
 
                     <div>
-                        <label class="mb-1.5 block text-sm text-slate-700">New Password</label>
-                        <input type="password" name="password" placeholder="Password baru"
+                        <label class="mb-1.5 block text-sm text-slate-700">{{ __('New Password') }}</label>
+                        <input type="password" name="password" placeholder="{{ __('Password baru') }}"
                                class="w-full rounded-full border border-slate-300 px-5 py-3 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition">
                         @if ($errors->updatePassword->has('password'))
                             <p class="mt-1 text-xs text-red-500">{{ $errors->updatePassword->first('password') }}</p>
@@ -237,20 +237,20 @@
                     </div>
 
                     <div>
-                        <label class="mb-1.5 block text-sm text-slate-700">Confirm Password</label>
-                        <input type="password" name="password_confirmation" placeholder="Ulangi password baru"
+                        <label class="mb-1.5 block text-sm text-slate-700">{{ __('Confirm Password') }}</label>
+                        <input type="password" name="password_confirmation" placeholder="{{ __('Ulangi password baru') }}"
                                class="w-full rounded-full border border-slate-300 px-5 py-3 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition">
                     </div>
 
                     <div class="pt-2 flex items-center gap-4">
                         <button type="submit"
                                 class="rounded-full bg-[#a4c400] px-7 py-2.5 text-sm font-semibold text-white hover:bg-[#8fad00] transition">
-                            Simpan
+                            {{ __('Simpan') }}
                         </button>
                         @if (session('status') === 'password-updated')
                             <p x-data="{ show: true }" x-show="show" x-transition
                                x-init="setTimeout(() => show = false, 2000)"
-                               class="text-sm text-green-600">Tersimpan.</p>
+                               class="text-sm text-green-600">{{ __('Tersimpan.') }}</p>
                         @endif
                     </div>
                 </form>
@@ -262,9 +262,9 @@
 
             {{-- Two-factor auth --}}
             <div class="rounded-2xl bg-white p-8">
-                <h2 class="mb-2 text-lg font-bold text-slate-900">Aktifkan Dua Faktor Autentikasi</h2>
+                <h2 class="mb-2 text-lg font-bold text-slate-900">{{ __('Aktifkan Dua Faktor Autentikasi') }}</h2>
                 <p class="mb-5 text-sm text-slate-500">
-                    Tambahkan keamanan ekstra dengan meminta kode verifikasi saat autentikasi
+                    {{ __('Tambahkan keamanan ekstra dengan meminta kode verifikasi saat autentikasi') }}
                 </p>
 
                 @if ($tfEnabled)
@@ -272,12 +272,12 @@
                         <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
                         </svg>
-                        2FA aktif
+                        {{ __('2FA aktif') }}
                     </div>
 
                     @if ($showCodes)
                         <div class="mb-4 rounded-xl bg-slate-50 p-4">
-                            <p class="mb-3 text-sm text-slate-600">Simpan kode pemulihan ini di tempat aman. Setiap kode hanya bisa digunakan sekali.</p>
+                            <p class="mb-3 text-sm text-slate-600">{{ __('Simpan kode pemulihan ini di tempat aman. Setiap kode hanya bisa digunakan sekali.') }}</p>
                             <div class="grid grid-cols-2 gap-2 font-mono text-sm">
                                 @foreach ($user->recoveryCodes() as $code)
                                     <span class="rounded-lg bg-white px-2 py-1 text-slate-800">{{ $code }}</span>
@@ -291,26 +291,26 @@
                             @csrf
                             <button type="submit"
                                     class="rounded-full border border-slate-300 px-5 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition">
-                                Buat ulang kode
+                                {{ __('Buat ulang kode') }}
                             </button>
                         </form>
                         <form method="POST" action="{{ route('two-factor.disable') }}"
-                              data-confirm="Akun Anda tidak akan lagi meminta kode saat masuk."
-                              data-confirm-title="Nonaktifkan 2FA?"
-                              data-confirm-action="Ya, Nonaktifkan"
+                              data-confirm="{{ __('Akun Anda tidak akan lagi meminta kode saat masuk.') }}"
+                              data-confirm-title="{{ __('Nonaktifkan 2FA?') }}"
+                              data-confirm-action="{{ __('Ya, Nonaktifkan') }}"
                               data-confirm-type="danger">
                             @csrf
                             @method('DELETE')
                             <button type="submit"
                                     class="rounded-full bg-red-500 px-5 py-2 text-sm font-semibold text-white hover:bg-red-600 transition">
-                                Nonaktifkan 2FA
+                                {{ __('Nonaktifkan 2FA') }}
                             </button>
                         </form>
                     </div>
 
                 @elseif ($tfPending)
                     <div class="space-y-4">
-                        <p class="text-sm text-slate-600">Pindai QR ini dengan Google Authenticator, Authy, atau aplikasi sejenis.</p>
+                        <p class="text-sm text-slate-600">{{ __('Pindai QR ini dengan Google Authenticator, Authy, atau aplikasi sejenis.') }}</p>
 
                         <div class="flex justify-center rounded-xl border border-slate-200 p-3">
                             {!! \App\Support\TwoFactorQrCode::svg($user) !!}
@@ -320,13 +320,13 @@
 
                         <form method="POST" action="{{ route('two-factor.confirm') }}">
                             @csrf
-                            <label class="mb-1.5 block text-sm text-slate-700">Kode 6 digit</label>
+                            <label class="mb-1.5 block text-sm text-slate-700">{{ __('Kode 6 digit') }}</label>
                             <div class="flex items-center gap-3">
                                 <input type="text" name="code" inputmode="numeric" autocomplete="one-time-code" required
                                        class="w-full rounded-full border border-slate-300 px-4 py-2.5 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition">
                                 <button type="submit"
                                         class="shrink-0 rounded-full bg-[#a4c400] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#8fad00] transition">
-                                    Konfirmasi
+                                    {{ __('Konfirmasi') }}
                                 </button>
                             </div>
                             @error('code') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
@@ -334,7 +334,7 @@
 
                         <form method="POST" action="{{ route('two-factor.disable') }}">
                             @csrf @method('DELETE')
-                            <button type="submit" class="text-sm text-slate-400 underline hover:text-slate-600">Batal</button>
+                            <button type="submit" class="text-sm text-slate-400 underline hover:text-slate-600">{{ __('Batal') }}</button>
                         </form>
                     </div>
 
@@ -343,7 +343,7 @@
                         @csrf
                         <button type="submit"
                                 class="rounded-full bg-[#a4c400] px-7 py-2.5 text-sm font-semibold text-white hover:bg-[#8fad00] transition">
-                            Aktifkan
+                            {{ __('Aktifkan') }}
                         </button>
                     </form>
                 @endif
@@ -351,15 +351,15 @@
 
             {{-- Delete account --}}
             <div class="rounded-2xl bg-white p-8">
-                <h2 class="mb-2 text-lg font-bold text-slate-900">Hapus Akun</h2>
+                <h2 class="mb-2 text-lg font-bold text-slate-900">{{ __('Hapus Akun') }}</h2>
                 <p class="mb-5 text-sm text-slate-500">
-                    Setelah anda menghapus akun, maka seluruh data akan otomatis terhapus
+                    {{ __('Setelah anda menghapus akun, maka seluruh data akan otomatis terhapus') }}
                 </p>
                 <button type="button"
                         x-data=""
                         x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
                         class="rounded-full bg-red-500 px-7 py-2.5 text-sm font-semibold text-white hover:bg-red-600 transition">
-                    Hapus
+                    {{ __('Hapus') }}
                 </button>
             </div>
         </div>
@@ -371,13 +371,13 @@
             @csrf
             @method('delete')
 
-            <h2 class="text-lg font-bold text-slate-900">Hapus akun?</h2>
+            <h2 class="text-lg font-bold text-slate-900">{{ __('Hapus akun?') }}</h2>
             <p class="mt-2 text-sm text-slate-600">
-                Seluruh data akun Anda akan dihapus permanen. Masukkan kata sandi untuk mengonfirmasi.
+                {{ __('Seluruh data akun Anda akan dihapus permanen. Masukkan kata sandi untuk mengonfirmasi.') }}
             </p>
 
             <div class="mt-5">
-                <input type="password" name="password" placeholder="Kata sandi"
+                <input type="password" name="password" placeholder="{{ __('Kata sandi') }}"
                        class="w-full rounded-full border border-slate-300 px-5 py-3 text-sm outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100 transition">
                 @if ($errors->userDeletion->has('password'))
                     <p class="mt-1 text-xs text-red-500">{{ $errors->userDeletion->first('password') }}</p>
@@ -387,11 +387,11 @@
             <div class="mt-6 flex justify-end gap-3">
                 <button type="button" x-on:click="$dispatch('close')"
                         class="rounded-full border border-slate-300 px-5 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition">
-                    Batal
+                    {{ __('Batal') }}
                 </button>
                 <button type="submit"
                         class="rounded-full bg-red-500 px-5 py-2 text-sm font-semibold text-white hover:bg-red-600 transition">
-                    Ya, Hapus Akun
+                    {{ __('Ya, Hapus Akun') }}
                 </button>
             </div>
         </form>

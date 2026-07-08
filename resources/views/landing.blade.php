@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="id" class="scroll-smooth">
+<html lang="{{ app()->getLocale() }}" class="scroll-smooth">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Kasiro | POS Bermerek untuk UMKM</title>
+    <title>{{ __('Kasiro | POS Bermerek untuk UMKM') }}</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('images/kasiro-logo.ico') }}">
     <link rel="apple-touch-icon" href="{{ asset('images/kasiro-logo.png') }}">
 
@@ -40,25 +40,26 @@
             </a>
             
             <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
-                <a href="#tentang" class="hover:text-slate-900 transition">Tentang</a>
-                <a href="#bantuan" class="hover:text-slate-900 transition">Bantuan</a>
+                <a href="#tentang" class="hover:text-slate-900 transition">{{ __('Tentang') }}</a>
+                <a href="#bantuan" class="hover:text-slate-900 transition">{{ __('Bantuan') }}</a>
             </nav>
         </div>
 
         <div class="flex items-center gap-2">
+            <x-language-switcher align="right" />
             @auth
                 <a href="{{ route('dashboard') }}"
                    class="rounded-full border border-blue-600 px-5 py-1.5 text-sm font-semibold text-blue-600 hover:bg-blue-50 transition">
-                    Dashboard
+                    {{ __('Dashboard') }}
                 </a>
             @else
                 <a href="{{ route('login') }}"
                    class="rounded-full border border-blue-600 px-5 py-1.5 text-sm font-semibold text-blue-600 hover:bg-blue-50 transition">
-                    Login
+                    {{ __('Login') }}
                 </a>
                 <a href="{{ route('register') }}"
                    class="rounded-full bg-blue-600 px-5 py-1.5 text-sm font-semibold text-white hover:bg-blue-700 transition">
-                    Daftar
+                    {{ __('Daftar') }}
                 </a>
             @endauth
         </div>
@@ -73,15 +74,14 @@
     <div class="relative mx-auto max-w-6xl px-4 sm:px-6 py-16 sm:py-20 grid lg:grid-cols-2 gap-10 items-center">
         <div>
             <h1 class="text-3xl sm:text-4xl font-bold leading-tight tracking-tight text-slate-900">
-                Transaksi Mudah,<br>Usaha Terarah
+                {!! __('Transaksi Mudah,<br>Usaha Terarah') !!}
             </h1>
             <p class="mt-5 max-w-md text-sm sm:text-base text-slate-500 leading-relaxed">
-                Partner digital UMKM dalam mengarahkan usaha menuju dunia yang lebih modern
-                melalui pembuatan sistem kasir yang sesuai dengan identitas unik setiap bisnis.
+                {{ __('Partner digital UMKM dalam mengarahkan usaha menuju dunia yang lebih modern melalui pembuatan sistem kasir yang sesuai dengan identitas unik setiap bisnis.') }}
             </p>
             <a href="{{ auth()->check() ? route('tenants.choose') : route('register') }}"
                class="mt-7 inline-flex items-center gap-2 rounded-full bg-lime-400 px-6 py-2.5 text-sm font-semibold text-slate-900 hover:bg-lime-500 transition">
-                Buat Sekarang
+                {{ __('Buat Sekarang') }}
                 <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></svg>
             </a>
         </div>
@@ -96,10 +96,10 @@
 {{-- ===== Template Kasir ===== --}}
 <section id="tentang" class="mx-auto max-w-6xl px-4 sm:px-6 py-14 scroll-mt-16">
     <div class="flex items-center justify-between mb-8">
-        <h2 class="text-xl sm:text-2xl font-bold text-slate-900">Template Kasir</h2>
+        <h2 class="text-xl sm:text-2xl font-bold text-slate-900">{{ __('Template Kasir') }}</h2>
         <a href="{{ auth()->check() ? route('tenants.create.template') : route('login') }}"
            class="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-4 py-1.5 text-xs font-semibold text-white hover:bg-blue-700 transition">
-            Lainnya
+            {{ __('Lainnya') }}
             <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
     </div>
@@ -114,14 +114,14 @@
                          alt="{{ $tpl->name }}">
                     <div class="absolute inset-0 flex items-center justify-center bg-blue-600/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                         <span class="rounded-full bg-white px-5 py-2 text-sm font-semibold text-blue-600 shadow">
-                            Pakai Template
+                            {{ __('Pakai Template') }}
                         </span>
                     </div>
                 </div>
                 <p class="mt-3 text-sm font-medium text-slate-700 transition group-hover:text-blue-600">{{ $tpl->name }}</p>
             </a>
         @empty
-            <p class="col-span-full text-center text-slate-400 py-8">Belum ada template tersedia.</p>
+            <p class="col-span-full text-center text-slate-400 py-8">{{ __('Belum ada template tersedia.') }}</p>
         @endforelse
     </div>
 </section>
@@ -129,7 +129,7 @@
 {{-- ===== 3 Hal yang membuat KASIRO berbeda ===== --}}
 <section class="bg-[#0c2461] py-16">
     <div class="mx-auto max-w-6xl px-4 sm:px-6">
-        <h2 class="text-center text-2xl sm:text-3xl font-bold text-white mb-12">3 Hal yang membuat KASIRO berbeda</h2>
+        <h2 class="text-center text-2xl sm:text-3xl font-bold text-white mb-12">{{ __('3 Hal yang membuat KASIRO berbeda') }}</h2>
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
             @php
@@ -144,7 +144,7 @@
                     <img src="{{ asset($icon) }}" alt="" class="shrink-0 h-16 w-16 object-contain">
                     <div>
                         <p class="text-xs font-semibold text-lime-400 mb-1">{{ $num }}</p>
-                        <p class="text-sm text-lime-400 leading-snug">{{ $text }}</p>
+                        <p class="text-sm text-lime-400 leading-snug">{{ __($text) }}</p>
                     </div>
                 </div>
             @endforeach
@@ -185,7 +185,7 @@
     @endphp
 
     <div class="relative mx-auto max-w-6xl px-4 sm:px-6">
-        <h2 class="text-center text-xl sm:text-2xl font-bold text-slate-900 mb-10">Apa saja yang ada dalam sistem Kasir?</h2>
+        <h2 class="text-center text-xl sm:text-2xl font-bold text-slate-900 mb-10">{{ __('Apa saja yang ada dalam sistem Kasir?') }}</h2>
 
         <div class="relative">
             {{-- Tombol navigasi --}}
@@ -203,8 +203,8 @@
                             </div>
                             {{-- Lime card --}}
                             <div class="absolute right-0 top-0 bottom-0 w-[38%] rounded-r-2xl bg-lime-400 p-8 flex flex-col justify-center">
-                                <h3 class="text-2xl font-bold text-slate-900">{{ $f['title'] }}</h3>
-                                <p class="mt-3 text-sm text-slate-700/80 leading-relaxed">{{ $f['desc'] }}</p>
+                                <h3 class="text-2xl font-bold text-slate-900">{{ __($f['title']) }}</h3>
+                                <p class="mt-3 text-sm text-slate-700/80 leading-relaxed">{{ __($f['desc']) }}</p>
                             </div>
                         </div>
                     </div>
@@ -223,7 +223,7 @@
     <div class="mx-auto max-w-5xl px-4 sm:px-6">
         <div class="flex items-center justify-center gap-2 mb-10">
             <span class="flex h-7 w-7 items-center justify-center rounded-full bg-slate-900 text-white text-sm font-bold">?</span>
-            <h2 class="text-xl sm:text-2xl font-bold text-slate-900">Pertanyaan Umum</h2>
+            <h2 class="text-xl sm:text-2xl font-bold text-slate-900">{{ __('Pertanyaan Umum') }}</h2>
         </div>
 
         @php
@@ -241,14 +241,14 @@
                 <div x-data="{ open: false }" class="rounded-2xl bg-white ring-1 ring-slate-100">
                     <button type="button" x-on:click="open = !open"
                             class="flex w-full items-center justify-between gap-3 px-5 py-4 text-left">
-                        <span class="text-sm font-medium text-slate-800">{{ $q }}</span>
+                        <span class="text-sm font-medium text-slate-800">{{ __($q) }}</span>
                         <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-lime-400 text-slate-900 transition" :class="open && 'rotate-180'">
                             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/></svg>
                         </span>
                     </button>
                     <div x-show="open" x-cloak x-transition
                          class="px-5 pb-4 text-sm text-slate-500 leading-relaxed">
-                        {{ $a }}
+                        {{ __($a) }}
                     </div>
                 </div>
             @endforeach
@@ -259,16 +259,16 @@
 {{-- ===== CTA ===== --}}
 <section class="bg-blue-600 py-16 text-center">
     <div class="mx-auto max-w-xl px-4">
-        <h2 class="text-2xl sm:text-3xl font-bold text-white">Kami Mendengar Anda!</h2>
+        <h2 class="text-2xl sm:text-3xl font-bold text-white">{{ __('Kami Mendengar Anda!') }}</h2>
         <p class="mt-3 text-sm text-blue-100/80 leading-relaxed">
-            Punya masukan atau pertanyaan seputar sistem kasir Kasiro? Sampaikan kepada kami.
+            {{ __('Punya masukan atau pertanyaan seputar sistem kasir Kasiro? Sampaikan kepada kami.') }}
         </p>
         <a href="{{ auth()->check() ? route('tenants.choose') : route('register') }}"
            class="mt-6 inline-flex items-center gap-2 rounded-full bg-lime-400 px-8 py-2.5 text-sm font-semibold text-slate-900 hover:bg-lime-500 transition">
             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h2.3a1 1 0 01.95.68l1 3a1 1 0 01-.27 1.05L8.2 9.2a12 12 0 006.6 6.6l1.47-1.48a1 1 0 011.05-.27l3 1a1 1 0 01.68.95V19a2 2 0 01-2 2A16 16 0 013 5z"/>
             </svg>
-            Hubungi kami!
+            {{ __('Hubungi kami!') }}
         </a>
     </div>
 </section>
@@ -280,7 +280,7 @@
             <a href="mailto:halo@kasiro.my.id" class="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 transition" aria-label="Email">
                 <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l9 6 9-6M3 8v8a2 2 0 002 2h14a2 2 0 002-2V8M3 8a2 2 0 012-2h14a2 2 0 012 2"/></svg>
             </a>
-            <a href="tel:+62" class="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 transition" aria-label="Telepon">
+            <a href="tel:+62" class="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 transition" aria-label="{{ __('Telepon') }}">
                 <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h2.3a1 1 0 01.95.68l1 3a1 1 0 01-.27 1.05L8.2 9.2a12 12 0 006.6 6.6l1.47-1.48a1 1 0 011.05-.27l3 1a1 1 0 01.68.95V19a2 2 0 01-2 2A16 16 0 013 5z"/></svg>
             </a>
         </div>

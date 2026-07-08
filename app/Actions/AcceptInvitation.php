@@ -13,15 +13,15 @@ class AcceptInvitation
         $invitation = TenantInvitation::where('token', hash('sha256', $plainToken))->first();
 
         if (! $invitation) {
-            throw new RuntimeException('Undangan tidak ditemukan atau sudah tidak valid.');
+            throw new RuntimeException(__('Undangan tidak ditemukan atau sudah tidak valid.'));
         }
 
         if ($invitation->isAccepted()) {
-            throw new RuntimeException('Undangan ini sudah pernah digunakan.');
+            throw new RuntimeException(__('Undangan ini sudah pernah digunakan.'));
         }
 
         if ($invitation->isExpired()) {
-            throw new RuntimeException('Undangan sudah kedaluwarsa.');
+            throw new RuntimeException(__('Undangan sudah kedaluwarsa.'));
         }
 
         $tenant = $invitation->tenant;
@@ -32,7 +32,7 @@ class AcceptInvitation
             ->exists();
 
         if ($alreadyMember) {
-            throw new RuntimeException('Anda sudah menjadi anggota toko ini.');
+            throw new RuntimeException(__('Anda sudah menjadi anggota toko ini.'));
         }
 
         // Attach or update pivot
