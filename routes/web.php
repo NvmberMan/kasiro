@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AcceptInvitationController;
+use App\Http\Controllers\ContactMessageController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\LocaleController;
@@ -34,6 +35,9 @@ Route::domain($central)->middleware(['setlocale'])->group(function () {
 
     // Studio / landing language switcher.
     Route::get('/locale/{locale}', [LocaleController::class, 'update'])->name('locale.update');
+
+    Route::post('/contact', [ContactMessageController::class, 'store'])
+        ->middleware('throttle:5,1')->name('contact.store');
 
     Route::get('/dashboard', [DashboardController::class, 'home'])
         ->middleware(['auth', 'verified'])->name('dashboard');
