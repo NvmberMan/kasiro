@@ -15,6 +15,7 @@
         'tenant-archived'      => [__('Toko Diarsipkan'), __('Toko berhasil diarsipkan.')],
         'tenant-restored'      => [__('Toko Dipulihkan'), __('Toko berhasil dipulihkan.')],
         'tenant-deleted'       => [__('Toko Dihapus'), __('Toko berhasil dihapus secara permanen.')],
+        'contact-sent'         => [__('Pesan Terkirim'), __('Terima kasih! Tim kami akan segera menghubungi Anda.')],
     ];
 
     $flash = $messages[session('status')] ?? null;
