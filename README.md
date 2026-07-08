@@ -1,66 +1,130 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Kasiro
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Kasiro adalah platform SaaS multi-tenant untuk membuat sistem kasir (POS) bermerek untuk UMKM. Setiap toko yang dibuat lewat "studio" mendapat subdomain sendiri (`{namatoko}.kasiro.my.id`), lengkap dengan template tampilan, tema warna, dan kini juga bahasa yang bisa disesuaikan per toko.
 
-## About Laravel
+## Tech Stack
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Backend:** Laravel 12, PHP 8.3
+- **Frontend:** Blade + Alpine.js + Tailwind CSS (Vite)
+- **Database:** MySQL
+- **Screenshot generator:** Spatie Browsershot (Puppeteer/headless Chrome)
+- **Auth:** Laravel Breeze + Google OAuth (Socialite) + 2FA (Google2FA)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Fitur Utama
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Multi-tenancy berbasis subdomain** — domain pusat (`kasiro.my.id`) untuk studio, subdomain per tenant untuk toko masing-masing.
+- **Sistem template & tema** — 6 template kasir siap pakai (2 per tema: classic, modern, retro), preview screenshot otomatis via headless Chrome.
+- **Localization (id/en)** — Indonesia sebagai bahasa default, English sebagai bahasa kedua. Bahasa studio dan bahasa tiap tenant bisa berbeda; tenant bisa memilih ikut bahasa studio (dinamis) atau bahasa sendiri.
+- **Kasir (POS)**, manajemen produk & kategori, laporan, manajemen karyawan & undangan, arsip toko.
+- **Login Google + 2FA** untuk keamanan akun studio.
 
-## Learning Laravel
+## Setup Lokal
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+1. Clone repo, lalu install dependency:
+   ```bash
+   composer install
+   npm install
+   ```
+2. Salin `.env.example` menjadi `.env`, lalu isi `APP_KEY`:
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+3. Sesuaikan koneksi database (`DB_*`) di `.env`, lalu buat databasenya.
+4. Migrate + seed (data awal: 6 template, akun demo `owner@kasiro.my.id` / `password` dengan tenant `kopisenja` & `berkahmart`):
+   ```bash
+   php artisan migrate --seed
+   php artisan storage:link
+   ```
+5. Jalankan dev server:
+   ```bash
+   npm run dev
+   php artisan serve
+   ```
+6. (Opsional) Generate ulang screenshot template/tenant kalau butuh preview gambar:
+   ```bash
+   php artisan templates:screenshots --queue
+   php artisan tenants:screenshots
+   php artisan queue:work   # perlu jalan supaya job screenshot diproses
+   ```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+> Domain lokal (Laragon) memakai `kasiro.test`; domain produksi memakai `kasiro.my.id`. Pastikan `TENANCY_CENTRAL_DOMAIN` di `.env` sesuai environment yang dipakai, dan subdomain wildcard (`*.kasiro.test` / `*.kasiro.my.id`) sudah diarahkan ke server lokal/VPS.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Testing
 
-## Laravel Sponsors
+```bash
+php artisan test
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Deployment (VPS)
 
-### Premium Partners
+Aplikasi production berjalan di VPS (`/var/www/kasiro`, branch `main`, nginx + php8.3-fpm + MySQL).
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+Alur deploy standar untuk perubahan kode (migration aditif, tidak menghapus data):
 
-## Contributing
+```bash
+ssh -i <path-ke-key.pem> ubuntu@<ip-vps>
+cd /var/www/kasiro
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+git pull origin main
+php artisan migrate --force        # aman, hanya menjalankan migration baru
+npm run build                      # rebuild CSS/JS kalau ada perubahan tampilan
+php artisan config:clear
+php artisan view:clear
+php artisan route:clear
+php artisan cache:clear
+```
 
-## Code of Conduct
+Kalau ada template/tenant baru yang belum punya screenshot:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+php artisan templates:screenshots --slug=<slug> --queue
+php artisan tenants:screenshots --subdomain=<subdomain>
+```
 
-## Security Vulnerabilities
+### Reset Total (Database + Seeder + Migrate + Screenshot)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Gunakan ini hanya kalau memang ingin mengembalikan aplikasi ke kondisi awal (misalnya lingkungan demo/staging). **Ini menghapus SEMUA data secara permanen dan tidak bisa di-undo** — semua akun, toko, transaksi yang sudah ada akan hilang dan digantikan hanya dengan data seed (template + akun demo).
+
+```bash
+# 1. Reset total: drop semua tabel, migrate ulang dari nol, lalu seed ulang
+php artisan migrate:fresh --seed --force
+
+# 2. Re-link storage (symlink public/storage -> storage/app/public)
+php artisan storage:link
+
+# 3. Generate ulang screenshot semua template
+php artisan templates:screenshots --queue
+
+# 4. Generate ulang screenshot semua tenant aktif (dari seeder demo)
+php artisan tenants:screenshots
+
+# 5. Bersihkan cache Laravel
+php artisan config:clear && php artisan view:clear && php artisan route:clear && php artisan cache:clear
+```
+
+Catatan:
+- `--force` wajib untuk migration/seeder di environment production.
+- Langkah screenshot memakai job queue (Browsershot/headless Chrome) — pastikan queue worker aktif (`sudo systemctl status kasiro-queue` di VPS) dan tunggu beberapa detik sebelum mengecek hasilnya.
+- Setelah reset, data yang tersedia hanya: user `test@example.com`, akun demo `owner@kasiro.my.id` / `password` dengan tenant `kopisenja` & `berkahmart`, dan 6 template kasir.
+
+### Catatan RAM saat build di VPS
+
+`npm run build` aman dijalankan langsung di VPS selama RAM mencukupi (cek dulu dengan `free -h`). Kalau instance sedang RAM kecil / tidak ada swap, build bisa membuat proses lain (nginx, php-fpm, sshd) kehabisan memori. Alternatif paling aman: build di lokal, lalu upload hasilnya:
+
+```bash
+# Di lokal
+npm run build
+
+# Upload ke VPS
+scp -i <path-ke-key.pem> -r public/build ubuntu@<ip-vps>:/tmp/kasiro-build-new
+
+# Di VPS
+cd /var/www/kasiro
+mv public/build public/build.bak
+mv /tmp/kasiro-build-new public/build
+```
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Proprietary — internal project.
