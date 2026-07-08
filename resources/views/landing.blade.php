@@ -200,15 +200,15 @@
                 <div class="swiper-wrapper items-stretch">
                     @foreach ($features as $f)
                     <div class="swiper-slide">
-                        <div class="relative flex items-stretch">
+                        <div class="relative flex flex-col sm:flex-row sm:items-stretch">
                             {{-- Gambar --}}
-                            <div class="w-[62%] rounded-l-2xl overflow-hidden">
+                            <div class="w-full sm:w-[62%] overflow-hidden rounded-t-2xl sm:rounded-l-2xl sm:rounded-tr-none">
                                 <img src="{{ asset($f['img']) }}" alt="{{ $f['title'] }}" class="ph w-full h-auto block select-none">
                             </div>
                             {{-- Lime card --}}
-                            <div class="absolute right-0 top-0 bottom-0 w-[38%] rounded-r-2xl bg-lime-400 p-8 flex flex-col justify-center">
-                                <h3 class="text-2xl font-bold text-slate-900">{{ __($f['title']) }}</h3>
-                                <p class="mt-3 text-sm text-slate-700/80 leading-relaxed">{{ __($f['desc']) }}</p>
+                            <div class="w-full sm:absolute sm:right-0 sm:top-0 sm:bottom-0 sm:w-[38%] rounded-b-2xl sm:rounded-r-2xl sm:rounded-bl-none bg-lime-400 p-6 sm:p-8 flex flex-col justify-center">
+                                <h3 class="text-lg sm:text-2xl font-bold text-slate-900">{{ __($f['title']) }}</h3>
+                                <p class="mt-2 sm:mt-3 text-sm text-slate-700/80 leading-relaxed">{{ __($f['desc']) }}</p>
                             </div>
                         </div>
                     </div>
@@ -261,19 +261,58 @@
 </section>
 
 {{-- ===== CTA ===== --}}
-<section class="bg-blue-600 py-16 text-center">
+<section class="bg-blue-600 py-16 text-center" x-data="{ open: {{ $errors->any() ? 'true' : 'false' }} }">
     <div class="mx-auto max-w-xl px-4">
         <h2 class="text-2xl sm:text-3xl font-bold text-white">{{ __('Kami Mendengar Anda!') }}</h2>
         <p class="mt-3 text-sm text-blue-100/80 leading-relaxed">
             {{ __('Punya masukan atau pertanyaan seputar sistem kasir Kasiro? Sampaikan kepada kami.') }}
         </p>
-        <a href="{{ auth()->check() ? route('tenants.choose') : route('register') }}"
-           class="mt-6 inline-flex items-center gap-2 rounded-full bg-lime-400 px-8 py-2.5 text-sm font-semibold text-slate-900 hover:bg-lime-500 transition">
+        <button type="button" @click="open = true"
+                class="mt-6 inline-flex items-center gap-2 rounded-full bg-lime-400 px-8 py-2.5 text-sm font-semibold text-slate-900 hover:bg-lime-500 transition">
             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h2.3a1 1 0 01.95.68l1 3a1 1 0 01-.27 1.05L8.2 9.2a12 12 0 006.6 6.6l1.47-1.48a1 1 0 011.05-.27l3 1a1 1 0 01.68.95V19a2 2 0 01-2 2A16 16 0 013 5z"/>
             </svg>
             {{ __('Hubungi kami!') }}
-        </a>
+        </button>
+    </div>
+
+    <div x-show="open" x-cloak @keydown.escape.window="open = false"
+         class="fixed inset-0 z-[80] flex items-center justify-center p-4">
+        <div class="fixed inset-0 bg-black/50" @click="open = false"></div>
+        <div x-show="open" x-transition class="relative w-full max-w-md rounded-2xl bg-white p-6 text-left shadow-xl">
+            <button type="button" @click="open = false" aria-label="{{ __('Tutup') }}"
+                    class="absolute right-4 top-4 text-slate-400 hover:text-slate-600">
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+
+            <h3 class="text-lg font-bold text-slate-900">{{ __('Hubungi Kami') }}</h3>
+            <p class="mt-1 text-sm text-slate-500">{{ __('Sampaikan masukan atau pertanyaan Anda, tim kami akan segera merespons.') }}</p>
+
+            @if ($errors->any())
+                <div class="mt-4 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">
+                    {{ $errors->first() }}
+                </div>
+            @endif
+
+            <form method="POST" action="{{ route('contact.store') }}" class="mt-4 space-y-3">
+                @csrf
+                <input type="text" name="website" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true">
+
+                <input type="text" name="name" value="{{ old('name') }}" required placeholder="{{ __('Nama Anda') }}"
+                       class="w-full rounded-lg border border-slate-200 px-4 py-2.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
+
+                <input type="email" name="email" value="{{ old('email') }}" required placeholder="{{ __('Email Anda') }}"
+                       class="w-full rounded-lg border border-slate-200 px-4 py-2.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
+
+                <textarea name="message" rows="4" required placeholder="{{ __('Pesan Anda') }}"
+                          class="w-full rounded-lg border border-slate-200 px-4 py-2.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">{{ old('message') }}</textarea>
+
+                <button type="submit"
+                        class="w-full rounded-full bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition">
+                    {{ __('Kirim Pesan') }}
+                </button>
+            </form>
+        </div>
     </div>
 </section>
 
@@ -291,6 +330,8 @@
         <p class="text-xs text-blue-100/60">&copy; {{ date('Y') }} kasiro.my.id</p>
     </div>
 </footer>
+
+<x-flash-modal />
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
