@@ -13,15 +13,15 @@
 
         {{-- Search + sort --}}
         <div class="flex flex-wrap gap-2 mb-4">
-            <input type="search" x-model="search" placeholder="Cari produk..."
+            <input type="search" x-model="search" placeholder="{{ __('Cari produk...') }}"
                    class="flex-1 min-w-[180px] border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
             <select x-model="sort" @change="sortProducts()"
                     class="border min-w-[150px] border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                <option value="name:asc">Nama A-Z</option>
-                <option value="name:desc">Nama Z-A</option>
-                <option value="price:asc">Harga Terendah</option>
-                <option value="price:desc">Harga Tertinggi</option>
-                <option value="stock:desc">Stok Terbanyak</option>
+                <option value="name:asc">{{ __('Nama A-Z') }}</option>
+                <option value="name:desc">{{ __('Nama Z-A') }}</option>
+                <option value="price:asc">{{ __('Harga Terendah') }}</option>
+                <option value="price:desc">{{ __('Harga Tertinggi') }}</option>
+                <option value="stock:desc">{{ __('Stok Terbanyak') }}</option>
             </select>
         </div>
 
@@ -30,9 +30,7 @@
         <div class="flex gap-2 flex-wrap mb-4">
             <button @click="filterCategory = null"
                     :class="filterCategory === null ? 'bg-indigo-600 text-white' : 'bg-white text-gray-600 border'"
-                    class="px-3 py-1 rounded-full text-xs font-medium transition">
-                Semua
-            </button>
+                    class="px-3 py-1 rounded-full text-xs font-medium transition">{{ __('Semua') }}</button>
             @foreach ($categories as $cat)
             <button @click="filterCategory = {{ $cat->id }}"
                     :class="filterCategory === {{ $cat->id }} ? 'bg-indigo-600 text-white' : 'bg-white text-gray-600 border'"
@@ -45,7 +43,7 @@
 
         {{-- Products --}}
         @if ($products->isEmpty())
-            <p class="text-gray-400 text-center py-12">Belum ada produk aktif.</p>
+            <p class="text-gray-400 text-center py-12">{{ __('Belum ada produk aktif.') }}</p>
         @else
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3" x-ref="grid">
             @foreach ($products as $product)
@@ -75,21 +73,21 @@
                         <img src="{{ asset('storage/'.$product->image_path) }}" alt="{{ $product->name }}"
                              class="w-full h-24 object-cover">
                     @else
-                        <div class="w-full h-24 bg-gray-100 flex items-center justify-center text-gray-300 text-xs">Foto</div>
+                        <div class="w-full h-24 bg-gray-100 flex items-center justify-center text-gray-300 text-xs">{{ __('Foto') }}</div>
                     @endif
                     <div class="p-3">
                         <p class="font-medium text-sm text-gray-800 leading-tight mb-1 line-clamp-2">{{ $product->name }}</p>
                         <p class="text-xs text-gray-500 mb-2">{{ $product->category?->name ?? '' }}</p>
                         <p class="font-bold text-indigo-600 text-sm">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
                         <p class="text-xs mt-1 {{ $product->stock === 0 ? 'text-red-500' : 'text-gray-400' }}">
-                            Stok: {{ $product->stock }}
+                            {{ __('Stok') }}: {{ $product->stock }}
                         </p>
                     </div>
                 </div>
 
                 @if ($product->stock === 0)
                     <div class="absolute inset-0 flex items-center justify-center">
-                        <span class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-md tracking-wide shadow">Stok Habis</span>
+                        <span class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-md tracking-wide shadow">{{ __('Stok Habis') }}</span>
                     </div>
                 @endif
             </div>
@@ -116,15 +114,15 @@
                 lg:static lg:inset-auto lg:z-auto lg:w-80 lg:max-w-none lg:rounded-xl lg:shadow-sm lg:translate-x-0"
          :class="cartOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'">
         <div class="px-4 py-3 border-b font-semibold text-gray-700 flex items-center justify-between">
-            <span>Keranjang</span>
-            <button type="button" @click="cartOpen = false" class="lg:hidden text-gray-400 hover:text-gray-600" aria-label="Tutup keranjang">
+            <span>{{ __('Keranjang') }}</span>
+            <button type="button" @click="cartOpen = false" class="lg:hidden text-gray-400 hover:text-gray-600" aria-label="{{ __('Tutup keranjang') }}">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
         </div>
 
         <div class="flex-1 overflow-y-auto divide-y">
             <template x-if="Object.keys(cart).length === 0">
-                <p class="text-center text-gray-400 text-sm py-8">Keranjang kosong</p>
+                <p class="text-center text-gray-400 text-sm py-8">{{ __('Keranjang kosong') }}</p>
             </template>
             <template x-for="item in cartItems" :key="item.id">
                 <div class="px-4 py-3 flex items-start gap-3">
@@ -147,21 +145,21 @@
             {{-- Totals --}}
             <div class="space-y-1">
                 <div class="flex justify-between text-sm text-gray-600">
-                    <span>Subtotal</span>
+                    <span>{{ __('Subtotal') }}</span>
                     <span x-text="'Rp ' + subtotal.toLocaleString('id')"></span>
                 </div>
                 <div class="flex justify-between text-sm text-gray-600" x-show="taxPercent > 0">
-                    <span>Pajak (<span x-text="taxPercent"></span>%)</span>
+                    <span>{{ __('Pajak') }} (<span x-text="taxPercent"></span>%)</span>
                     <span x-text="'Rp ' + tax.toLocaleString('id')"></span>
                 </div>
                 <div class="flex justify-between text-base font-semibold pt-1 border-t border-dashed">
-                    <span>Total</span>
+                    <span>{{ __('Total') }}</span>
                     <span class="text-indigo-700" x-text="'Rp ' + grandTotal.toLocaleString('id')"></span>
                 </div>
             </div>
 
             <div>
-                <label class="text-xs text-gray-500">Uang Bayar</label>
+                <label class="text-xs text-gray-500">{{ __('Uang Bayar') }}</label>
                 <input type="number" x-model.number="paid"
                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm mt-1 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                        min="0" step="1000" placeholder="0">
@@ -172,22 +170,18 @@
                 <template x-for="amt in quickAmounts" :key="amt">
                     <button type="button" @click="addPaid(amt)"
                             class="py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-xs font-medium text-gray-700 transition"
-                            x-text="(amt / 1000) + 'rb'"></button>
+                            x-text="(amt / 1000) + @js(__('rb'))"></button>
                 </template>
             </div>
             <div class="flex gap-1.5">
                 <button type="button" @click="payExact()" :disabled="grandTotal === 0"
-                        class="flex-1 py-1.5 rounded-lg bg-indigo-50 text-indigo-700 text-xs font-medium hover:bg-indigo-100 transition disabled:opacity-40">
-                    Uang Pas
-                </button>
+                        class="flex-1 py-1.5 rounded-lg bg-indigo-50 text-indigo-700 text-xs font-medium hover:bg-indigo-100 transition disabled:opacity-40">{{ __('Uang Pas') }}</button>
                 <button type="button" @click="paid = 0"
-                        class="px-3 py-1.5 rounded-lg bg-gray-100 text-gray-500 text-xs hover:bg-gray-200 transition">
-                    Reset
-                </button>
+                        class="px-3 py-1.5 rounded-lg bg-gray-100 text-gray-500 text-xs hover:bg-gray-200 transition">{{ __('Reset') }}</button>
             </div>
 
             <div class="flex justify-between text-sm">
-                <span class="text-gray-500">Kembalian</span>
+                <span class="text-gray-500">{{ __('Kembalian') }}</span>
                 <span :class="change < 0 ? 'text-red-600 font-bold' : 'text-gray-700'" x-text="'Rp ' + Math.max(0, change).toLocaleString('id')"></span>
             </div>
 
@@ -201,13 +195,12 @@
                         :disabled="Object.keys(cart).length === 0 || paid < grandTotal || submitting"
                         class="w-full py-2.5 bg-indigo-600 text-white font-semibold text-sm rounded-lg hover:bg-indigo-700 transition disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2">
                     <svg x-show="submitting" class="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none" style="display:none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path></svg>
-                    <span x-text="submitting ? 'Memproses…' : 'Bayar'"></span>
+                    <span x-text="submitting ? @js(__('Memproses…')) : @js(__('Bayar'))"></span>
                 </button>
             </form>
 
             <button @click="clearCart()" x-show="Object.keys(cart).length > 0"
-                    class="w-full py-1.5 text-xs text-gray-400 hover:text-red-500 transition">
-                Kosongkan Keranjang
+                    class="w-full py-1.5 text-xs text-gray-400 hover:text-red-500 transition">{{ __('Kosongkan Keranjang') }}
             </button>
         </div>
     </div>
@@ -217,7 +210,7 @@
          class="fixed inset-0 z-[60] bg-black/40 flex items-center justify-center">
         <div class="bg-white rounded-2xl px-6 py-5 flex flex-col items-center gap-3 shadow-xl">
             <svg class="animate-spin h-7 w-7 text-indigo-600" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path></svg>
-            <p class="text-sm text-gray-600">Memproses pembayaran…</p>
+            <p class="text-sm text-gray-600">{{ __('Memproses pembayaran…') }}</p>
         </div>
     </div>
 </div>
@@ -231,17 +224,15 @@
         <div class="mx-auto mb-4 h-14 w-14 rounded-full bg-green-100 flex items-center justify-center">
             <svg class="h-8 w-8 text-green-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
         </div>
-        <h3 class="text-lg font-bold text-gray-800">Pembayaran Berhasil</h3>
-        <p class="text-sm text-gray-500 mt-1">Transaksi telah dicatat.</p>
+        <h3 class="text-lg font-bold text-gray-800">{{ __('Pembayaran Berhasil') }}</h3>
+        <p class="text-sm text-gray-500 mt-1">{{ __('Transaksi telah dicatat.') }}</p>
         <div class="mt-4 rounded-xl bg-gray-50 p-4 text-sm space-y-1.5 text-left">
-            <div class="flex justify-between"><span class="text-gray-500">Total</span><span class="font-semibold text-gray-800">Rp {{ number_format((float) session('checkout_total'), 0, ',', '.') }}</span></div>
-            <div class="flex justify-between"><span class="text-gray-500">Uang Bayar</span><span class="text-gray-700">Rp {{ number_format((float) session('checkout_paid'), 0, ',', '.') }}</span></div>
-            <div class="flex justify-between"><span class="text-gray-500">Kembalian</span><span class="font-semibold text-green-600">Rp {{ number_format((float) session('checkout_change'), 0, ',', '.') }}</span></div>
+            <div class="flex justify-between"><span class="text-gray-500">{{ __('Total') }}</span><span class="font-semibold text-gray-800">Rp {{ number_format((float) session('checkout_total'), 0, ',', '.') }}</span></div>
+            <div class="flex justify-between"><span class="text-gray-500">{{ __('Uang Bayar') }}</span><span class="text-gray-700">Rp {{ number_format((float) session('checkout_paid'), 0, ',', '.') }}</span></div>
+            <div class="flex justify-between"><span class="text-gray-500">{{ __('Kembalian') }}</span><span class="font-semibold text-green-600">Rp {{ number_format((float) session('checkout_change'), 0, ',', '.') }}</span></div>
         </div>
         <button @click="open = false"
-                class="mt-5 w-full py-2.5 bg-indigo-600 text-white rounded-xl font-semibold text-sm hover:bg-indigo-700 transition">
-            Transaksi Baru
-        </button>
+                class="mt-5 w-full py-2.5 bg-indigo-600 text-white rounded-xl font-semibold text-sm hover:bg-indigo-700 transition">{{ __('Transaksi Baru') }}</button>
     </div>
 </div>
 @endif

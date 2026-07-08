@@ -29,19 +29,22 @@ class LandingPageTest extends TestCase
 
     public function test_landing_shows_login_link_for_guests(): void
     {
+        // Default locale is Indonesian, so the login link renders as "Masuk".
         $this->get('http://kasiro.my.id/')
             ->assertOk()
-            ->assertSee('Login');
+            ->assertSee('Masuk')
+            ->assertSee(route('login'));
     }
 
     public function test_landing_shows_dashboard_link_for_authenticated_user(): void
     {
         $user = User::factory()->create();
 
+        // Default locale is Indonesian, so the dashboard link renders as "Beranda".
         $this->actingAs($user)
             ->get('http://kasiro.my.id/')
             ->assertOk()
-            ->assertSee('Dashboard');
+            ->assertSee('Beranda');
     }
 
     public function test_landing_shows_published_templates(): void

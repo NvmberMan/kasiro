@@ -91,9 +91,20 @@ return [
     |
     */
 
-    'locale' => env('APP_LOCALE', 'en'),
+    'locale' => env('APP_LOCALE', 'id'),
 
-    'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),
+    'fallback_locale' => env('APP_FALLBACK_LOCALE', 'id'),
+
+    /*
+    | Locales the UI can be switched between. Keys are the locale codes used
+    | by Laravel's translator; values are the human-readable labels shown in
+    | the language switcher. Indonesian ('id') is the source language — its
+    | strings are the translation keys, so no id.json is required.
+    */
+    'supported_locales' => [
+        'id' => 'Indonesia',
+        'en' => 'English',
+    ],
 
     'faker_locale' => env('APP_FAKER_LOCALE', 'en_US'),
 

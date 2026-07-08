@@ -24,23 +24,27 @@
     <div x-data="{
             loading: false,
             step: 1,
-            stepTitles: { 1: 'Personalisasi Kasir', 2: 'Rincian Kasir' },
+            stepTitles: { 1: @js(__('Personalisasi Kasir')), 2: @js(__('Rincian Kasir')) },
             fields: { name: @js(old('name', '')), subdomain: @js(old('subdomain', '')) },
             errors: { name: '', subdomain: '' },
+            localeMode: @js(old('locale') ? 'custom' : 'inherit'),
+            locale: @js(old('locale', app()->getLocale())),
+            localeOpen: false,
+            localeLabels: @js(\App\Support\Locale::supported()),
             next() { if (this.step < 2) this.step++; window.scrollTo({ top: 0, behavior: 'smooth' }); },
             back() {
                 if (this.step > 1) { this.step--; window.scrollTo({ top: 0, behavior: 'smooth' }); }
                 else { window.location = '{{ route('tenants.choose') }}'; }
             },
             validateName() {
-                return this.fields.name.trim() === '' ? 'Nama toko wajib diisi.' : '';
+                return this.fields.name.trim() === '' ? @js(__('Nama toko wajib diisi.')) : '';
             },
             validateSubdomain() {
                 const v = this.fields.subdomain.trim();
-                if (v === '') return 'Nama domain wajib diisi.';
-                if (!/^[a-z0-9]([a-z0-9-]*[a-z0-9])?$/.test(v)) return 'Hanya huruf kecil, angka, dan tanda penghubung; harus diawali dan diakhiri huruf atau angka.';
-                if (v.length < 3) return 'Nama domain minimal 3 karakter.';
-                if (v.length > 63) return 'Nama domain maksimal 63 karakter.';
+                if (v === '') return @js(__('Nama domain wajib diisi.'));
+                if (!/^[a-z0-9]([a-z0-9-]*[a-z0-9])?$/.test(v)) return @js(__('Hanya huruf kecil, angka, dan tanda penghubung; harus diawali dan diakhiri huruf atau angka.'));
+                if (v.length < 3) return @js(__('Nama domain minimal 3 karakter.'));
+                if (v.length > 63) return @js(__('Nama domain maksimal 63 karakter.'));
                 return '';
             },
             submitForm(e) {
@@ -156,7 +160,7 @@
             <div class="h-7 w-80 overflow-hidden rounded-full border-2 border-[#c0c6ef] bg-[#eaf3c9]">
                 <div class="progress-fill h-full rounded-full bg-[#2734bd]"></div>
             </div>
-            <p class="mt-4 text-sm text-slate-500">Loading...</p>
+            <p class="mt-4 text-sm text-slate-500">{{ __('Loading...') }}</p>
         </div>
 
         <form method="POST" action="{{ route('tenants.store.custom') }}"
@@ -175,7 +179,7 @@
                     {{-- Wizard header: back / title / next-or-finish --}}
                     <div class="flex flex-col gap-2 sm:grid sm:grid-cols-3 sm:items-center">
                         <div class="flex items-center justify-between sm:contents">
-                            <button type="button" @click="back()" aria-label="Kembali"
+                            <button type="button" @click="back()" aria-label="{{ __('Kembali') }}"
                                     class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-600 shadow-sm transition hover:border-slate-400 hover:bg-slate-50 hover:text-slate-900 sm:order-1 sm:justify-self-start">
                                 <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
@@ -185,19 +189,19 @@
                             <div class="sm:order-3 sm:justify-self-end">
                                 <button type="button" x-show="step < 2" @click="next()" style="display:none"
                                         class="inline-flex items-center gap-1.5 rounded-full bg-blue-500 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-600 active:scale-95">
-                                    Selanjutnya
+                                    {{ __('Selanjutnya') }}
                                     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
                                     </svg>
                                 </button>
                                 <button type="submit" x-show="step === 2" style="display:none"
                                         class="inline-flex items-center gap-2 rounded-full bg-lime-400 px-5 py-2.5 text-sm font-bold text-slate-900 transition hover:bg-lime-500 active:scale-95">
-                                    Selesai!
+                                    {{ __('Selesai!') }}
                                 </button>
                             </div>
                         </div>
 
-                        <h1 class="text-center text-lg font-bold text-slate-900 sm:order-2 sm:justify-self-center">Buat Kasir</h1>
+                        <h1 class="text-center text-lg font-bold text-slate-900 sm:order-2 sm:justify-self-center">{{ __('Buat Kasir') }}</h1>
                     </div>
 
                     {{-- Step indicator --}}
@@ -213,7 +217,7 @@
                     </div>
 
                     <h2 class="mt-2 text-center text-lg font-bold text-slate-900">
-                        <span x-text="`Step ${step}.`"></span>
+                        <span x-text="`{{ __('Step') }} ${step}.`"></span>
                         <span x-text="stepTitles[step]"></span>
                     </h2>
                 </div>
@@ -229,7 +233,7 @@
 
                         {{-- Col 1: Layout --}}
                         <div class="order-2 flex h-full flex-col rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100 lg:order-1">
-                            <p class="mb-2 text-sm font-semibold text-slate-800">Layout</p>
+                            <p class="mb-2 text-sm font-semibold text-slate-800">{{ __('Layout') }}</p>
                             <div class="flex flex-1 flex-col justify-between gap-2">
                                 @foreach ($layouts as $key => $layout)
                                     <button type="button"
@@ -243,7 +247,7 @@
                                         </div>
                                         <span :class="activeLayout === '{{ $key }}' ? 'text-blue-600 font-semibold' : 'text-slate-600 font-medium'"
                                               class="text-sm">
-                                            {{ $layout['label'] }}
+                                            {{ __($layout['label']) }}
                                         </span>
                                     </button>
                                 @endforeach
@@ -259,7 +263,7 @@
                         {{-- Col 3: Gaya (Tema) + Warna (Palet) --}}
                         <div class="order-3 flex h-full flex-col gap-4">
                             <div class="flex flex-1 flex-col rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
-                                <p class="mb-2 text-sm font-semibold text-slate-800">Gaya</p>
+                                <p class="mb-2 text-sm font-semibold text-slate-800">{{ __('Gaya') }}</p>
                                 <div class="flex flex-1 flex-wrap content-center gap-2">
                                     @foreach ($themes as $key => $theme)
                                         <button type="button"
@@ -268,7 +272,7 @@
                                                     ? 'bg-blue-500 text-white border-blue-500'
                                                     : 'bg-white text-slate-700 border-slate-300 hover:border-blue-300'"
                                                 class="rounded-full border-2 px-5 py-2 text-sm font-medium transition">
-                                            {{ $theme['label'] }}
+                                            {{ __($theme['label']) }}
                                         </button>
                                     @endforeach
                                 </div>
@@ -276,7 +280,7 @@
                             </div>
 
                             <div class="flex flex-1 flex-col rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
-                                <p class="mb-2 text-sm font-semibold text-slate-800">Warna</p>
+                                <p class="mb-2 text-sm font-semibold text-slate-800">{{ __('Warna') }}</p>
                                 @foreach ($themes as $themeKey => $theme)
                                     <div x-show="activeTheme === '{{ $themeKey }}'"
                                          style="{{ $currentTheme === $themeKey ? '' : 'display:none' }}"
@@ -314,17 +318,17 @@
                         <div class="mx-auto max-w-xl rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
 
                             <div>
-                                <label class="mb-1.5 block text-sm font-semibold text-slate-800">Nama Toko</label>
+                                <label class="mb-1.5 block text-sm font-semibold text-slate-800">{{ __('Nama Toko') }}</label>
                                 <input type="text" name="name" x-model="fields.name"
                                        @input="errors.name = ''"
-                                       placeholder="Contoh: Warung Budi"
+                                       placeholder="{{ __('Contoh: Warung Budi') }}"
                                        class="w-full rounded-full border border-slate-300 px-5 py-3 text-sm text-slate-900 placeholder-slate-400 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
                                 <p x-show="errors.name" x-text="errors.name" style="display:none" class="mt-1.5 text-xs text-red-500"></p>
                                 @error('name')<p x-show="!errors.name" class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
                             </div>
 
                             <div class="mt-5">
-                                <label class="mb-1.5 block text-sm font-semibold text-slate-800">Nama Domain Kasir</label>
+                                <label class="mb-1.5 block text-sm font-semibold text-slate-800">{{ __('Nama Domain Kasir') }}</label>
                                 <div class="flex items-center">
                                     <input type="text" name="subdomain" x-model="fields.subdomain"
                                            @input="errors.subdomain = ''"
@@ -334,32 +338,78 @@
                                         .{{ config('tenancy.central_domain') }}
                                     </span>
                                 </div>
-                                <p class="mt-1.5 text-xs text-slate-400">Huruf kecil, angka, dan tanda penghubung (min. 3 karakter)</p>
+                                <p class="mt-1.5 text-xs text-slate-400">{{ __('Huruf kecil, angka, dan tanda penghubung (min. 3 karakter)') }}</p>
                                 <p x-show="errors.subdomain" x-text="errors.subdomain" style="display:none" class="mt-1.5 text-xs text-red-500"></p>
                                 @error('subdomain')<p x-show="!errors.subdomain" class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
                             </div>
 
                             <div class="mt-5">
-                                <label class="mb-1.5 block text-sm font-semibold text-slate-800">Logo Toko <span class="font-normal text-slate-400">(Opsional)</span></label>
+                                <label class="mb-1.5 block text-sm font-semibold text-slate-800">{{ __('Bahasa Kasir') }}</label>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button type="button" @click="localeMode = 'inherit'"
+                                            :class="localeMode === 'inherit' ? 'border-blue-500 bg-blue-50 text-blue-600 font-semibold' : 'border-slate-200 bg-white text-slate-600 hover:border-blue-300'"
+                                            class="rounded-xl border-2 px-4 py-3 text-sm transition">
+                                        {{ __('Ikut bahasa studio') }}
+                                    </button>
+                                    <button type="button" @click="localeMode = 'custom'"
+                                            :class="localeMode === 'custom' ? 'border-blue-500 bg-blue-50 text-blue-600 font-semibold' : 'border-slate-200 bg-white text-slate-600 hover:border-blue-300'"
+                                            class="rounded-xl border-2 px-4 py-3 text-sm transition">
+                                        {{ __('Bahasa khusus') }}
+                                    </button>
+                                </div>
+
+                                {{-- When "inherit" the hidden input is disabled and not submitted, so
+                                     the tenant stores a null locale and follows the studio dynamically. --}}
+                                <div class="relative mt-2" x-show="localeMode === 'custom'" style="display:none" @click.outside="localeOpen = false">
+                                    <input type="hidden" name="locale" :value="locale" :disabled="localeMode !== 'custom'">
+                                    <button type="button" @click="localeOpen = ! localeOpen"
+                                            class="flex w-full items-center justify-between rounded-full border border-slate-300 bg-white px-5 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
+                                        <span x-text="localeLabels[locale]"></span>
+                                        <svg class="h-4 w-4 text-slate-400 transition-transform" :class="localeOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                                        </svg>
+                                    </button>
+                                    <div x-show="localeOpen" x-transition style="display:none"
+                                         class="absolute z-20 mt-2 w-full overflow-hidden rounded-2xl border border-slate-200 bg-white py-1 shadow-lg">
+                                        @foreach (\App\Support\Locale::supported() as $code => $label)
+                                            <button type="button" @click="locale = '{{ $code }}'; localeOpen = false"
+                                                    class="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm transition hover:bg-blue-50"
+                                                    :class="locale === '{{ $code }}' ? 'text-blue-600 font-semibold bg-blue-50' : 'text-slate-700'">
+                                                {{ $label }}
+                                                <svg x-show="locale === '{{ $code }}'" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                                                </svg>
+                                            </button>
+                                        @endforeach
+                                    </div>
+                                </div>
+                                <p x-show="localeMode === 'inherit'" class="mt-1.5 text-xs text-slate-400">
+                                    {{ __('Kasir memakai bahasa yang sama dengan studio Anda dan ikut berubah bila bahasa studio diganti.') }}
+                                </p>
+                                @error('locale')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
+                            </div>
+
+                            <div class="mt-5">
+                                <label class="mb-1.5 block text-sm font-semibold text-slate-800">{{ __('Logo Toko') }} <span class="font-normal text-slate-400">{{ __('(Opsional)') }}</span></label>
                                 <label class="flex cursor-pointer items-center justify-center gap-2 rounded-full border-2 border-blue-400 px-5 py-3 text-sm font-semibold text-blue-500 transition hover:bg-blue-50">
                                     <template x-if="!logoPreview">
                                         <span class="flex items-center gap-2">
                                             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
                                             </svg>
-                                            Unggah File Logo
+                                            {{ __('Unggah File Logo') }}
                                         </span>
                                     </template>
                                     <template x-if="logoPreview">
                                         <span class="flex items-center gap-2">
                                             <img :src="logoPreview" class="h-6 w-6 rounded-full object-cover ring-1 ring-blue-300">
-                                            Ganti Logo
+                                            {{ __('Ganti Logo') }}
                                         </span>
                                     </template>
                                     <input id="logo-file-input" type="file" name="logo" accept="image/png,image/jpeg,image/webp"
                                            class="sr-only" @change="onLogoSelect($event)">
                                 </label>
-                                <p class="mt-1.5 text-xs text-slate-400">PNG, JPG (maks. 2 MB)</p>
+                                <p class="mt-1.5 text-xs text-slate-400">{{ __('PNG, JPG (maks. 2 MB)') }}</p>
                                 @error('logo')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
                             </div>
                         </div>
@@ -379,8 +429,8 @@
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden" x-on:click.stop>
             <div class="flex items-center justify-between px-6 py-4 border-b">
                 <div>
-                    <h3 class="font-semibold text-gray-800">Crop Logo</h3>
-                    <p class="text-xs text-gray-400 mt-0.5">Geser &amp; resize kotak untuk menyesuaikan area</p>
+                    <h3 class="font-semibold text-gray-800">{{ __('Crop Logo') }}</h3>
+                    <p class="text-xs text-gray-400 mt-0.5">{{ __('Geser & resize kotak untuk menyesuaikan area') }}</p>
                 </div>
                 <button type="button" x-on:click="cancelCrop()"
                         class="h-8 w-8 flex items-center justify-center rounded-full text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition">
@@ -396,11 +446,11 @@
             <div class="flex items-center gap-3 px-6 py-4 border-t justify-end">
                 <button type="button" x-on:click="cancelCrop()"
                         class="px-4 py-2 rounded-xl border border-gray-200 text-sm text-gray-700 hover:bg-gray-50 transition">
-                    Batal
+                    {{ __('Batal') }}
                 </button>
                 <button type="button" x-on:click="confirmCrop()"
                         class="px-5 py-2 rounded-xl bg-blue-500 text-white text-sm font-medium hover:bg-blue-600 transition">
-                    Terapkan
+                    {{ __('Terapkan') }}
                 </button>
             </div>
         </div>

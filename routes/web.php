@@ -3,6 +3,7 @@
 use App\Http\Controllers\AcceptInvitationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LandingController;
+use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Tenant\CategoryController;
 use App\Http\Controllers\Tenant\CreateTenantController;
@@ -28,8 +29,11 @@ $central = config('tenancy.central_domain');
 | context. Breeze auth routes (routes/auth.php) are scoped to the apex so
 | login/register never leak onto tenant subdomains.
 */
-Route::domain($central)->group(function () {
+Route::domain($central)->middleware(['setlocale'])->group(function () {
     Route::get('/', [LandingController::class, 'index'])->name('platform.home');
+
+    // Studio / landing language switcher.
+    Route::get('/locale/{locale}', [LocaleController::class, 'update'])->name('locale.update');
 
     Route::get('/dashboard', [DashboardController::class, 'home'])
         ->middleware(['auth', 'verified'])->name('dashboard');
@@ -74,14 +78,14 @@ Route::domain($central)->group(function () {
 */
 // Public preview — no auth required, only resolves tenant + context.
 Route::domain('{subdomain}.'.$central)
-    ->middleware(['tenant', 'tenant.context'])
+    ->middleware(['tenant', 'tenant.context', 'setlocale'])
     ->group(function () {
         Route::get('/__preview', [PreviewController::class, 'index'])->name('tenant.preview');
         Route::get('/__template-preview/{template}', [PreviewController::class, 'template'])->name('tenant.template-preview');
     });
 
 Route::domain('{subdomain}.'.$central)
-    ->middleware(['tenant', 'tenant.member', 'tenant.context'])
+    ->middleware(['tenant', 'tenant.member', 'tenant.context', 'setlocale'])
     ->group(function () {
         Route::get('/', [TenantHomeController::class, 'index'])->name('tenant.home');
 

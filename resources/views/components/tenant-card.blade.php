@@ -3,7 +3,7 @@
 @php
     $screenshot = $tenant->screenshotUrl();
     $brandColor = \App\Support\ThemeConfig::cssVariables($tenant->theme_config ?? [])['--brand-primary'] ?? '#6366f1';
-    $roleLabels = ['owner' => 'Pemilik', 'manager' => 'Manajer', 'cashier' => 'Kasir'];
+    $roleLabels = ['owner' => __('Pemilik'), 'manager' => __('Manajer'), 'cashier' => __('Kasir')];
     $roleLabel = $role ? ($roleLabels[$role->value] ?? ucfirst($role->value)) : null;
 @endphp
 
@@ -37,7 +37,7 @@
             {{-- Hover overlay with "Lihat" button --}}
             <div class="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                 <span class="inline-flex items-center gap-1.5 rounded-full bg-lime-400 px-5 py-2 text-sm font-semibold text-slate-900 shadow-lg">
-                    Lihat
+                    {{ __('Lihat') }}
                     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M9 7h8v8"/>
                     </svg>

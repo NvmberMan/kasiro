@@ -3,7 +3,9 @@
 namespace App\Http\Requests;
 
 use App\Rules\ValidSubdomain;
+use App\Support\Locale;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CreateTenantRequest extends FormRequest
 {
@@ -18,6 +20,8 @@ class CreateTenantRequest extends FormRequest
             'name'      => ['required', 'string', 'max:255'],
             'subdomain' => ['required', 'string', new ValidSubdomain],
             'logo'      => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:2048'],
+            // Null / absent = follow the studio language dynamically.
+            'locale'    => ['nullable', Rule::in(Locale::codes())],
         ];
     }
 
@@ -30,12 +34,12 @@ class CreateTenantRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required'      => 'Nama toko wajib diisi.',
-            'name.max'           => 'Nama toko maksimal 255 karakter.',
-            'subdomain.required' => 'Nama domain wajib diisi.',
-            'logo.image'         => 'Logo harus berupa file gambar.',
-            'logo.mimes'         => 'Logo harus berformat PNG, JPG, atau WebP.',
-            'logo.max'           => 'Ukuran logo maksimal 2 MB.',
+            'name.required'      => __('Nama toko wajib diisi.'),
+            'name.max'           => __('Nama toko maksimal 255 karakter.'),
+            'subdomain.required' => __('Nama domain wajib diisi.'),
+            'logo.image'         => __('Logo harus berupa file gambar.'),
+            'logo.mimes'         => __('Logo harus berformat PNG, JPG, atau WebP.'),
+            'logo.max'           => __('Ukuran logo maksimal 2 MB.'),
         ];
     }
 
@@ -45,9 +49,9 @@ class CreateTenantRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'name'      => 'nama toko',
-            'subdomain' => 'nama domain',
-            'logo'      => 'logo',
+            'name'      => __('nama toko'),
+            'subdomain' => __('nama domain'),
+            'logo'      => __('logo'),
         ];
     }
 }
