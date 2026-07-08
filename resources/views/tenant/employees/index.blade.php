@@ -1,7 +1,7 @@
 <x-tenant-page>
     <div class="max-w-4xl mx-auto px-4 py-8">
         <div class="flex items-center justify-between mb-6">
-            <h1 class="text-2xl font-bold">Manajemen Karyawan</h1>
+            <h1 class="text-2xl font-bold">{{ __('Manajemen Karyawan') }}</h1>
         </div>
 
         @if ($errors->any())
@@ -12,26 +12,24 @@
 
         {{-- Invite form --}}
         <div class="bg-white rounded-xl shadow-sm border p-6 mb-8">
-            <h2 class="text-lg font-semibold mb-4">Undang Karyawan Baru</h2>
+            <h2 class="text-lg font-semibold mb-4">{{ __('Undang Karyawan Baru') }}</h2>
             <form method="POST" data-loading action="{{ route('tenant.invitations.store', ['subdomain' => $tenant->subdomain]) }}" class="flex flex-col sm:flex-row gap-3">
                 @csrf
-                <input type="email" name="email" placeholder="Email karyawan" required
+                <input type="email" name="email" placeholder="{{ __('Email karyawan') }}" required
                     value="{{ old('email') }}"
                     class="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
                 <select name="role" class="min-w-[120px] rounded-lg border border-gray-300 px-3 py-2 text-sm">
-                    <option value="cashier" @selected(old('role','cashier')==='cashier')>Kasir</option>
-                    <option value="manager" @selected(old('role')==='manager')>Manager</option>
+                    <option value="cashier" @selected(old('role','cashier')==='cashier')>{{ __('Kasir') }}</option>
+                    <option value="manager" @selected(old('role')==='manager')>{{ __('Manager') }}</option>
                 </select>
-                <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700">
-                    Kirim Undangan
-                </button>
+                <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700">{{ __('Kirim Undangan') }}</button>
             </form>
         </div>
 
         {{-- Members list --}}
         <div class="bg-white rounded-xl shadow-sm border mb-6">
             <div class="px-6 py-4 border-b">
-                <h2 class="font-semibold">Anggota Aktif</h2>
+                <h2 class="font-semibold">{{ __('Anggota Aktif') }}</h2>
             </div>
             <ul class="divide-y">
                 @forelse ($members as $member)
@@ -51,28 +49,28 @@
                             ])>{{ ucfirst($role) }}</span>
 
                             @if ($status === 'revoked')
-                                <span class="text-xs text-red-500">Dicabut</span>
+                                <span class="text-xs text-red-500">{{ __('Dicabut') }}</span>
                             @elseif ($role !== 'owner')
                                 <form method="POST" action="{{ route('tenant.employees.update', ['subdomain' => $tenant->subdomain, 'user' => $member->id]) }}">
                                     @csrf @method('PATCH')
                                     <select name="role" onchange="this.form.submit()" class="min-w-[100px] text-xs border rounded px-2 py-1">
-                                        <option value="cashier" @selected($role==='cashier')>Kasir</option>
-                                        <option value="manager" @selected($role==='manager')>Manager</option>
+                                        <option value="cashier" @selected($role==='cashier')>{{ __('Kasir') }}</option>
+                                        <option value="manager" @selected($role==='manager')>{{ __('Manager') }}</option>
                                     </select>
                                 </form>
                                 <form method="POST" action="{{ route('tenant.employees.destroy', ['subdomain' => $tenant->subdomain, 'user' => $member->id]) }}"
-                                    data-confirm="Akses {{ $member->name }} ke toko ini akan dihapus."
-                                    data-confirm-title="Hapus Akses?"
-                                    data-confirm-action="Ya, Hapus"
+                                    data-confirm="{{ __('Akses :name ke toko ini akan dihapus.', ['name' => $member->name]) }}"
+                                    data-confirm-title="{{ __('Hapus Akses?') }}"
+                                    data-confirm-action="{{ __('Ya, Hapus') }}"
                                     data-confirm-type="danger">
                                     @csrf @method('DELETE')
-                                    <button class="text-xs text-red-600 hover:underline">Hapus</button>
+                                    <button class="text-xs text-red-600 hover:underline">{{ __('Hapus') }}</button>
                                 </form>
                             @endif
                         </div>
                     </li>
                 @empty
-                    <li class="px-6 py-8 text-center text-sm text-gray-400">Belum ada anggota.</li>
+                    <li class="px-6 py-8 text-center text-sm text-gray-400">{{ __('Belum ada anggota.') }}</li>
                 @endforelse
             </ul>
         </div>
@@ -81,7 +79,7 @@
         @if ($pendingInvitations->isNotEmpty())
             <div class="bg-white rounded-xl shadow-sm border">
                 <div class="px-6 py-4 border-b">
-                    <h2 class="font-semibold">Undangan Tertunda</h2>
+                    <h2 class="font-semibold">{{ __('Undangan Tertunda') }}</h2>
                 </div>
                 <ul class="divide-y">
                     @foreach ($pendingInvitations as $inv)
@@ -89,12 +87,12 @@
                             <div>
                                 <p class="text-sm font-medium">{{ $inv->email }}</p>
                                 <p class="text-xs text-gray-500">
-                                    {{ ucfirst($inv->role) }} · kedaluwarsa {{ $inv->expires_at->diffForHumans() }}
+                                    {{ ucfirst($inv->role) }} · {{ __('kedaluwarsa') }} {{ $inv->expires_at->diffForHumans() }}
                                 </p>
                             </div>
                             <form method="POST" action="{{ route('tenant.invitations.destroy', ['subdomain' => $tenant->subdomain, 'invitation' => $inv->id]) }}">
                                 @csrf @method('DELETE')
-                                <button class="text-xs text-red-600 hover:underline">Batalkan</button>
+                                <button class="text-xs text-red-600 hover:underline">{{ __('Batalkan') }}</button>
                             </form>
                         </li>
                     @endforeach

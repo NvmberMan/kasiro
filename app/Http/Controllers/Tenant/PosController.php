@@ -35,7 +35,7 @@ class PosController extends Controller
         $items = json_decode($request->input('cart'), true);
 
         if (empty($items)) {
-            return back()->withErrors(['cart' => 'Keranjang tidak boleh kosong.']);
+            return back()->withErrors(['cart' => __('Keranjang tidak boleh kosong.')]);
         }
 
         try {

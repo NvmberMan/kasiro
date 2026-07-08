@@ -46,6 +46,7 @@ class TenantSettingsTest extends TestCase
             'layout'        => 'topbar',
             'theme'         => 'modern',
             'color_palette' => 'violet',
+            'locale'        => 'inherit',
         ], $overrides);
     }
 

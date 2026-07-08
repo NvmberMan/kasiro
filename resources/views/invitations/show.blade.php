@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Terima Undangan — Kasiro</title>
+    <title>{{ __("Terima Undangan — Kasiro") }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-gray-50 flex items-center justify-center min-h-screen">
@@ -15,11 +15,12 @@
             </svg>
         </div>
 
-        <h1 class="text-xl font-bold text-gray-900 mb-1">Undangan Karyawan</h1>
+        <h1 class="text-xl font-bold text-gray-900 mb-1">{{ __("Undangan Karyawan") }}</h1>
         <p class="text-sm text-gray-500 mb-6">
-            Anda diundang bergabung di
-            <strong class="text-gray-800">{{ $invitation->tenant->name }}</strong>
-            sebagai <strong class="text-indigo-700">{{ ucfirst($invitation->role) }}</strong>.
+            {!! __('Anda diundang bergabung di :tenant sebagai :role.', [
+                'tenant' => '<strong class="text-gray-800">'.e($invitation->tenant->name).'</strong>',
+                'role'   => '<strong class="text-indigo-700">'.e(ucfirst($invitation->role)).'</strong>',
+            ]) !!}
         </p>
 
         @if ($errors->any())
@@ -32,13 +33,11 @@
             <form method="POST" action="{{ route('invitations.accept', ['token' => $token]) }}">
                 @csrf
                 <button type="submit"
-                    class="w-full py-2.5 bg-indigo-600 text-white rounded-xl font-medium hover:bg-indigo-700 transition">
-                    Terima Undangan
-                </button>
+                    class="w-full py-2.5 bg-indigo-600 text-white rounded-xl font-medium hover:bg-indigo-700 transition">{{ __("Terima Undangan") }}</button>
             </form>
             <p class="mt-4 text-xs text-gray-400">
-                Anda login sebagai {{ auth()->user()->email }}.
-                Tidak ada Anda? <a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();" class="underline">Keluar</a>
+                {{ __('Anda login sebagai :email.', ['email' => auth()->user()->email]) }}
+                {{ __('Tidak ada Anda?') }} <a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();" class="underline">{{ __('Keluar') }}</a>
             </p>
             <form id="logout-form" method="POST" action="{{ route('logout') }}" class="hidden">@csrf</form>
         @else
@@ -52,7 +51,7 @@
         @endauth
 
         <p class="mt-6 text-xs text-gray-400">
-            Undangan kedaluwarsa {{ $invitation->expires_at->diffForHumans() }}.
+            {{ __('Undangan kedaluwarsa :time.', ['time' => $invitation->expires_at->diffForHumans()]) }}
         </p>
     </div>
 </body>
