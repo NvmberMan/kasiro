@@ -1,29 +1,29 @@
 <x-tenant-page>
     <div class="p-4 sm:p-6">
         <div class="flex items-center justify-between gap-3 mb-6">
-            <h1 class="text-xl font-semibold">Kategori</h1>
+            <h1 class="text-xl font-semibold">{{ __('Kategori') }}</h1>
             @can('create', \App\Models\Category::class)
                 <a href="{{ route('tenant.categories.create', ['subdomain' => $tenant->subdomain]) }}"
                     class="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition">
-                    + Tambah Kategori
+                    + {{ __('Tambah Kategori') }}
                 </a>
             @endcan
         </div>
 
         @if ($categories->isEmpty())
-            <div class="text-center py-12 text-gray-400">Belum ada kategori.</div>
+            <div class="text-center py-12 text-gray-400">{{ __('Belum ada kategori.') }}</div>
         @else
             <div x-data="listController({ defaultSort: 'name:asc' })" x-init="init()">
 
                 {{-- Controls --}}
                 <div class="flex flex-wrap gap-2 mb-4">
-                    <input type="search" x-model="search" @input="apply()" placeholder="Cari kategori..."
+                    <input type="search" x-model="search" @input="apply()" placeholder="{{ __('Cari kategori...') }}"
                         class="flex-1 min-w-[200px] border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
 
                     <select x-model="sort" @change="apply()"
                         class="min-w-[120px] border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        <option value="name:asc">Nama A-Z</option>
-                        <option value="name:desc">Nama Z-A</option>
+                        <option value="name:asc">{{ __('Nama A-Z') }}</option>
+                        <option value="name:desc">{{ __('Nama Z-A') }}</option>
                     </select>
                 </div>
 
@@ -35,14 +35,14 @@
                             <div class="flex items-center gap-3">
                                 @can('update', $category)
                                     <a href="{{ route('tenant.categories.edit', ['subdomain' => $tenant->subdomain, 'category' => $category]) }}"
-                                        class="text-sm text-indigo-600 hover:underline">Edit</a>
+                                        class="text-sm text-indigo-600 hover:underline">{{ __('Edit') }}</a>
                                     <form method="POST"
                                         action="{{ route('tenant.categories.destroy', ['subdomain' => $tenant->subdomain, 'category' => $category]) }}"
-                                        data-confirm="Kategori ini akan dihapus permanen dan tidak bisa dikembalikan."
-                                        data-confirm-title="Hapus Kategori?" data-confirm-action="Ya, Hapus"
+                                        data-confirm="{{ __('Kategori ini akan dihapus permanen dan tidak bisa dikembalikan.') }}"
+                                        data-confirm-title="{{ __('Hapus Kategori?') }}" data-confirm-action="{{ __('Ya, Hapus') }}"
                                         data-confirm-type="danger">
                                         @csrf @method('DELETE')
-                                        <button type="submit" class="text-sm text-red-500 hover:underline">Hapus</button>
+                                        <button type="submit" class="text-sm text-red-500 hover:underline">{{ __('Hapus') }}</button>
                                     </form>
                                 @endcan
                             </div>
@@ -50,9 +50,7 @@
                     @endforeach
                 </div>
 
-                <p x-show="visibleCount === 0" style="display:none" class="text-center py-10 text-gray-400">
-                    Tidak ada kategori yang cocok dengan pencarian.
-                </p>
+                <p x-show="visibleCount === 0" style="display:none" class="text-center py-10 text-gray-400">{{ __('Tidak ada kategori yang cocok dengan pencarian.') }}</p>
             </div>
 
             @include('partials.list-controller')

@@ -16,7 +16,7 @@ class CreateTransaction
     public function handle(User $cashier, array $items, float $paid, string $paymentMethod = 'cash'): Transaction
     {
         if (empty($items)) {
-            throw new RuntimeException('Keranjang tidak boleh kosong.');
+            throw new RuntimeException(__('Keranjang tidak boleh kosong.'));
         }
 
         return DB::transaction(function () use ($cashier, $items, $paid, $paymentMethod): Transaction {

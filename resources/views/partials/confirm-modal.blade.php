@@ -42,7 +42,7 @@
             <div class="mt-6 flex gap-3">
                 <button type="button" @click="cancel()"
                         class="flex-1 rounded-xl border border-gray-300 px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50">
-                    Batal
+                    {{ __('Batal') }}
                 </button>
                 <button type="button" @click="confirm()" x-text="confirmText"
                         class="flex-1 rounded-xl px-4 py-2.5 text-sm font-semibold text-white transition"
@@ -55,15 +55,15 @@
     function confirmModal() {
         return {
             show: false,
-            title: 'Konfirmasi',
+            title: @js(__('Konfirmasi')),
             message: '',
-            confirmText: 'Ya, Lanjutkan',
+            confirmText: @js(__('Ya, Lanjutkan')),
             type: 'danger',
             form: null,
             open(d) {
-                this.title = d.title || 'Konfirmasi';
-                this.message = d.message || 'Apakah Anda yakin?';
-                this.confirmText = d.confirmText || 'Ya, Lanjutkan';
+                this.title = d.title || @js(__('Konfirmasi'));
+                this.message = d.message || @js(__('Apakah Anda yakin?'));
+                this.confirmText = d.confirmText || @js(__('Ya, Lanjutkan'));
                 this.type = d.type || 'danger';
                 this.form = d.form || null;
                 this.show = true;

@@ -7,47 +7,47 @@
 
     $navItems = [
         [
-            'label'  => 'Kasir',
+            'label'  => __('Kasir'),
             'href'   => route('tenant.pos', ['subdomain' => $sub]),
             'active' => request()->routeIs('tenant.pos'),
         ],
         [
-            'label'  => 'Produk',
+            'label'  => __('Produk'),
             'href'   => route('tenant.products.index', ['subdomain' => $sub]),
             'active' => request()->routeIs('tenant.products.*'),
         ],
         [
-            'label'  => 'Kategori',
+            'label'  => __('Kategori'),
             'href'   => route('tenant.categories.index', ['subdomain' => $sub]),
             'active' => request()->routeIs('tenant.categories.*'),
         ],
     ];
     if ($navRole?->canViewReports()) {
         $navItems[] = [
-            'label'  => 'Laporan',
+            'label'  => __('Laporan'),
             'href'   => route('tenant.reports', ['subdomain' => $sub]),
             'active' => request()->routeIs('tenant.reports'),
         ];
         $navItems[] = [
-            'label'  => 'Transaksi',
+            'label'  => __('Transaksi'),
             'href'   => route('tenant.transactions', ['subdomain' => $sub]),
             'active' => request()->routeIs('tenant.transactions'),
         ];
     }
     if ($navRole?->canManageStaff()) {
         $navItems[] = [
-            'label'  => 'Karyawan',
+            'label'  => __('Karyawan'),
             'href'   => route('tenant.employees.index', ['subdomain' => $sub]),
             'active' => request()->routeIs('tenant.employees.*'),
         ];
         $navItems[] = [
-            'label'  => 'Pengaturan',
+            'label'  => __('Pengaturan'),
             'href'   => route('tenant.settings.edit', ['subdomain' => $sub]),
             'active' => request()->routeIs('tenant.settings.*'),
         ];
     }
     $navItems[] = [
-        'label'  => 'Studio',
+        'label'  => __('Studio'),
         'href'   => route('dashboard'),
         'active' => false,
         'icon'   => '<path stroke-linecap="round" stroke-linejoin="round" d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h12a1 1 0 001-1v-9"/>',
@@ -71,12 +71,12 @@
         <button type="button" id="topNavMore" class="hidden ml-auto {{ $base }}"
                 aria-haspopup="true" aria-expanded="false" aria-controls="topNavOverlay">
             <svg id="topNavMoreIcon" class="h-4 w-4 flex-shrink-0 transition-transform duration-300" fill="currentColor" viewBox="0 0 24 24"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>
-            Lainnya
+            {{ __('Lainnya') }}
         </button>
     </div>
 
     {{-- Full navigation dropdown (opened via the "more" button) --}}
-    <div id="topNavOverlay" class="hidden absolute inset-x-0 top-full z-50" role="dialog" aria-modal="true" aria-label="Semua menu">
+    <div id="topNavOverlay" class="hidden absolute inset-x-0 top-full z-50" role="dialog" aria-modal="true" aria-label="{{ __('Semua menu') }}">
         <div id="topNavPanel" class="brand-primary border-t border-white/15 rounded-b-2xl shadow-xl opacity-0 -translate-y-3 transition-all duration-300 ease-out">
             <div class="mx-auto max-w-7xl px-4 py-3 flex flex-wrap items-center gap-1">
                 @foreach ($navItems as $navItem)

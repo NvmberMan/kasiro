@@ -19,7 +19,7 @@ class CreateInvitation
             ->exists();
 
         if ($alreadyMember) {
-            throw new RuntimeException('Email ini sudah menjadi anggota aktif toko.');
+            throw new RuntimeException(__('Email ini sudah menjadi anggota aktif toko.'));
         }
 
         // Cancel any pending invitation for same tenant+email
