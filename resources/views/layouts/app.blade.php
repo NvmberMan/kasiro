@@ -46,7 +46,7 @@
             <header class="fixed inset-x-0 top-0 z-40 flex h-16 items-center justify-between border-b border-slate-100 bg-white px-4 sm:px-6">
                 <div class="flex items-center gap-3">
                     @unless ($fullWidth)
-                        <button type="button" class="lg:hidden text-slate-500" x-on:click="sidebar = ! sidebar" aria-label="Menu">
+                        <button type="button" class="lg:hidden text-slate-500" x-on:click="sidebar = ! sidebar" aria-label="{{ __('Menu') }}">
                             <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
                         </button>
                     @endunless
@@ -56,6 +56,8 @@
                     </a>
                 </div>
 
+                <div class="flex items-center gap-2">
+                <x-language-switcher align="right" />
                 <div class="relative" x-data="{ open: false }" @click.outside="open = false">
                     <button @click="open = !open" class="flex items-center focus:outline-none">
                         @if ($u->avatar)
@@ -105,7 +107,7 @@
                                 <svg class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                                 </svg>
-                                <span class="font-medium">Profil</span>
+                                <span class="font-medium">{{ __('Profil') }}</span>
                             </a>
 
                             <form method="POST" action="{{ route('logout') }}">
@@ -115,11 +117,12 @@
                                     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                                     </svg>
-                                    <span class="font-medium">Keluar</span>
+                                    <span class="font-medium">{{ __('Keluar') }}</span>
                                 </button>
                             </form>
                         </div>
                     </div>
+                </div>
                 </div>
             </header>
 
@@ -144,7 +147,7 @@
                             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                             </svg>
-                            Ke Landing Page
+                            {{ __('Ke Landing Page') }}
                         </a>
                     </div>
                 </aside>

@@ -34,6 +34,7 @@ class CreateTenant
                 $tenant = Tenant::create([
                     'owner_id'    => $owner->id,
                     'name'        => $data['name'],
+                    'locale'      => $data['locale'] ?? null,
                     'subdomain'   => $data['subdomain'],
                     'logo_path'   => $logoPath,
                     'status'      => Tenant::STATUS_ACTIVE,

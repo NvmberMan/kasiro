@@ -4,6 +4,7 @@ use App\Http\Middleware\EnsureTenantContext;
 use App\Http\Middleware\EnsureTenantMember;
 use App\Http\Middleware\ForceHttps;
 use App\Http\Middleware\ResolveTenant;
+use App\Http\Middleware\SetLocale;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -28,6 +29,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'tenant' => ResolveTenant::class,
             'tenant.context' => EnsureTenantContext::class,
             'tenant.member' => EnsureTenantMember::class,
+            'setlocale' => SetLocale::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
