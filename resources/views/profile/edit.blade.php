@@ -186,12 +186,9 @@
 
                     <div>
                         <label class="mb-1.5 block text-sm text-slate-700">{{ __('Email') }}</label>
-                        <input type="email" name="email" value="{{ old('email', $user->email) }}"
-                               placeholder="contoh@email.com"
-                               class="w-full rounded-full border border-slate-300 px-5 py-3 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition">
-                        @error('email')
-                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
-                        @enderror
+                        <input type="email" value="{{ $user->email }}" disabled readonly
+                               class="w-full rounded-full border border-slate-300 bg-slate-100 px-5 py-3 text-sm text-slate-500 outline-none cursor-not-allowed">
+                        <p class="mt-1.5 text-xs text-slate-400">{{ __('Email tidak dapat diubah.') }}</p>
                     </div>
 
                     <div class="pt-2 flex items-center gap-4">
