@@ -175,7 +175,7 @@
                     @method('patch')
 
                     <div>
-                        <label class="mb-1.5 block text-sm text-slate-700">{{ __('Username') }}</label>
+                        <label class="mb-1.5 block text-sm text-slate-700">{{ __('Nama lengkap') }}</label>
                         <input type="text" name="name" value="{{ old('name', $user->name) }}"
                                placeholder="{{ __('Nama lengkap') }}"
                                class="w-full rounded-full border border-slate-300 px-5 py-3 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition">
