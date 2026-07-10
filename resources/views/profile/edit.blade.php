@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout :full-width="true">
 @push('head')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
 <style>
@@ -17,8 +17,17 @@
         $showCodes = in_array(session('status'), ['two-factor-enabled', 'recovery-codes-generated'], true);
     @endphp
 
+    <div class="mx-auto max-w-5xl">
+
     {{-- Page header --}}
-    <div class="mb-8">
+    <div class="mb-8 flex items-center gap-4">
+        <button type="button" onclick="window.location.assign('{{ route('dashboard') }}')"
+                aria-label="{{ __('Kembali') }}"
+                class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-600 shadow-sm transition hover:border-slate-400 hover:bg-slate-50 hover:text-slate-900">
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+            </svg>
+        </button>
         <h1 class="text-2xl font-bold text-slate-900">{{ __('Profil Anda') }}</h1>
     </div>
 
@@ -362,6 +371,8 @@
         </div>
     </div>
 
+    </div>
+
     {{-- Delete account modal --}}
     <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
         <form method="POST" action="{{ route('profile.destroy') }}" class="p-6">
@@ -370,16 +381,22 @@
 
             <h2 class="text-lg font-bold text-slate-900">{{ __('Hapus akun?') }}</h2>
             <p class="mt-2 text-sm text-slate-600">
-                {{ __('Seluruh data akun Anda akan dihapus permanen. Masukkan kata sandi untuk mengonfirmasi.') }}
+                @if ($hasPassword)
+                    {{ __('Seluruh data akun Anda akan dihapus permanen. Masukkan kata sandi untuk mengonfirmasi.') }}
+                @else
+                    {{ __('Seluruh data akun Anda akan dihapus permanen. Tindakan ini tidak dapat dibatalkan.') }}
+                @endif
             </p>
 
-            <div class="mt-5">
-                <input type="password" name="password" placeholder="{{ __('Kata sandi') }}"
-                       class="w-full rounded-full border border-slate-300 px-5 py-3 text-sm outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100 transition">
-                @if ($errors->userDeletion->has('password'))
-                    <p class="mt-1 text-xs text-red-500">{{ $errors->userDeletion->first('password') }}</p>
-                @endif
-            </div>
+            @if ($hasPassword)
+                <div class="mt-5">
+                    <input type="password" name="password" placeholder="{{ __('Kata sandi') }}"
+                           class="w-full rounded-full border border-slate-300 px-5 py-3 text-sm outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100 transition">
+                    @if ($errors->userDeletion->has('password'))
+                        <p class="mt-1 text-xs text-red-500">{{ $errors->userDeletion->first('password') }}</p>
+                    @endif
+                </div>
+            @endif
 
             <div class="mt-6 flex justify-end gap-3">
                 <button type="button" x-on:click="$dispatch('close')"
