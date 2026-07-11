@@ -20,7 +20,6 @@ class TransactionFactory extends Factory
             'total'          => $total,
             'paid'           => $paid,
             'change'         => $paid - $total,
-            'payment_method' => 'cash',
             'transacted_at'  => now(),
         ];
     }

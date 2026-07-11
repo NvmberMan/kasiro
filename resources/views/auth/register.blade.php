@@ -20,7 +20,7 @@
                       autocomplete="new-password" required />
 
         <x-auth-input name="password_confirmation" type="password" icon="lock"
-                      placeholder="{{ __('Konfirmasi password') }}"
+                      placeholder="{{ __('Konfirmasi Kata Sandi') }}"
                       autocomplete="new-password" required />
 
         <x-auth-button class="mt-2">{{ __('Daftar') }}</x-auth-button>

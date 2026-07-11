@@ -1,8 +1,8 @@
 <x-guest-layout>
     <div class="text-center">
-        <h1 class="text-2xl font-bold text-gray-900">{{ __('Lupa Password') }}</h1>
+        <h1 class="text-2xl font-bold text-gray-900">{{ __('Lupa Kata Sandi') }}</h1>
         <p class="mt-1 text-sm text-gray-500">
-            {{ __('Masukkan email Anda, kami akan mengirim tautan untuk mengatur ulang password.') }}
+            {{ __('Masukkan email Anda, kami akan mengirim tautan untuk mengatur ulang kata sandi.') }}
         </p>
     </div>
 

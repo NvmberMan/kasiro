@@ -49,7 +49,6 @@ class HomePageTest extends TestCase
             'total' => 18000,
             'paid' => 20000,
             'change' => 2000,
-            'payment_method' => 'cash',
             'transacted_at' => now(),
         ]);
         app(TenantContext::class)->forget();

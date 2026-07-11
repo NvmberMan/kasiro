@@ -72,6 +72,7 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Nama Produk') }} <span
                             class="text-red-500">*</span></label>
                     <input type="text" name="name" value="{{ old('name', $product->name ?? '') }}"
+                        placeholder="{{ __('Contoh: Kopi Susu Gula Aren') }}"
                         class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                         required maxlength="200">
                     @error('name')
@@ -91,13 +92,6 @@
                             </option>
                         @endforeach
                     </select>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">SKU</label>
-                    <input type="text" name="sku" value="{{ old('sku', $product->sku ?? '') }}"
-                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        maxlength="50">
                 </div>
 
                 <div>
