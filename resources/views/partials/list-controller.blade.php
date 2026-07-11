@@ -3,7 +3,7 @@
     satu filter kategori/peran) dan mengurutkan node yang sudah dirender server,
     tanpa request ulang ke server. Setiap item cukup punya atribut data-*:
       data-name   : teks untuk pencarian & sort nama
-      data-search : (opsional) teks tambahan yang ikut dicari (mis. SKU)
+      data-search : (opsional) teks tambahan yang ikut dicari
       data-filter : nilai untuk filter tunggal (id kategori / nilai peran)
       data-<key>  : nilai untuk sort lain (mis. data-price, data-stock)
     Kontainer item diberi x-ref="list".

@@ -15,7 +15,6 @@ class ProductFactory extends Factory
             'tenant_id'   => null,
             'category_id' => null,
             'name'        => fake()->unique()->words(3, true),
-            'sku'         => fake()->optional()->bothify('SKU-###??'),
             'price'       => fake()->numberBetween(5000, 200000),
             'stock'       => fake()->numberBetween(0, 100),
             'is_active'   => true,

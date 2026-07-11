@@ -185,7 +185,6 @@ class DemoAccountSeeder extends Seeder
                 $products[] = Product::create([
                     'category_id' => $category->id,
                     'name' => $item['name'],
-                    'sku' => 'SKU-'.Str::upper(Str::random(6)),
                     'image_path' => $image,
                     'price' => $item['price'],
                     'stock' => $item['stock'] ?? rand(15, 120),
@@ -248,7 +247,6 @@ class DemoAccountSeeder extends Seeder
                 'total' => $total,
                 'paid' => $paid,
                 'change' => $paid - $total,
-                'payment_method' => $method,
                 'transacted_at' => $when,
             ]);
 

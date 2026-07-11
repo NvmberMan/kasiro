@@ -11,9 +11,10 @@
         @else
             <div class="bg-white rounded-xl shadow-sm overflow-hidden">
                 <div class="overflow-x-auto">
-                <table class="w-full text-sm min-w-[560px]">
+                <table class="w-full text-sm min-w-[620px]">
                     <thead class="bg-gray-50 text-gray-500 text-xs uppercase">
                         <tr>
+                            <th class="px-5 py-3 text-left">{{ __('Tanggal') }}</th>
                             <th class="px-5 py-3 text-left">{{ __('Waktu') }}</th>
                             <th class="px-5 py-3 text-left">{{ __('Kasir') }}</th>
                             <th class="px-5 py-3 text-right">{{ __('Total') }}</th>
@@ -25,7 +26,8 @@
                     <tbody class="divide-y divide-gray-100">
                         @foreach ($transactions as $tx)
                             <tr>
-                                <td class="px-5 py-3 text-gray-600">{{ $tx->transacted_at->format('d/m/Y H:i') }}</td>
+                                <td class="px-5 py-3 text-gray-600">{{ $tx->transacted_at->format('d/m/Y') }}</td>
+                                <td class="px-5 py-3 text-gray-600">{{ $tx->transacted_at->format('H:i') }}</td>
                                 <td class="px-5 py-3">{{ $tx->cashier->name }}</td>
                                 <td class="px-5 py-3 text-right font-medium">Rp
                                     {{ number_format($tx->total, 0, ',', '.') }}</td>
