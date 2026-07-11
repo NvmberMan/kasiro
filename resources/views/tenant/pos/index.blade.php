@@ -144,7 +144,7 @@
         <div class="border-t px-4 py-4 space-y-3">
             {{-- Totals --}}
             <div class="space-y-1">
-                <div class="flex justify-between text-sm text-gray-600">
+                <div class="flex justify-between text-sm text-gray-600" x-show="taxPercent > 0">
                     <span>{{ __('Subtotal') }}</span>
                     <span x-text="'Rp ' + subtotal.toLocaleString('id')"></span>
                 </div>
