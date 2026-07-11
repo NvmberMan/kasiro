@@ -133,18 +133,18 @@
                 <table class="w-full text-sm min-w-[480px]">
                     <thead class="text-left text-xs text-gray-500 bg-gray-50">
                         <tr>
+                            <th class="px-5 py-2 font-medium">{{ __('Tanggal') }}</th>
                             <th class="px-5 py-2 font-medium">{{ __('Waktu') }}</th>
                             <th class="px-5 py-2 font-medium">{{ __('Kasir') }}</th>
-                            <th class="px-5 py-2 font-medium">{{ __('Metode') }}</th>
                             <th class="px-5 py-2 font-medium text-right">{{ __('Total') }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
                         @foreach ($recent as $tx)
                             <tr>
-                                <td class="px-5 py-2.5 text-gray-600">{{ $tx->transacted_at->format('d M Y H:i') }}</td>
+                                <td class="px-5 py-2.5 text-gray-600">{{ $tx->transacted_at->format('d M Y') }}</td>
+                                <td class="px-5 py-2.5 text-gray-600">{{ $tx->transacted_at->format('H:i') }}</td>
                                 <td class="px-5 py-2.5 text-gray-600">{{ $tx->cashier?->name ?? '-' }}</td>
-                                <td class="px-5 py-2.5 text-gray-600 uppercase">{{ $tx->payment_method }}</td>
                                 <td class="px-5 py-2.5 text-right font-medium">Rp {{ number_format($tx->total, 0, ',', '.') }}</td>
                             </tr>
                         @endforeach
