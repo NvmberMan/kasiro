@@ -14,7 +14,7 @@ class Transaction extends Model
 
     protected $fillable = [
         'tenant_id', 'cashier_id', 'subtotal', 'tax', 'total', 'paid', 'change',
-        'payment_method', 'transacted_at',
+        'transacted_at',
     ];
 
     protected $casts = [
