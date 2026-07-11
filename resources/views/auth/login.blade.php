@@ -22,7 +22,7 @@
                 <div class="mt-2 text-right">
                     <a href="{{ route('password.request') }}"
                        class="text-xs font-medium text-blue-600 hover:text-blue-800">
-                        {{ __('Lupa Password?') }}
+                        {{ __('Lupa Kata Sandi?') }}
                     </a>
                 </div>
             @endif
