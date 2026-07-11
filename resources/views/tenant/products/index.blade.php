@@ -17,7 +17,7 @@
 
                 {{-- Controls --}}
                 <div class="flex flex-wrap gap-2 mb-4">
-                    <input type="search" x-model="search" @input="apply()" placeholder="{{ __('Cari nama produk atau SKU...') }}"
+                    <input type="search" x-model="search" @input="apply()" placeholder="{{ __('Cari nama produk...') }}"
                         class="flex-1 min-w-[200px] border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
 
                     <select x-model="filter" @change="apply()"
@@ -57,7 +57,6 @@
                             @foreach ($products as $product)
                                 <tr class="{{ $product->is_active ? '' : 'opacity-50' }}"
                                     data-name="{{ mb_strtolower($product->name) }}"
-                                    data-search="{{ mb_strtolower($product->sku ?? '') }}"
                                     data-filter="{{ $product->category_id }}" data-price="{{ $product->price }}"
                                     data-stock="{{ $product->stock }}">
                                     <td class="px-3 py-2 w-12">

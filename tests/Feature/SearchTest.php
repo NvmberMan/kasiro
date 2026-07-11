@@ -36,11 +36,11 @@ class SearchTest extends TestCase
         app(TenantContext::class)->set($this->tenant);
         $coffee = Category::create(['name' => 'Kopi']);
         $food = Category::create(['name' => 'Makanan']);
-        Product::create(['category_id' => $coffee->id, 'name' => 'Espresso', 'sku' => 'KOPI-001', 'price' => 18000, 'stock' => 10, 'is_active' => true]);
-        Product::create(['category_id' => $food->id, 'name' => 'Nasi Goreng', 'sku' => 'MKN-001', 'price' => 30000, 'stock' => 5, 'is_active' => true]);
+        Product::create(['category_id' => $coffee->id, 'name' => 'Espresso', 'price' => 18000, 'stock' => 10, 'is_active' => true]);
+        Product::create(['category_id' => $food->id, 'name' => 'Nasi Goreng', 'price' => 30000, 'stock' => 5, 'is_active' => true]);
         Transaction::create([
             'cashier_id' => $this->owner->id, 'total' => 18000, 'paid' => 20000,
-            'change' => 2000, 'payment_method' => 'cash', 'transacted_at' => now(),
+            'change' => 2000, 'transacted_at' => now(),
         ]);
         app(TenantContext::class)->forget();
     }

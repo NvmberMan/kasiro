@@ -13,13 +13,13 @@ class CreateTransaction
     /**
      * @param array<int, array{product_id: int, qty: int}> $items
      */
-    public function handle(User $cashier, array $items, float $paid, string $paymentMethod = 'cash'): Transaction
+    public function handle(User $cashier, array $items, float $paid): Transaction
     {
         if (empty($items)) {
             throw new RuntimeException(__('Keranjang tidak boleh kosong.'));
         }
 
-        return DB::transaction(function () use ($cashier, $items, $paid, $paymentMethod): Transaction {
+        return DB::transaction(function () use ($cashier, $items, $paid): Transaction {
             $productIds = array_column($items, 'product_id');
 
             // Lock rows to prevent concurrent stock depletion (E11)
@@ -66,7 +66,6 @@ class CreateTransaction
                 'total'          => $total,
                 'paid'           => $paid,
                 'change'         => max(0, $paid - $total),
-                'payment_method' => $paymentMethod,
                 'transacted_at'  => now(),
             ]);
 

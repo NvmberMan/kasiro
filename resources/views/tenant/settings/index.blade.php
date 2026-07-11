@@ -52,6 +52,7 @@
          showCropModal: false,
          cropper: null,
          locale: @js($currentLocale),
+         _initLocale: @js($currentLocale),
          localeOpen: false,
          localeLabels: @js($localeOptions),
 
@@ -60,6 +61,7 @@
              this.activePalette = this._initPalette;
              this.activeLayout = this._initLayout;
              this.logoPreview = this._initLogoPreview;
+             this.locale = this._initLocale;
              document.getElementById('logo-file-input').value = '';
              document.getElementById('settings-form').reset();
              this.dirty = false;
@@ -228,7 +230,7 @@
                                 <div x-show="localeOpen" x-transition style="display:none"
                                      class="absolute z-20 mt-2 w-full overflow-hidden rounded-2xl border border-gray-300 bg-white py-1 shadow-lg">
                                     @foreach ($localeOptions as $code => $label)
-                                        <button type="button" @click="locale = '{{ $code }}'; localeOpen = false"
+                                        <button type="button" @click="locale = '{{ $code }}'; localeOpen = false; dirty = true"
                                                 class="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm transition hover:bg-indigo-50"
                                                 :class="locale === '{{ $code }}' ? 'text-indigo-600 font-semibold bg-indigo-50' : 'text-gray-700'">
                                             <span class="truncate">{{ $label }}</span>
