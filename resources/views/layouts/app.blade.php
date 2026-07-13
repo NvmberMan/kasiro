@@ -94,7 +94,7 @@
                                 </span>
                             @endif
                             <div class="min-w-0">
-                                <p class="text-sm font-semibold text-slate-800 truncate">{{ $u->name }}</p>
+                                <p data-clarity-mask="true" class="text-sm font-semibold text-slate-800 truncate">{{ $u->name }}</p>
                                 <p class="text-xs text-slate-400 truncate">{{ $u->email }}</p>
                             </div>
                         </div>

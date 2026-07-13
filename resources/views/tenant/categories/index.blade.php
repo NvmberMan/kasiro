@@ -30,6 +30,7 @@
                 <div class="bg-white rounded-xl shadow-sm divide-y" x-ref="list">
                     @foreach ($categories as $category)
                         <div class="flex items-center justify-between px-5 py-3 gap-4"
+                            data-clarity-mask="true"
                             data-name="{{ mb_strtolower($category->name) }}">
                             <span class="font-medium text-gray-800">{{ $category->name }}</span>
                             <div class="flex items-center gap-3">

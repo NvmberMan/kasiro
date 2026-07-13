@@ -96,7 +96,7 @@
                                 {{ $roleLabel }}
                             </span>
                         @endif
-                        <p class="mt-2 font-semibold text-slate-800">{{ $tenant->name }}</p>
+                        <p data-clarity-mask="true" class="mt-2 font-semibold text-slate-800">{{ $tenant->name }}</p>
                     </a>
                 @endforeach
             </div>

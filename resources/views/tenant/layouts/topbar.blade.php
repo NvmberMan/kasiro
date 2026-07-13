@@ -20,7 +20,7 @@
 
     <header class="brand-primary">
         <div class="mx-auto max-w-7xl px-4 py-3 flex items-center gap-3">
-            <a href="{{ route('tenant.home', ['subdomain' => $tenant->subdomain]) }}"
+            <a data-clarity-mask="true" href="{{ route('tenant.home', ['subdomain' => $tenant->subdomain]) }}"
                class="flex items-center gap-3 transition hover:opacity-80" aria-label="{{ __('Beranda') }} {{ $tenant->name }}">
                 @if (!empty($tenant->logo_path))
                     <img data-clarity-mask="true" src="{{ asset('storage/'.$tenant->logo_path) }}" alt="{{ $tenant->name }}"
@@ -34,7 +34,7 @@
             </a>
 
             <div class="ml-auto flex items-center gap-2 text-sm">
-                <span class="hidden sm:block text-white/70">{{ $navUser?->name }}</span>
+                <span data-clarity-mask="true" class="hidden sm:block text-white/70">{{ $navUser?->name }}</span>
                 <span class="rounded-full bg-white/20 text-white px-2.5 py-0.5 text-xs font-medium capitalize">{{ $navRole?->value ?? '—' }}</span>
             </div>
         </div>

@@ -15,6 +15,7 @@
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Nama Kategori') }}</label>
                 <input type="text" name="name" value="{{ old('name', $category->name ?? '') }}"
+                       data-clarity-mask="true"
                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                        required maxlength="100">
                 @error('name')

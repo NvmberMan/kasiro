@@ -4,8 +4,8 @@
 
     {{-- Welcome --}}
     <div class="mb-6">
-        <h1 class="text-2xl font-bold">{{ __('Selamat datang di :name', ['name' => $tenant->name]) }}</h1>
-        <p class="text-sm opacity-70 mt-1">
+        <h1 data-clarity-mask="true" class="text-2xl font-bold">{{ __('Selamat datang di :name', ['name' => $tenant->name]) }}</h1>
+        <p data-clarity-mask="true" class="text-sm opacity-70 mt-1">
             {{ __('Halo, :name', ['name' => $user?->name ?? __('Pengguna')]) }}@if ($role) &middot; <span class="capitalize">{{ $role->value }}</span>@endif
         </p>
     </div>

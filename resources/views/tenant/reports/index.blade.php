@@ -79,7 +79,7 @@
                 <div class="px-5 py-4 border-b">
                     <h2 class="font-semibold text-gray-700">{{ __('Produk Terlaris') }}</h2>
                 </div>
-                <div class="p-5">
+                <div class="p-5" data-clarity-mask="true">
                     @php
                         $prodLabels = $topProducts->map(fn ($item) => $item->product?->name ?? __('(dihapus)'))->all();
                         $prodValues = $topProducts->pluck('total_qty')->all();
