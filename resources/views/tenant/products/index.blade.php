@@ -56,12 +56,13 @@
                         <tbody class="divide-y divide-gray-100" x-ref="list">
                             @foreach ($products as $product)
                                 <tr class="{{ $product->is_active ? '' : 'opacity-50' }}"
+                                    data-clarity-mask="true"
                                     data-name="{{ mb_strtolower($product->name) }}"
                                     data-filter="{{ $product->category_id }}" data-price="{{ $product->price }}"
                                     data-stock="{{ $product->stock }}">
                                     <td class="px-3 py-2 w-12">
                                         @if ($product->image_path)
-                                            <img src="{{ asset('storage/' . $product->image_path) }}" alt=""
+                                            <img data-clarity-mask="true" src="{{ asset('storage/' . $product->image_path) }}" alt=""
                                                 class="h-10 w-10 rounded-lg object-cover border">
                                         @else
                                             <div

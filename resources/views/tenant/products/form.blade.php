@@ -72,6 +72,7 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Nama Produk') }} <span
                             class="text-red-500">*</span></label>
                     <input type="text" name="name" value="{{ old('name', $product->name ?? '') }}"
+                        data-clarity-mask="true"
                         placeholder="{{ __('Contoh: Kopi Susu Gula Aren') }}"
                         class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                         required maxlength="200">
@@ -82,7 +83,7 @@
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Kategori') }}</label>
-                    <select name="category_id"
+                    <select name="category_id" data-clarity-mask="true"
                         class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
                         <option value="">{{ __('— Tanpa Kategori —') }}</option>
                         @foreach ($categories as $cat)
@@ -101,7 +102,7 @@
                             <div class="h-24 w-24 rounded-lg overflow-hidden border transition-all duration-200"
                                  :class="imagePreview ? 'bg-white' : 'border-dashed border-gray-300 bg-gray-50 group-hover:border-gray-400'">
                                 <template x-if="imagePreview">
-                                    <img :src="imagePreview" alt="{{ __('Foto Produk') }}" class="h-full w-full object-cover">
+                                    <img data-clarity-mask="true" :src="imagePreview" alt="{{ __('Foto Produk') }}" class="h-full w-full object-cover">
                                 </template>
                                 <template x-if="!imagePreview">
                                     <div class="flex h-full w-full flex-col items-center justify-center gap-1">
@@ -191,7 +192,7 @@
                     </button>
                 </div>
                 <div class="bg-gray-900 overflow-hidden" style="height: 300px; position: relative;">
-                    <img id="product-crop-img" :src="imageCropSrc" alt="Crop"
+                    <img data-clarity-mask="true" id="product-crop-img" :src="imageCropSrc" alt="Crop"
                          style="display: block; max-width: 100%; max-height: 300px;">
                 </div>
                 <div class="flex items-center gap-3 px-6 py-4 border-t justify-end">

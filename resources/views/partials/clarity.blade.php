@@ -8,7 +8,6 @@
     <meta name="clarity-project-id" content="{{ config('services.clarity.project_id') }}">
     @auth
         <meta name="clarity-user-id" content="{{ auth()->id() }}">
-        <meta name="clarity-user-name" content="{{ auth()->user()->name }}">
     @endauth
     @isset($tenant)
         <meta name="clarity-tenant" content="{{ $tenant->subdomain }}">
