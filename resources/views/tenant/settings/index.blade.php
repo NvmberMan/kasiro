@@ -163,7 +163,7 @@
                                  :class="logoPreview ? 'bg-white' : 'border-dashed border-gray-300 bg-gray-50 group-hover:border-gray-400'"
                                  :style="logoPreview ? 'border-color: var(--brand-primary)' : ''">
                                 <template x-if="logoPreview">
-                                    <img :src="logoPreview" alt="Logo" class="h-full w-full object-cover">
+                                    <img data-clarity-mask="true" :src="logoPreview" alt="Logo" class="h-full w-full object-cover">
                                 </template>
                                 <template x-if="!logoPreview">
                                     <div class="flex h-full w-full flex-col items-center justify-center gap-1">
@@ -380,7 +380,7 @@
                 </button>
             </div>
             <div class="bg-gray-900 overflow-hidden" style="height: 300px; position: relative;">
-                <img id="logo-crop-img" :src="logoCropSrc" alt="Crop"
+                <img data-clarity-mask="true" id="logo-crop-img" :src="logoCropSrc" alt="Crop"
                      style="display: block; max-width: 100%; max-height: 300px;">
             </div>
             <div class="flex items-center gap-3 px-6 py-4 border-t justify-end">
