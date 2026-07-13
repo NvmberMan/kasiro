@@ -37,7 +37,7 @@
                     <div class="space-y-3" x-ref="list">
                         @foreach ($tenants as $tenant)
                             <div class="flex items-center justify-between bg-white rounded-xl border border-gray-200 shadow-sm px-6 py-4 gap-4"
-                                 data-name="{{ mb_strtolower($tenant->name) }}">
+                                 data-clarity-mask="true" data-name="{{ mb_strtolower($tenant->name) }}">
                                 <div class="min-w-0">
                                     <p class="font-bold text-gray-900 text-lg">{{ $tenant->name }}</p>
                                     <p class="text-sm text-gray-500 mt-0.5">

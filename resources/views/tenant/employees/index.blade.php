@@ -15,7 +15,7 @@
             <h2 class="text-lg font-semibold mb-4">{{ __('Undang Karyawan Baru') }}</h2>
             <form method="POST" data-loading action="{{ route('tenant.invitations.store', ['subdomain' => $tenant->subdomain]) }}" class="flex flex-col sm:flex-row gap-3">
                 @csrf
-                <input type="email" name="email" placeholder="{{ __('Email karyawan') }}" required
+                <input data-clarity-mask="true" type="email" name="email" placeholder="{{ __('Email karyawan') }}" required
                     value="{{ old('email') }}"
                     class="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
                 <select name="role" class="min-w-[120px] rounded-lg border border-gray-300 px-3 py-2 text-sm">
@@ -34,7 +34,7 @@
             <ul class="divide-y">
                 @forelse ($members as $member)
                     @php $role = $member->pivot->role->value; $status = $member->pivot->status; @endphp
-                    <li class="px-6 py-4 flex items-center justify-between gap-3 flex-wrap">
+                    <li data-clarity-mask="true" class="px-6 py-4 flex items-center justify-between gap-3 flex-wrap">
                         <div class="min-w-0">
                             <p class="font-medium text-sm truncate">{{ $member->name }}</p>
                             <p class="text-xs text-gray-500 truncate">{{ $member->email }}</p>
@@ -83,7 +83,7 @@
                 </div>
                 <ul class="divide-y">
                     @foreach ($pendingInvitations as $inv)
-                        <li class="px-6 py-4 flex items-center justify-between">
+                        <li data-clarity-mask="true" class="px-6 py-4 flex items-center justify-between">
                             <div>
                                 <p class="text-sm font-medium">{{ $inv->email }}</p>
                                 <p class="text-xs text-gray-500">

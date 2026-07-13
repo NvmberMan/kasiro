@@ -33,6 +33,7 @@
                     class="px-3 py-1 rounded-full text-xs font-medium transition">{{ __('Semua') }}</button>
             @foreach ($categories as $cat)
             <button @click="filterCategory = {{ $cat->id }}"
+                    data-clarity-mask="true"
                     :class="filterCategory === {{ $cat->id }} ? 'bg-indigo-600 text-white' : 'bg-white text-gray-600 border'"
                     class="px-3 py-1 rounded-full text-xs font-medium transition">
                 {{ $cat->name }}
@@ -47,12 +48,18 @@
         @else
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3" x-ref="grid">
             @foreach ($products as $product)
+            {{-- data-clarity-mask menyamarkan teks DAN atribut data-* elemen ini beserta anaknya
+                 sebelum dikirim ke Clarity. Karena itu nama produk hanya boleh hidup di data-*
+                 dan di teks — bukan di atribut Alpine (x-show/@click), yang tetap terkirim apa
+                 adanya. Alpine membacanya lewat $el.dataset saat runtime, jadi tetap berfungsi. --}}
             <div
+                data-clarity-mask="true"
                 data-name="{{ mb_strtolower($product->name) }}"
+                data-display-name="{{ $product->name }}"
                 data-price="{{ $product->price }}"
                 data-stock="{{ $product->stock }}"
-                x-show="(filterCategory === null || filterCategory === {{ $product->category_id ?? 'null' }}) && nameMatches('{{ addslashes(mb_strtolower($product->name)) }}')"
-                @click="{{ $product->stock }} > 0 && addToCart({{ $product->id }}, '{{ addslashes($product->name) }}', {{ $product->price }}, {{ $product->stock }})"
+                x-show="(filterCategory === null || filterCategory === {{ $product->category_id ?? 'null' }}) && nameMatches($el.dataset.name)"
+                @click="{{ $product->stock }} > 0 && addToCart({{ $product->id }}, $el.dataset.displayName, {{ $product->price }}, {{ $product->stock }})"
                 :class="cart[{{ $product->id }}] ? 'border-indigo-500 ring-2 ring-indigo-200' : 'border-transparent hover:border-indigo-400'"
                 class="relative text-left bg-white rounded-xl border-2 transition shadow-sm overflow-hidden select-none
                        {{ $product->stock === 0 ? 'cursor-not-allowed' : 'cursor-pointer' }}">
@@ -70,7 +77,7 @@
                     </div>
 
                     @if ($product->image_path)
-                        <img src="{{ asset('storage/'.$product->image_path) }}" alt="{{ $product->name }}"
+                        <img data-clarity-mask="true" src="{{ asset('storage/'.$product->image_path) }}" alt="{{ $product->name }}"
                              class="w-full h-24 object-cover">
                     @else
                         <div class="w-full h-24 bg-gray-100 flex items-center justify-center text-gray-300 text-xs">{{ __('Foto') }}</div>
@@ -127,7 +134,7 @@
             <template x-for="item in cartItems" :key="item.id">
                 <div class="px-4 py-3 flex items-start gap-3">
                     <div class="flex-1 min-w-0">
-                        <p class="text-sm font-medium text-gray-800 truncate" x-text="item.name"></p>
+                        <p data-clarity-mask="true" class="text-sm font-medium text-gray-800 truncate" x-text="item.name"></p>
                         <p class="text-xs text-indigo-600 mt-0.5" x-text="'Rp ' + item.price.toLocaleString('id')"></p>
                     </div>
                     <div class="flex items-center gap-1 shrink-0">

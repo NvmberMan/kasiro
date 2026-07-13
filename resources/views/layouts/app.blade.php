@@ -62,7 +62,7 @@
                 <div class="relative" x-data="{ open: false }" @click.outside="open = false">
                     <button @click="open = !open" class="flex items-center focus:outline-none">
                         @if ($u->avatar)
-                            <img src="{{ $u->avatar }}" alt="{{ $u->name }}" class="h-9 w-9 rounded-full object-cover ring-2 ring-slate-200 hover:ring-blue-400 transition">
+                            <img data-clarity-mask="true" src="{{ $u->avatar }}" alt="{{ $u->name }}" class="h-9 w-9 rounded-full object-cover ring-2 ring-slate-200 hover:ring-blue-400 transition">
                         @else
                             <span class="flex h-9 w-9 items-center justify-center rounded-full bg-slate-200 text-slate-500 ring-2 ring-slate-200 hover:ring-blue-400 transition">
                                 <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -85,7 +85,7 @@
                         {{-- User info --}}
                         <div class="flex items-center gap-3 px-4 py-4">
                             @if ($u->avatar)
-                                <img src="{{ $u->avatar }}" alt="{{ $u->name }}" class="h-11 w-11 rounded-full object-cover shrink-0">
+                                <img data-clarity-mask="true" src="{{ $u->avatar }}" alt="{{ $u->name }}" class="h-11 w-11 rounded-full object-cover shrink-0">
                             @else
                                 <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-400">
                                     <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
@@ -94,7 +94,7 @@
                                 </span>
                             @endif
                             <div class="min-w-0">
-                                <p class="text-sm font-semibold text-slate-800 truncate">{{ $u->name }}</p>
+                                <p data-clarity-mask="true" class="text-sm font-semibold text-slate-800 truncate">{{ $u->name }}</p>
                                 <p class="text-xs text-slate-400 truncate">{{ $u->email }}</p>
                             </div>
                         </div>
