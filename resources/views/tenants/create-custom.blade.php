@@ -402,7 +402,7 @@
                                     </template>
                                     <template x-if="logoPreview">
                                         <span class="flex items-center gap-2">
-                                            <img :src="logoPreview" class="h-6 w-6 rounded-full object-cover ring-1 ring-blue-300">
+                                            <img data-clarity-mask="true" :src="logoPreview" class="h-6 w-6 rounded-full object-cover ring-1 ring-blue-300">
                                             {{ __('Ganti Logo') }}
                                         </span>
                                     </template>
@@ -440,7 +440,7 @@
                 </button>
             </div>
             <div class="bg-gray-900 overflow-hidden" style="height: 300px; position: relative;">
-                <img id="logo-crop-img" :src="logoCropSrc" alt="Crop"
+                <img data-clarity-mask="true" id="logo-crop-img" :src="logoCropSrc" alt="Crop"
                      style="display: block; max-width: 100%; max-height: 300px;">
             </div>
             <div class="flex items-center gap-3 px-6 py-4 border-t justify-end">

@@ -48,7 +48,7 @@
                     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3" x-ref="list">
                         @foreach ($tenants as $tenant)
                             @php $role = auth()->user()->roleFor($tenant); @endphp
-                            <div data-name="{{ mb_strtolower($tenant->name) }}" data-filter="{{ $role?->value }}">
+                            <div data-clarity-mask="true" data-name="{{ mb_strtolower($tenant->name) }}" data-filter="{{ $role?->value }}">
                                 <x-tenant-card :tenant="$tenant" :role="$role">
                                     @if ($role?->canManageTenantSettings())
                                         <form method="POST" action="{{ route('tenants.archive', $tenant) }}"

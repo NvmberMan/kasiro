@@ -15,7 +15,7 @@
 <body>
     <div class="card">
         <h1>{{ __('Aplikasi kasir ini sedang tidak aktif') }}</h1>
-        <p>
+        <p data-clarity-mask="true">
             {!! __('<span class="brand">:name</span> telah diarsipkan oleh pemiliknya dan untuk sementara tidak dapat diakses.', ['name' => e($tenant->name)]) !!}
         </p>
     </div>

@@ -17,7 +17,7 @@
         </div>
 
         <h1 class="text-xl font-bold text-gray-900 mb-1">{{ __("Undangan Karyawan") }}</h1>
-        <p class="text-sm text-gray-500 mb-6">
+        <p data-clarity-mask="true" class="text-sm text-gray-500 mb-6">
             {!! __('Anda diundang bergabung di :tenant sebagai :role.', [
                 'tenant' => '<strong class="text-gray-800">'.e($invitation->tenant->name).'</strong>',
                 'role'   => '<strong class="text-indigo-700">'.e(ucfirst($invitation->role)).'</strong>',

@@ -17,7 +17,7 @@
         <div class="flex items-center gap-5">
             {{-- Current / Preview --}}
             <div class="relative shrink-0">
-                <img x-bind:src="preview" alt="Avatar"
+                <img data-clarity-mask="true" x-bind:src="preview" alt="Avatar"
                      class="h-20 w-20 rounded-full object-cover ring-2 ring-slate-200">
                 <label for="avatar-input"
                        class="absolute bottom-0 right-0 flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-slate-700 text-white hover:bg-slate-900 transition">
