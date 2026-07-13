@@ -16,6 +16,7 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @include('partials.clarity')
         @stack('head')
         <style>
             [x-cloak]{display:none !important}
