@@ -192,6 +192,7 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ __('Nama Toko') }}</label>
                             <input type="text" name="name" value="{{ old('name', $tenant->name) }}" required
+                                data-clarity-mask="true"
                                 placeholder="{{ __('Nama toko kamu') }}"
                                 class="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
                         </div>

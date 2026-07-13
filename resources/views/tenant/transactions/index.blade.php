@@ -28,7 +28,7 @@
                             <tr>
                                 <td class="px-5 py-3 text-gray-600">{{ $tx->transacted_at->format('d/m/Y') }}</td>
                                 <td class="px-5 py-3 text-gray-600">{{ $tx->transacted_at->format('H:i') }}</td>
-                                <td class="px-5 py-3">{{ $tx->cashier->name }}</td>
+                                <td data-clarity-mask="true" class="px-5 py-3">{{ $tx->cashier->name }}</td>
                                 <td class="px-5 py-3 text-right font-medium">Rp
                                     {{ number_format($tx->total, 0, ',', '.') }}</td>
                                 <td class="px-5 py-3 text-right">Rp {{ number_format($tx->paid, 0, ',', '.') }}</td>
