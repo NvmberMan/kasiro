@@ -98,7 +98,7 @@
                             <div class="h-16 w-16 rounded-full overflow-hidden ring-2 transition-all duration-300"
                                  :class="changed ? 'ring-[#a4c400] ring-offset-2' : 'ring-slate-200'">
                                 <template x-if="preview">
-                                    <img :src="preview" alt="Avatar" class="h-full w-full object-cover">
+                                    <img data-clarity-mask="true" :src="preview" alt="Avatar" class="h-full w-full object-cover">
                                 </template>
                                 <template x-if="!preview">
                                     <span class="flex h-full w-full items-center justify-center bg-slate-200 text-slate-400">
@@ -162,7 +162,7 @@
                                 </button>
                             </div>
                             <div class="bg-gray-900 overflow-hidden" style="height: 280px; position: relative;">
-                                <img id="avatar-crop-img" :src="cropSrc" alt="Crop"
+                                <img data-clarity-mask="true" id="avatar-crop-img" :src="cropSrc" alt="Crop"
                                      style="display: block; max-width: 100%; max-height: 280px;">
                             </div>
                             <div class="flex gap-3 px-5 py-4 border-t justify-end">
