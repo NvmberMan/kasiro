@@ -17,13 +17,11 @@ export function initClarity() {
 
     Clarity.init(projectId);
 
-    // Clarity meng-hash customId di sisi klien sebelum dikirim, jadi ID user
-    // internal tidak pernah keluar dalam bentuk mentah. friendlyName-lah yang
-    // tampil di dashboard.
+    // Hanya ID yang dikirim, dan Clarity meng-hash-nya di sisi klien sebelum
+    // keluar. friendlyName sengaja TIDAK diisi: argumen itu tidak di-hash, jadi
+    // nama asli user akan tampil apa adanya di dashboard.
     const userId = meta('clarity-user-id');
-    if (userId) {
-        Clarity.identify(userId, undefined, undefined, meta('clarity-user-name') ?? undefined);
-    }
+    if (userId) Clarity.identify(userId);
 
     // Tag tenant supaya rekaman bisa difilter per toko di dashboard Clarity.
     const tenant = meta('clarity-tenant');
