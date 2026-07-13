@@ -32,7 +32,7 @@
         </button>
         <a href="{{ route('tenant.home', ['subdomain' => $sub]) }}" class="flex items-center gap-2 min-w-0">
             @if (!empty($tenant->logo_path))
-                <img src="{{ asset('storage/'.$tenant->logo_path) }}" alt="{{ $tenant->name }}" class="h-8 w-8 rounded-lg object-cover flex-shrink-0">
+                <img data-clarity-mask="true" src="{{ asset('storage/'.$tenant->logo_path) }}" alt="{{ $tenant->name }}" class="h-8 w-8 rounded-lg object-cover flex-shrink-0">
             @endif
             <span class="font-bold tracking-tight text-white truncate">{{ $tenant->name }}</span>
         </a>
@@ -51,7 +51,7 @@
            class="px-3 py-4 flex items-center gap-3 border-b border-white/15 min-h-[60px] hover:bg-white/10 transition"
            aria-label="{{ __('Beranda') }} {{ $tenant->name }}">
             @if (!empty($tenant->logo_path))
-                <img src="{{ asset('storage/'.$tenant->logo_path) }}" alt="{{ $tenant->name }}"
+                <img data-clarity-mask="true" src="{{ asset('storage/'.$tenant->logo_path) }}" alt="{{ $tenant->name }}"
                      class="h-9 w-9 rounded-lg object-cover flex-shrink-0">
             @else
                 <div class="h-9 w-9 rounded-lg flex items-center justify-center bg-white/20 font-bold text-sm flex-shrink-0">

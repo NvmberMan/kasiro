@@ -31,7 +31,7 @@
                     }
                  }">
                 <div class="relative overflow-hidden rounded-2xl bg-slate-200/80 shadow-md">
-                    <img :src="src" alt="{{ $tenant->name }}"
+                    <img data-clarity-mask="true" :src="src" alt="{{ $tenant->name }}"
                          x-on:load="loaded = true" x-on:error="loaded = false; onError()"
                          x-show="loaded" x-cloak
                          class="w-full object-cover object-top">

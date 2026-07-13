@@ -30,7 +30,7 @@
             <a href="{{ route('tenant.home', ['subdomain' => $sub]) }}"
                class="flex items-center gap-3 transition hover:opacity-80" aria-label="{{ __('Beranda') }} {{ $tenant->name }}">
                 @if (!empty($tenant->logo_path))
-                    <img src="{{ asset('storage/'.$tenant->logo_path) }}" alt="{{ $tenant->name }}" class="h-9 w-9 rounded-lg object-cover brand-rounded">
+                    <img data-clarity-mask="true" src="{{ asset('storage/'.$tenant->logo_path) }}" alt="{{ $tenant->name }}" class="h-9 w-9 rounded-lg object-cover brand-rounded">
                 @else
                     <div class="h-9 w-9 brand-rounded flex items-center justify-center text-white font-bold text-sm bg-white/20">
                         {{ mb_strtoupper(mb_substr($tenant->name, 0, 1)) }}

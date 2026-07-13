@@ -70,7 +70,7 @@
                     </div>
 
                     @if ($product->image_path)
-                        <img src="{{ asset('storage/'.$product->image_path) }}" alt="{{ $product->name }}"
+                        <img data-clarity-mask="true" src="{{ asset('storage/'.$product->image_path) }}" alt="{{ $product->name }}"
                              class="w-full h-24 object-cover">
                     @else
                         <div class="w-full h-24 bg-gray-100 flex items-center justify-center text-gray-300 text-xs">{{ __('Foto') }}</div>
