@@ -72,6 +72,7 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Nama Produk') }} <span
                             class="text-red-500">*</span></label>
                     <input type="text" name="name" value="{{ old('name', $product->name ?? '') }}"
+                        data-clarity-mask="true"
                         placeholder="{{ __('Contoh: Kopi Susu Gula Aren') }}"
                         class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                         required maxlength="200">
@@ -82,7 +83,7 @@
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Kategori') }}</label>
-                    <select name="category_id"
+                    <select name="category_id" data-clarity-mask="true"
                         class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
                         <option value="">{{ __('— Tanpa Kategori —') }}</option>
                         @foreach ($categories as $cat)

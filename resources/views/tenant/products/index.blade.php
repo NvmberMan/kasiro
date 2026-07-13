@@ -56,6 +56,7 @@
                         <tbody class="divide-y divide-gray-100" x-ref="list">
                             @foreach ($products as $product)
                                 <tr class="{{ $product->is_active ? '' : 'opacity-50' }}"
+                                    data-clarity-mask="true"
                                     data-name="{{ mb_strtolower($product->name) }}"
                                     data-filter="{{ $product->category_id }}" data-price="{{ $product->price }}"
                                     data-stock="{{ $product->stock }}">

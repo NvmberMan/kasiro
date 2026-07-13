@@ -30,7 +30,7 @@
         <button @click="mobileOpen = true" class="text-white -ml-1 p-1" aria-label="{{ __('Buka menu') }}">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
-        <a href="{{ route('tenant.home', ['subdomain' => $sub]) }}" class="flex items-center gap-2 min-w-0">
+        <a data-clarity-mask="true" href="{{ route('tenant.home', ['subdomain' => $sub]) }}" class="flex items-center gap-2 min-w-0">
             @if (!empty($tenant->logo_path))
                 <img data-clarity-mask="true" src="{{ asset('storage/'.$tenant->logo_path) }}" alt="{{ $tenant->name }}" class="h-8 w-8 rounded-lg object-cover flex-shrink-0">
             @endif
@@ -47,7 +47,7 @@
                   fixed inset-y-0 left-0 lg:static lg:z-auto"
            :class="(mobileOpen ? 'translate-x-0' : '-translate-x-full') + ' lg:translate-x-0 ' + (open ? 'lg:w-56' : 'lg:w-16')">
 
-        <a href="{{ route('tenant.home', ['subdomain' => $sub]) }}"
+        <a data-clarity-mask="true" href="{{ route('tenant.home', ['subdomain' => $sub]) }}"
            class="px-3 py-4 flex items-center gap-3 border-b border-white/15 min-h-[60px] hover:bg-white/10 transition"
            aria-label="{{ __('Beranda') }} {{ $tenant->name }}">
             @if (!empty($tenant->logo_path))
@@ -108,11 +108,11 @@
         </nav>
 
         <div class="px-3 py-3 border-t border-white/15 flex items-center gap-2">
-            <div class="h-8 w-8 rounded-full bg-white/20 flex items-center justify-center text-xs font-bold flex-shrink-0">
+            <div data-clarity-mask="true" class="h-8 w-8 rounded-full bg-white/20 flex items-center justify-center text-xs font-bold flex-shrink-0">
                 {{ mb_strtoupper(mb_substr($navUser?->name ?? '?', 0, 1)) }}
             </div>
             <div class="flex-1 min-w-0" :class="open ? '' : 'lg:hidden'">
-                <p class="text-xs font-medium text-white truncate">{{ $navUser?->name }}</p>
+                <p data-clarity-mask="true" class="text-xs font-medium text-white truncate">{{ $navUser?->name }}</p>
                 <p class="text-xs text-white/60 capitalize">{{ $navRole?->value ?? '-' }}</p>
             </div>
             <button @click="open = !open" class="hidden lg:block flex-shrink-0 text-white/60 hover:text-white transition" aria-label="{{ __('Lipat menu') }}">
