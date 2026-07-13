@@ -10,6 +10,7 @@
         <link rel="icon" type="image/x-icon" href="{{ asset('images/kasiro-logo.ico') }}">
     @endif
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @include('partials.clarity')
     <x-brand-styles :config="$tenant->theme_config ?? []" />
     @stack('head')
 </head>
