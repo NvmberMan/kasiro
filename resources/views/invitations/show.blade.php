@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ __("Terima Undangan — Kasiro") }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @include('partials.clarity')
 </head>
 <body class="bg-gray-50 flex items-center justify-center min-h-screen">
     <div class="bg-white rounded-2xl shadow-md p-8 w-full max-w-md text-center">
