@@ -1,6 +1,9 @@
 import './bootstrap';
 
 import Alpine from 'alpinejs';
+import { initClarity } from './clarity';
+
+initClarity();
 
 // ─── Top page-loading bar ───────────────────────────────────────────────────
 (function () {
