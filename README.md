@@ -2,6 +2,16 @@
 
 Kasiro adalah platform SaaS multi-tenant untuk membuat sistem kasir (POS) bermerek untuk UMKM. Setiap toko yang dibuat lewat "studio" mendapat subdomain sendiri (`{namatoko}.kasiro.my.id`), lengkap dengan template tampilan, tema warna, dan kini juga bahasa yang bisa disesuaikan per toko.
 
+<p align="center">
+  <img src="docs/screenshots/landing.jpg" alt="Landing page Kasiro" width="90%">
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/login.jpg" alt="Halaman login" width="32%">
+  <img src="docs/screenshots/dashboard.jpg" alt="Dashboard studio" width="32%">
+  <img src="docs/screenshots/pos.jpg" alt="Halaman kasir (POS)" width="32%">
+</p>
+
 ## Tech Stack
 
 - **Backend:** Laravel 12, PHP 8.3
