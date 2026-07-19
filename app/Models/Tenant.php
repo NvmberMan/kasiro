@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Cache;
 
 class Tenant extends Model
 {
@@ -17,6 +18,34 @@ class Tenant extends Model
     public const STATUS_ACTIVE = 'active';
 
     public const STATUS_ARCHIVED = 'archived';
+
+    /**
+     * Keep the subdomain->tenant resolution cache (see ResolveTenant) honest:
+     * any write to a tenant — archive, restore, rename, delete — must drop the
+     * cached copy so the change takes effect on the very next request instead of
+     * lingering until the TTL expires (which let archived tenants stay browsable).
+     */
+    protected static function booted(): void
+    {
+        static::saved(fn (self $tenant) => $tenant->forgetResolutionCache());
+        static::deleted(fn (self $tenant) => $tenant->forgetResolutionCache());
+    }
+
+    /**
+     * Forget the resolution cache for this tenant's subdomain, including the
+     * previous subdomain when it was just renamed.
+     */
+    public function forgetResolutionCache(): void
+    {
+        $subdomains = array_unique(array_filter([
+            $this->subdomain,
+            $this->getOriginal('subdomain'),
+        ]));
+
+        foreach ($subdomains as $subdomain) {
+            Cache::forget("tenant:subdomain:{$subdomain}");
+        }
+    }
 
     /**
      * @var list<string>

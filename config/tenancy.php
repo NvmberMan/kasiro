@@ -82,4 +82,18 @@ return [
         'queue' => (bool) env('TENANT_SCREENSHOT_QUEUE', true),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Archived tenant retention
+    |--------------------------------------------------------------------------
+    |
+    | Number of days an archived tenant is kept before it is permanently
+    | deleted by the scheduled `tenants:purge-archived` command. After this
+    | grace period the tenant and all its data (products, memberships,
+    | transactions — via FK cascade) are removed for good.
+    |
+    */
+
+    'archive_retention_days' => (int) env('TENANCY_ARCHIVE_RETENTION_DAYS', 30),
+
 ];
