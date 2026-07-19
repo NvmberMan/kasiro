@@ -241,7 +241,7 @@
                 ['Apakah data saya aman?', 'Setiap toko terisolasi pada subdomain khusus dengan akses berbasis peran.'],
             ];
         @endphp
-        <div class="grid md:grid-cols-2 gap-4">
+        <div class="grid md:grid-cols-2 gap-4 items-start">
             @foreach ($faqs as [$q, $a])
                 <div x-data="{ open: false }" class="rounded-2xl bg-white ring-1 ring-slate-100">
                     <button type="button" x-on:click="open = !open"
