@@ -16,10 +16,20 @@
              imageCropSrc: null,
              showCropModal: false,
              cropper: null,
+             imageError: '',
+             maxImageBytes: 2 * 1024 * 1024,
 
              onImageSelect(e) {
                  const f = e.target.files[0];
                  if (!f) return;
+                 // Enforce the 2 MB limit at selection time, before loading the
+                 // (potentially huge) file into the cropper.
+                 if (f.size > this.maxImageBytes) {
+                     this.imageError = @js(__('Ukuran gambar maksimal 2 MB. Silakan pilih file yang lebih kecil.'));
+                     e.target.value = '';
+                     return;
+                 }
+                 this.imageError = '';
                  this.imageCropSrc = URL.createObjectURL(f);
                  this.showCropModal = true;
                  this.$nextTick(() => {
@@ -125,6 +135,7 @@
                                x-on:change.stop="onImageSelect($event)">
                     </div>
                     <p class="mt-1 text-xs text-gray-400">{{ __('Maks. 2MB. Kosongkan jika tidak ingin mengganti.') }}</p>
+                    <p x-show="imageError" x-text="imageError" x-cloak class="mt-1 text-xs text-red-600"></p>
                     @error('image')
                         <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                     @enderror
@@ -134,19 +145,26 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Harga (Rp)') }} <span
                                 class="text-red-500">*</span></label>
+                        {{-- step="1" allows any whole number (e.g. 5132); only decimals are rejected. --}}
                         <input type="number" name="price" value="{{ old('price', $product->price ?? 0) }}"
                             class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                            min="0" step="100" required>
+                            min="0" step="1" inputmode="numeric" required>
                         @error('price')
                             <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
-                    <div>
+                    <div x-data="{ stock: {{ (int) old('stock', $product->stock ?? 0) }} }">
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Stok') }} <span
                                 class="text-red-500">*</span></label>
-                        <input type="number" name="stock" value="{{ old('stock', $product->stock ?? 0) }}"
+                        <input type="number" name="stock" x-model.number="stock" value="{{ old('stock', $product->stock ?? 0) }}"
                             class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                            min="0" required>
+                            min="0" step="1" inputmode="numeric" required>
+                        <p x-show="!stock || stock < 1" x-cloak class="mt-1 flex items-start gap-1 text-xs text-amber-600">
+                            <svg class="mt-px h-3.5 w-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+                            </svg>
+                            <span>{{ __('Stok masih 0 — produk tetap bisa disimpan, tetapi belum bisa dijual sampai stok ditambah.') }}</span>
+                        </p>
                         @error('stock')
                             <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                         @enderror

@@ -83,6 +83,25 @@ class TenantArchiveTest extends TestCase
             ->assertForbidden();
     }
 
+    public function test_archiving_immediately_blocks_subdomain_access(): void
+    {
+        $tenant = Tenant::factory()->subdomain('cupmaret')->create(['owner_id' => $this->owner->id]);
+        $tenant->users()->attach($this->owner, ['role' => 'owner', 'status' => 'active']);
+
+        // Prime the subdomain->tenant resolution cache with the active tenant.
+        $this->actingAs($this->owner)->get('http://cupmaret.kasiro.my.id/')->assertOk();
+
+        // Archive it, then hit the subdomain again — must be blocked at once,
+        // not served from the now-stale "active" cache entry.
+        $this->actingAs($this->owner)
+            ->post("http://kasiro.my.id/tenants/{$tenant->id}/archive");
+
+        $this->actingAs($this->owner)->get('http://cupmaret.kasiro.my.id/')->assertStatus(403);
+        $this->actingAs($this->owner)
+            ->get('http://cupmaret.kasiro.my.id/products/create')
+            ->assertStatus(403);
+    }
+
     // --- Restore ---
 
     public function test_owner_can_restore_archived_tenant(): void
