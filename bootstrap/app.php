@@ -17,10 +17,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // Redirect insecure requests to HTTPS before anything else runs.
         $middleware->prepend(ForceHttps::class);
 
-        // Force OAuth accounts without a password through profile completion.
         $middleware->web(append: [EnsureProfileComplete::class]);
 
         $middleware->redirectGuestsTo(function () {
