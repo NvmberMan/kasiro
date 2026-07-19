@@ -241,9 +241,9 @@
                 ['Apakah data saya aman?', 'Setiap toko terisolasi pada subdomain khusus dengan akses berbasis peran.'],
             ];
         @endphp
-        <div class="grid md:grid-cols-2 gap-4 items-start">
+        <div class="gap-4 md:columns-2">
             @foreach ($faqs as [$q, $a])
-                <div x-data="{ open: false }" class="rounded-2xl bg-white ring-1 ring-slate-100">
+                <div x-data="{ open: false }" class="mb-4 break-inside-avoid rounded-2xl bg-white ring-1 ring-slate-100">
                     <button type="button" x-on:click="open = !open"
                             class="flex w-full items-center justify-between gap-3 px-5 py-4 text-left">
                         <span class="text-sm font-medium text-slate-800">{{ __($q) }}</span>
