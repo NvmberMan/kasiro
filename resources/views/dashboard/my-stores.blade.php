@@ -58,12 +58,7 @@
                                               data-confirm-type="primary"
                                               class="mt-1">
                                             @csrf
-                                            <button type="submit" class="inline-flex items-center gap-1 rounded-lg border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-500 transition hover:border-red-300 hover:bg-red-100 hover:text-red-600">
-                                                <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v1a2 2 0 01-2 2M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
-                                                </svg>
-                                                {{ __('Arsipkan') }}
-                                            </button>
+                                            <button type="submit" class="text-xs font-medium text-red-500 underline underline-offset-2 transition hover:text-red-600">{{ __('Arsipkan') }}</button>
                                         </form>
                                     @endif
                                 </x-tenant-card>
