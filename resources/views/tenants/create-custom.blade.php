@@ -194,10 +194,6 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
                                     </svg>
                                 </button>
-                                <button type="submit" x-show="step === 2" style="display:none"
-                                        class="inline-flex items-center gap-2 rounded-full bg-lime-400 px-5 py-2.5 text-sm font-bold text-slate-900 transition hover:bg-lime-500 active:scale-95">
-                                    {{ __('Selesai!') }}
-                                </button>
                             </div>
                         </div>
 
@@ -412,6 +408,14 @@
                                 <p class="mt-1.5 text-xs text-slate-400">{{ __('PNG, JPG (maks. 2 MB)') }}</p>
                                 @error('logo')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
                             </div>
+                        </div>
+
+                        {{-- Finish button below the card so users can submit right after filling the form --}}
+                        <div class="mx-auto mt-6 flex max-w-xl justify-center">
+                            <button type="submit"
+                                    class="inline-flex items-center gap-2 rounded-full bg-lime-400 px-8 py-3 text-sm font-bold text-slate-900 transition hover:bg-lime-500 active:scale-95">
+                                {{ __('Selesai!') }}
+                            </button>
                         </div>
                     </div>
                 </div>
