@@ -163,7 +163,7 @@
                             <svg class="mt-px h-3.5 w-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
                             </svg>
-                            <span>{{ __('Stok masih 0 — produk tetap bisa disimpan, tetapi belum bisa dijual sampai stok ditambah.') }}</span>
+                            <span>{{ __('Stok 0 — belum bisa dijual sampai stok diisi.') }}</span>
                         </p>
                         @error('stock')
                             <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
