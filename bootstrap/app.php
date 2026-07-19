@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\EnsureProfileComplete;
 use App\Http\Middleware\EnsureTenantContext;
 use App\Http\Middleware\EnsureTenantMember;
 use App\Http\Middleware\ForceHttps;
@@ -18,6 +19,9 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         // Redirect insecure requests to HTTPS before anything else runs.
         $middleware->prepend(ForceHttps::class);
+
+        // Force OAuth accounts without a password through profile completion.
+        $middleware->web(append: [EnsureProfileComplete::class]);
 
         $middleware->redirectGuestsTo(function () {
             $scheme = config('app.force_https') ? 'https' : 'http';
