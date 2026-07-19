@@ -7,8 +7,10 @@
     $roleLabel = $role ? ($roleLabels[$role->value] ?? ucfirst($role->value)) : null;
 @endphp
 
-<div class="group">
-    <a href="{{ $tenant->subdomainUrl() }}" target="_blank" rel="noopener" class="block">
+<div>
+    {{-- `group` lives on the preview link only, so hovering the name, role, or the
+         Arsipkan button below never triggers the preview's hover animation. --}}
+    <a href="{{ $tenant->subdomainUrl() }}" target="_blank" rel="noopener" class="group block">
         <div class="relative aspect-video w-full rounded-xl ring-1 ring-slate-200 transition group-hover:ring-blue-400 overflow-hidden bg-slate-100">
             @if ($screenshot)
                 <img data-clarity-mask="true" src="{{ $screenshot }}" alt="{{ $tenant->name }}"
