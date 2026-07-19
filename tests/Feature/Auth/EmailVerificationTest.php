@@ -41,6 +41,20 @@ class EmailVerificationTest extends TestCase
         $response->assertRedirect(route('dashboard', absolute: false).'?verified=1');
     }
 
+    public function test_unverified_user_is_kept_behind_the_verification_wall(): void
+    {
+        $user = User::factory()->unverified()->create();
+
+        $this->actingAs($user)->get('/dashboard')->assertRedirect(route('verification.notice'));
+    }
+
+    public function test_verified_user_can_reach_the_dashboard(): void
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)->get('/dashboard')->assertOk();
+    }
+
     public function test_email_is_not_verified_with_invalid_hash(): void
     {
         $user = User::factory()->unverified()->create();
