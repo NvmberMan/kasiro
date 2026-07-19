@@ -45,7 +45,7 @@ class ProductController extends Controller
             'category_id' => ['nullable', 'exists:categories,id'],
             'name'        => ['required', 'string', 'max:200'],
             'image'       => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:2048'],
-            'price'       => ['required', 'numeric', 'min:0'],
+            'price'       => ['required', 'integer', 'min:0'],
             'stock'       => ['required', 'integer', 'min:0'],
         ]);
 
@@ -85,7 +85,7 @@ class ProductController extends Controller
             'category_id' => ['nullable', 'exists:categories,id'],
             'name'        => ['required', 'string', 'max:200'],
             'image'       => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:2048'],
-            'price'       => ['required', 'numeric', 'min:0'],
+            'price'       => ['required', 'integer', 'min:0'],
             'stock'       => ['required', 'integer', 'min:0'],
         ]);
 
