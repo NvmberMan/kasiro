@@ -1,18 +1,6 @@
 <?php
 
 return [
-
-    /*
-    |--------------------------------------------------------------------------
-    | Baris Bahasa Validasi
-    |--------------------------------------------------------------------------
-    |
-    | Baris bahasa berikut berisi pesan kesalahan bawaan yang digunakan oleh
-    | kelas validator. Sebagian aturan memiliki beberapa versi seperti aturan
-    | ukuran. Silakan sesuaikan setiap pesan di sini sesuai kebutuhan.
-    |
-    */
-
     'accepted' => 'Kolom :attribute harus diterima.',
     'accepted_if' => 'Kolom :attribute harus diterima ketika :other bernilai :value.',
     'active_url' => 'Kolom :attribute harus berupa URL yang valid.',
@@ -167,23 +155,12 @@ return [
     'ulid' => 'Kolom :attribute harus berupa ULID yang valid.',
     'uuid' => 'Kolom :attribute harus berupa UUID yang valid.',
 
-    /*
-    |--------------------------------------------------------------------------
-    | Baris Bahasa Validasi Kustom
-    |--------------------------------------------------------------------------
-    */
 
     'custom' => [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
     ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Atribut Validasi Kustom
-    |--------------------------------------------------------------------------
-    */
 
     'attributes' => [
         'name' => 'nama',

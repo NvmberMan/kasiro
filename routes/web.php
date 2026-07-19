@@ -22,14 +22,8 @@ use Illuminate\Support\Facades\Route;
 
 $central = config('tenancy.central_domain');
 
-/*
-|--------------------------------------------------------------------------
-| Platform routes (apex: kasiro.my.id)
-|--------------------------------------------------------------------------
-| The platform itself — landing, centralized auth, dashboard. No tenant
-| context. Breeze auth routes (routes/auth.php) are scoped to the apex so
-| login/register never leak onto tenant subdomains.
-*/
+# --- Main Domain ---
+
 Route::domain($central)->middleware(['setlocale'])->group(function () {
     Route::get('/', [LandingController::class, 'index'])->name('platform.home');
 
@@ -72,15 +66,9 @@ Route::domain($central)->middleware(['setlocale'])->group(function () {
     });
 });
 
-/*
-|--------------------------------------------------------------------------
-| Tenant routes (*.kasiro.my.id)
-|--------------------------------------------------------------------------
-| Resolved at runtime from the host by ResolveTenant; EnsureTenantContext
-| guards against any tenant route running without an active tenant. Auth +
-| membership guards (auth, tenant.member) are layered in M2 Tasks 5–6.
-*/
-// Public preview — no auth required, only resolves tenant + context.
+
+
+# --- Tenant Domain (Subdomain) ---
 Route::domain('{subdomain}.'.$central)
     ->middleware(['tenant', 'tenant.context', 'setlocale'])
     ->group(function () {
