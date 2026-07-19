@@ -2,17 +2,17 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Enums\MembershipStatus;
 use App\Enums\TenantRole;
 use Database\Factories\UserFactory;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
@@ -89,6 +89,16 @@ class User extends Authenticatable
         $this->forceFill([
             'two_factor_recovery_codes' => json_encode($remaining),
         ])->save();
+    }
+
+    /**
+     * Whether the account still needs onboarding. OAuth (Google) accounts are
+     * created without a password, so we funnel them through the "complete
+     * profile" page until they set one.
+     */
+    public function needsProfileCompletion(): bool
+    {
+        return $this->password === null;
     }
 
     public function tenants(): BelongsToMany

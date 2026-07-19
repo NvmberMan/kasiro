@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\ProfileCompletionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\TwoFactorAuthController;
 use App\Http\Controllers\Auth\TwoFactorChallengeController;
@@ -43,13 +44,16 @@ Route::middleware('guest')->group(function () {
 
     Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])
         ->name('password.email');
-
-    Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])
-        ->name('password.reset');
-
-    Route::post('reset-password', [NewPasswordController::class, 'store'])
-        ->name('password.store');
 });
+
+// Password-reset confirmation is available whether or not the user is logged in:
+// a logged-in user can trigger a "change password" link from their profile and
+// must still be able to open it and set a new password from the same session.
+Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])
+    ->name('password.reset');
+
+Route::post('reset-password', [NewPasswordController::class, 'store'])
+    ->name('password.store');
 
 Route::middleware('auth')->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)
@@ -69,6 +73,18 @@ Route::middleware('auth')->group(function () {
     Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
 
     Route::put('password', [PasswordController::class, 'update'])->name('password.update');
+
+    // Changing an existing password requires proving control of the inbox: this
+    // emails a signed reset link instead of accepting the new password inline.
+    Route::post('password/change-link', [PasswordController::class, 'sendChangeLink'])
+        ->middleware('throttle:6,1')
+        ->name('password.change-link');
+
+    // OAuth onboarding: set a password before using the app.
+    Route::get('complete-profile', [ProfileCompletionController::class, 'show'])
+        ->name('profile.complete');
+    Route::post('complete-profile', [ProfileCompletionController::class, 'store'])
+        ->name('profile.complete.store');
 
     // Note: not gated by password.confirm — Google-only accounts have no password
     // to confirm, which would otherwise lock them out of managing 2FA.
