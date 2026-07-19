@@ -218,48 +218,67 @@
             <div class="rounded-2xl bg-white p-8">
                 <h2 class="mb-6 text-lg font-bold text-slate-900">{{ __('Update Password Akun Anda') }}</h2>
 
-                <form method="POST" action="{{ route('password.update') }}" class="space-y-4">
-                    @csrf
-                    @method('put')
+                @if ($hasPassword)
+                    {{-- Changing an existing password is gated behind email: we send a
+                         secure link to the inbox rather than accepting it inline. --}}
+                    <p class="mb-5 text-sm text-slate-500">
+                        {{ __('Demi keamanan, perubahan kata sandi dikonfirmasi lewat email. Kami akan mengirim tautan aman ke :email untuk mengatur kata sandi baru.', ['email' => $user->email]) }}
+                    </p>
 
-                    @if ($hasPassword)
-                        <div>
-                            <label class="mb-1.5 block text-sm text-slate-700">{{ __('Current Password') }}</label>
-                            <input type="password" name="current_password" placeholder="{{ __('Password saat ini') }}"
-                                   class="w-full rounded-full border border-slate-300 px-5 py-3 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition">
-                            @if ($errors->updatePassword->has('current_password'))
-                                <p class="mt-1 text-xs text-red-500">{{ $errors->updatePassword->first('current_password') }}</p>
-                            @endif
+                    @if (session('status') === 'password-change-link-sent')
+                        <div class="mb-5 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
+                            {{ __('Tautan ubah kata sandi telah dikirim ke email Anda. Silakan periksa kotak masuk.') }}
+                        </div>
+                    @elseif (session('status') === 'password-updated')
+                        <div class="mb-5 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
+                            {{ __('Kata sandi berhasil diperbarui.') }}
                         </div>
                     @endif
 
-                    <div>
-                        <label class="mb-1.5 block text-sm text-slate-700">{{ __('New Password') }}</label>
-                        <input type="password" name="password" placeholder="{{ __('Password baru') }}"
-                               class="w-full rounded-full border border-slate-300 px-5 py-3 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition">
-                        @if ($errors->updatePassword->has('password'))
-                            <p class="mt-1 text-xs text-red-500">{{ $errors->updatePassword->first('password') }}</p>
-                        @endif
-                    </div>
-
-                    <div>
-                        <label class="mb-1.5 block text-sm text-slate-700">{{ __('Confirm Password') }}</label>
-                        <input type="password" name="password_confirmation" placeholder="{{ __('Ulangi password baru') }}"
-                               class="w-full rounded-full border border-slate-300 px-5 py-3 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition">
-                    </div>
-
-                    <div class="pt-2 flex items-center gap-4">
+                    <form method="POST" action="{{ route('password.change-link') }}">
+                        @csrf
                         <button type="submit"
-                                class="rounded-full bg-[#a4c400] px-7 py-2.5 text-sm font-semibold text-white hover:bg-[#8fad00] transition">
-                            {{ __('Simpan') }}
+                                class="inline-flex items-center gap-2 rounded-full bg-[#a4c400] px-7 py-2.5 text-sm font-semibold text-white hover:bg-[#8fad00] transition">
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                            {{ __('Kirim Tautan Ubah Kata Sandi') }}
                         </button>
-                        @if (session('status') === 'password-updated')
-                            <p x-data="{ show: true }" x-show="show" x-transition
-                               x-init="setTimeout(() => show = false, 2000)"
-                               class="text-sm text-green-600">{{ __('Tersimpan.') }}</p>
-                        @endif
-                    </div>
-                </form>
+                    </form>
+                @else
+                    {{-- OAuth accounts that never set a password can create one directly. --}}
+                    <form method="POST" action="{{ route('password.update') }}" class="space-y-4">
+                        @csrf
+                        @method('put')
+
+                        <div>
+                            <label class="mb-1.5 block text-sm text-slate-700">{{ __('New Password') }}</label>
+                            <input type="password" name="password" placeholder="{{ __('Password baru') }}"
+                                   class="w-full rounded-full border border-slate-300 px-5 py-3 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition">
+                            @if ($errors->updatePassword->has('password'))
+                                <p class="mt-1 text-xs text-red-500">{{ $errors->updatePassword->first('password') }}</p>
+                            @endif
+                        </div>
+
+                        <div>
+                            <label class="mb-1.5 block text-sm text-slate-700">{{ __('Confirm Password') }}</label>
+                            <input type="password" name="password_confirmation" placeholder="{{ __('Ulangi password baru') }}"
+                                   class="w-full rounded-full border border-slate-300 px-5 py-3 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition">
+                        </div>
+
+                        <div class="pt-2 flex items-center gap-4">
+                            <button type="submit"
+                                    class="rounded-full bg-[#a4c400] px-7 py-2.5 text-sm font-semibold text-white hover:bg-[#8fad00] transition">
+                                {{ __('Simpan') }}
+                            </button>
+                            @if (session('status') === 'password-updated')
+                                <p x-data="{ show: true }" x-show="show" x-transition
+                                   x-init="setTimeout(() => show = false, 2000)"
+                                   class="text-sm text-green-600">{{ __('Tersimpan.') }}</p>
+                            @endif
+                        </div>
+                    </form>
+                @endif
             </div>
         </div>
 
