@@ -80,6 +80,27 @@ class ProductCrudTest extends TestCase
             ->assertForbidden();
     }
 
+    public function test_price_allows_any_whole_number(): void
+    {
+        $this->actingAs($this->owner)
+            ->post($this->url('/products'), $this->validProductData(['name' => 'Odd Price', 'price' => 5132]))
+            ->assertRedirect();
+
+        $this->assertDatabaseHas('products', [
+            'tenant_id' => $this->tenant->id,
+            'name'      => 'Odd Price',
+            'price'     => 5132,
+        ]);
+    }
+
+    public function test_price_rejects_decimals(): void
+    {
+        $this->actingAs($this->owner)
+            ->from($this->url('/products/create'))
+            ->post($this->url('/products'), $this->validProductData(['price' => 5132.5]))
+            ->assertSessionHasErrors('price');
+    }
+
     public function test_owner_can_update_product(): void
     {
         $product = Product::factory()->create(['tenant_id' => $this->tenant->id]);
