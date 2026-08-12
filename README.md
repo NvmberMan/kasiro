@@ -30,111 +30,120 @@ Kasiro adalah platform SaaS multi-tenant untuk membuat sistem kasir (POS) bermer
 
 ## Setup Lokal
 
-1. Clone repo, lalu install dependency:
+Pengembangan lokal **wajib menggunakan Laragon** dan **Acrylic DNS Proxy** (Acrylic UI) karena aplikasi Kasiro berbasis multi-tenant dengan *wildcard subdomain* (`*.kasiro.test`).
+
+### 1. Konfigurasi DNS Wildcard (Acrylic UI & Network Settings)
+
+Karena file `hosts` default Windows tidak mendukung wildcard domain (`*.kasiro.test`), kita perlu menggunakan **Acrylic DNS Proxy**.
+
+#### Step A: Pengaturan Host di Acrylic UI
+1. Buka **Acrylic UI** (atau edit file `AcrylicHosts.txt`).
+2. Tambahkan baris konfigurasi wildcard berikut di bagian pengaturan host Acrylic:
+   ```text
+   127.0.0.1 *.kasiro.test
+   ```
+3. Simpan file dan restart layanan Acrylic DNS Proxy.
+
+#### Step B: Pengaturan Network Adapter Windows ("View Network Connections")
+1. Buka **View Network Connections** di Windows (tekan `Win + R`, ketik `ncpa.cpl`, lalu tekan Enter).
+2. Klik kanan pada Network Adapter yang sedang aktif (misalnya **Wi-Fi** atau **Ethernet**) -> pilih **Properties**.
+3. Pilih **Internet Protocol Version 4 (TCP/IPv4)** -> klik **Properties**.
+4. Pilih **"Use the following DNS server addresses"**:
+   - **Preferred DNS server:** `127.0.0.1`
+   - **Alternate DNS server:** `8.8.8.8` (atau `1.1.1.1`)
+5. Klik **OK** dan jalankan perintah flush DNS di Command Prompt / Terminal:
+   ```cmd
+   ipconfig /flushdns
+   ```
+
+---
+
+### 2. Konfigurasi Virtual Host & SSL Laragon (Apache)
+
+Aplikasi wajib dijalankan di web server Laragon (Apache) agar VirtualHost mendengarkan domain utama `kasiro.test` dan seluruh subdomain `*.kasiro.test` via HTTP (port 80) & HTTPS (port 443).
+
+#### Step A: Konfigurasi VirtualHost
+1. Buka folder konfigurasi VirtualHost Laragon (misalnya di `T:/Programs/laragon/etc/apache2/sites-enabled/auto.kasiro.test.conf`).
+2. Buat atau sesuaikan isi file `auto.kasiro.test.conf` dengan konfigurasi berikut:
+
+   ```apache
+   define ROOT "T:/Programs/laragon/www/kasiro/public"
+   define SITE "kasiro.test"
+
+   <VirtualHost *:80> 
+       DocumentRoot "${ROOT}"
+       ServerName ${SITE}
+       ServerAlias *.${SITE}
+       <Directory "${ROOT}">
+           AllowOverride All
+           Require all granted
+       </Directory>
+   </VirtualHost>
+
+   <VirtualHost *:443>
+       DocumentRoot "${ROOT}"
+       ServerName ${SITE}
+       ServerAlias *.${SITE}
+       <Directory "${ROOT}">
+           AllowOverride All
+           Require all granted
+       </Directory>
+
+       SSLEngine on
+       SSLCertificateFile      T:/Programs/laragon/etc/ssl/laragon.crt
+       SSLCertificateKeyFile   T:/Programs/laragon/etc/ssl/laragon.key
+    
+   </VirtualHost>
+   ```
+
+#### Step B: Aktivasi SSL & Trust Certificate pada Laragon
+Untuk mengaktifkan koneksi HTTPS yang valid tanpa peringatan keamanan browser:
+
+<p align="center">
+  <img src="docs/screenshots/laragon-ssl.png" alt="Pengaturan SSL & Trust Store pada Laragon" width="80%">
+</p>
+
+1. Buka panel Laragon, klik kanan area kosong atau buka menu **Menu**.
+2. Arahkan ke **Apache** -> **SSL** -> Centang **Enabled**.
+3. Klik opsi **Add laragon.crt to Trust Store** (konfirmasi `Yes`/`Ya` apabila muncul prompt Windows Security Warning agar sertifikat SSL Laragon dianggap valid dan dipercayai oleh sistem Windows/browser).
+4. Restart Apache pada panel Laragon (**Stop** -> **Start All**).
+
+---
+
+### 3. Setup Project Laravel
+
+1. Clone repo, lalu install dependency backend dan frontend:
    ```bash
    composer install
    npm install
    ```
-2. Salin `.env.example` menjadi `.env`, lalu isi `APP_KEY`:
+2. Salin `.env.example` menjadi `.env`, lalu generate `APP_KEY`:
    ```bash
    cp .env.example .env
    php artisan key:generate
    ```
-3. Sesuaikan koneksi database (`DB_*`) di `.env`, lalu buat databasenya.
-4. Migrate + seed (data awal: 6 template, akun demo `owner@kasiro.my.id` / `password` dengan tenant `kopisenja` & `berkahmart`):
+3. Pastikan konfigurasi domain pada `.env` sudah sesuai:
+   ```env
+   APP_URL=http://kasiro.test
+   TENANCY_CENTRAL_DOMAIN=kasiro.test
+   ```
+4. Sesuaikan koneksi database (`DB_*`) di `.env`, lalu buat databasenya di MySQL/Laragon.
+5. Jalankan migration dan seeder (menyiapkan 6 template awal dan akun demo `owner@kasiro.my.id` / `password` dengan tenant `kopisenja` & `berkahmart`):
    ```bash
    php artisan migrate --seed
    php artisan storage:link
    ```
-5. Jalankan dev server:
+6. Jalankan Vite dev server untuk frontend:
    ```bash
    npm run dev
-   php artisan serve
    ```
-6. (Opsional) Generate ulang screenshot template/tenant kalau butuh preview gambar:
+7. Buka browser dan akses:
+   - Central App / Studio: `https://kasiro.test`
+   - Tenant Demo 1: `https://kopisenja.kasiro.test`
+   - Tenant Demo 2: `https://berkahmart.kasiro.test`
+8. (Opsional) Generate ulang screenshot template/tenant jika membutuhkan preview gambar:
    ```bash
    php artisan templates:screenshots --queue
    php artisan tenants:screenshots
-   php artisan queue:work   # perlu jalan supaya job screenshot diproses
+   php artisan queue:work   # perlu dijalankan supaya job screenshot diproses
    ```
-
-> Domain lokal (Laragon) memakai `kasiro.test`; domain produksi memakai `kasiro.my.id`. Pastikan `TENANCY_CENTRAL_DOMAIN` di `.env` sesuai environment yang dipakai, dan subdomain wildcard (`*.kasiro.test` / `*.kasiro.my.id`) sudah diarahkan ke server lokal/VPS.
-
-## Testing
-
-```bash
-php artisan test
-```
-
-## Deployment (VPS)
-
-Aplikasi production berjalan di VPS (`/var/www/kasiro`, branch `main`, nginx + php8.3-fpm + MySQL).
-
-Alur deploy standar untuk perubahan kode (migration aditif, tidak menghapus data):
-
-```bash
-ssh -i <path-ke-key.pem> ubuntu@<ip-vps>
-cd /var/www/kasiro
-
-git pull origin main
-php artisan migrate --force        # aman, hanya menjalankan migration baru
-npm run build                      # rebuild CSS/JS kalau ada perubahan tampilan
-php artisan config:clear
-php artisan view:clear
-php artisan route:clear
-php artisan cache:clear
-```
-
-Kalau ada template/tenant baru yang belum punya screenshot:
-
-```bash
-php artisan templates:screenshots --slug=<slug> --queue
-php artisan tenants:screenshots --subdomain=<subdomain>
-```
-
-### Reset Total (Database + Seeder + Migrate + Screenshot)
-
-Gunakan ini hanya kalau memang ingin mengembalikan aplikasi ke kondisi awal (misalnya lingkungan demo/staging). **Ini menghapus SEMUA data secara permanen dan tidak bisa di-undo** — semua akun, toko, transaksi yang sudah ada akan hilang dan digantikan hanya dengan data seed (template + akun demo).
-
-```bash
-# 1. Reset total: drop semua tabel, migrate ulang dari nol, lalu seed ulang
-php artisan migrate:fresh --seed --force
-
-# 2. Re-link storage (symlink public/storage -> storage/app/public)
-php artisan storage:link
-
-# 3. Generate ulang screenshot semua template
-php artisan templates:screenshots --queue
-
-# 4. Generate ulang screenshot semua tenant aktif (dari seeder demo)
-php artisan tenants:screenshots
-
-# 5. Bersihkan cache Laravel
-php artisan config:clear && php artisan view:clear && php artisan route:clear && php artisan cache:clear
-```
-
-Catatan:
-- `--force` wajib untuk migration/seeder di environment production.
-- Langkah screenshot memakai job queue (Browsershot/headless Chrome) — pastikan queue worker aktif (`sudo systemctl status kasiro-queue` di VPS) dan tunggu beberapa detik sebelum mengecek hasilnya.
-- Setelah reset, data yang tersedia hanya: user `test@example.com`, akun demo `owner@kasiro.my.id` / `password` dengan tenant `kopisenja` & `berkahmart`, dan 6 template kasir.
-
-### Catatan RAM saat build di VPS
-
-`npm run build` aman dijalankan langsung di VPS selama RAM mencukupi (cek dulu dengan `free -h`). Kalau instance sedang RAM kecil / tidak ada swap, build bisa membuat proses lain (nginx, php-fpm, sshd) kehabisan memori. Alternatif paling aman: build di lokal, lalu upload hasilnya:
-
-```bash
-# Di lokal
-npm run build
-
-# Upload ke VPS
-scp -i <path-ke-key.pem> -r public/build ubuntu@<ip-vps>:/tmp/kasiro-build-new
-
-# Di VPS
-cd /var/www/kasiro
-mv public/build public/build.bak
-mv /tmp/kasiro-build-new public/build
-```
-
-## License
-
-Proprietary — internal project.
